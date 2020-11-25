@@ -1,6 +1,9 @@
 package ru.sfedu.Aisova.umbrello;
 
+import com.opencsv.bean.CsvBindByName;
+
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Class Order
@@ -11,13 +14,28 @@ public class Order {
   // Fields
   //
 
+  @CsvBindByName
   private Long id;
+
+  @CsvBindByName
   private Date created;
+
+  @CsvBindByName
   private OrderItem item;
+
+  @CsvBindByName
   private Double cost;
+
+  @CsvBindByName
   private OrderStatus status;
+
+  @CsvBindByName
   private Customer customer;
+
+  @CsvBindByName
   private Date lastUpdated;
+
+  @CsvBindByName
   private Date completed;
   
   //
@@ -36,10 +54,10 @@ public class Order {
 
   /**
    * Set the value of id
-   * @param newVar the new value of id
+   * @param id the new value of id
    */
-  public void setId (Long newVar) {
-    id = newVar;
+  public void setId (Long id) {
+    this.id = id;
   }
 
   /**
@@ -52,10 +70,10 @@ public class Order {
 
   /**
    * Set the value of created
-   * @param newVar the new value of created
+   * @param created the new value of created
    */
-  public void setCreated (Date newVar) {
-    created = newVar;
+  public void setCreated (Date created) {
+    this.created = created;
   }
 
   /**
@@ -68,10 +86,10 @@ public class Order {
 
   /**
    * Set the value of item
-   * @param newVar the new value of item
+   * @param item the new value of item
    */
-  public void setItem (OrderItem newVar) {
-    item = newVar;
+  public void setItem (OrderItem item) {
+    this.item = item;
   }
 
   /**
@@ -84,10 +102,10 @@ public class Order {
 
   /**
    * Set the value of cost
-   * @param newVar the new value of cost
+   * @param cost the new value of cost
    */
-  public void setCost (Double newVar) {
-    cost = newVar;
+  public void setCost (Double cost) {
+    this.cost = cost;
   }
 
   /**
@@ -100,10 +118,10 @@ public class Order {
 
   /**
    * Set the value of status
-   * @param newVar the new value of status
+   * @param status the new value of status
    */
-  public void setStatus (OrderStatus newVar) {
-    status = newVar;
+  public void setStatus (OrderStatus status) {
+    this.status = status;
   }
 
   /**
@@ -116,10 +134,10 @@ public class Order {
 
   /**
    * Set the value of customer
-   * @param newVar the new value of customer
+   * @param customer the new value of customer
    */
-  public void setCustomer (Customer newVar) {
-    customer = newVar;
+  public void setCustomer (Customer customer) {
+    this.customer = customer;
   }
 
   /**
@@ -132,10 +150,10 @@ public class Order {
 
   /**
    * Set the value of lastUpdated
-   * @param newVar the new value of lastUpdated
+   * @param lastUpdated the new value of lastUpdated
    */
-  public void setLastUpdated (Date newVar) {
-    lastUpdated = newVar;
+  public void setLastUpdated (Date lastUpdated) {
+    this.lastUpdated = lastUpdated;
   }
 
   /**
@@ -148,10 +166,10 @@ public class Order {
 
   /**
    * Set the value of completed
-   * @param newVar the new value of completed
+   * @param completed the new value of completed
    */
-  public void setCompleted (Date newVar) {
-    completed = newVar;
+  public void setCompleted (Date completed) {
+    this.completed = completed;
   }
 
   /**
@@ -166,6 +184,40 @@ public class Order {
   // Other methods
   //
 
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Order order = (Order) o;
+    return id.equals(order.id) &&
+            created.equals(order.created) &&
+            item.equals(order.item) &&
+            cost.equals(order.cost) &&
+            status == order.status &&
+            customer.equals(order.customer) &&
+            Objects.equals(lastUpdated, order.lastUpdated) &&
+            completed.equals(order.completed);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, created, item, cost, status, customer, lastUpdated, completed);
+  }
+
+  @Override
+  public String toString() {
+    return "Order{" +
+            "id=" + id +
+            ", created=" + created +
+            ", item=" + item +
+            ", cost=" + cost +
+            ", status=" + status +
+            ", customer=" + customer +
+            ", lastUpdated=" + lastUpdated +
+            ", completed=" + completed +
+            '}';
+  }
 }
 enum OrderStatus{
   CREATED,

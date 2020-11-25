@@ -1,23 +1,40 @@
 package ru.sfedu.Aisova.umbrello;
 
+import com.opencsv.bean.CsvBindByName;
+
 import javax.xml.ws.Service;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class Master
  */
-public class Master {
+public class Master implements Serializable {
 
   //
   // Fields
   //
 
+  @CsvBindByName
   private Long id;
+
+  @CsvBindByName
   private String firstName;
+
+  @CsvBindByName
   private String lastName;
+
+  @CsvBindByName
   private String position;
+
+  @CsvBindByName
   private List<Service> serviceList;
+
+  @CsvBindByName
   private String phone;
+
+  @CsvBindByName
   private Double salary;
   
   //
@@ -36,10 +53,10 @@ public class Master {
 
   /**
    * Set the value of id
-   * @param newVar the new value of id
+   * @param id the new value of id
    */
-  public void setId (Long newVar) {
-    id = newVar;
+  public void setId (Long id) {
+    this.id = id;
   }
 
   /**
@@ -52,10 +69,10 @@ public class Master {
 
   /**
    * Set the value of firstName
-   * @param newVar the new value of firstName
+   * @param firstName the new value of firstName
    */
-  public void setFirstName (String newVar) {
-    firstName = newVar;
+  public void setFirstName (String firstName) {
+    this.firstName = firstName;
   }
 
   /**
@@ -68,10 +85,10 @@ public class Master {
 
   /**
    * Set the value of lastName
-   * @param newVar the new value of lastName
+   * @param lastName the new value of lastName
    */
-  public void setLastName (String newVar) {
-    lastName = newVar;
+  public void setLastName (String lastName) {
+    this.lastName = lastName;
   }
 
   /**
@@ -84,10 +101,10 @@ public class Master {
 
   /**
    * Set the value of position
-   * @param newVar the new value of position
+   * @param position the new value of position
    */
-  public void setPosition (String newVar) {
-    position = newVar;
+  public void setPosition (String position) {
+    this.position = position;
   }
 
   /**
@@ -100,10 +117,10 @@ public class Master {
 
   /**
    * Set the value of serviceList
-   * @param newVar the new value of serviceList
+   * @param serviceList the new value of serviceList
    */
-  public void setServiceList (List<Service> newVar) {
-    serviceList = newVar;
+  public void setServiceList (List<Service> serviceList) {
+    this.serviceList = serviceList;
   }
 
   /**
@@ -116,10 +133,10 @@ public class Master {
 
   /**
    * Set the value of phone
-   * @param newVar the new value of phone
+   * @param phone the new value of phone
    */
-  public void setPhone (String newVar) {
-    phone = newVar;
+  public void setPhone (String phone) {
+    this.phone = phone;
   }
 
   /**
@@ -132,10 +149,10 @@ public class Master {
 
   /**
    * Set the value of salary
-   * @param newVar the new value of salary
+   * @param salary the new value of salary
    */
-  public void setSalary (Double newVar) {
-    salary = newVar;
+  public void setSalary (Double salary) {
+    this.salary = salary;
   }
 
   /**
@@ -150,4 +167,36 @@ public class Master {
   // Other methods
   //
 
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Master master = (Master) o;
+    return id.equals(master.id) &&
+            firstName.equals(master.firstName) &&
+            lastName.equals(master.lastName) &&
+            position.equals(master.position) &&
+            serviceList.equals(master.serviceList) &&
+            phone.equals(master.phone) &&
+            Objects.equals(salary, master.salary);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, firstName, lastName, position, serviceList, phone, salary);
+  }
+
+  @Override
+  public String toString() {
+    return "Master{" +
+            "id=" + id +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", position='" + position + '\'' +
+            ", serviceList=" + serviceList +
+            ", phone='" + phone + '\'' +
+            ", salary=" + salary +
+            '}';
+  }
 }

@@ -1,5 +1,9 @@
 package ru.sfedu.Aisova.umbrello;
 
+import com.opencsv.bean.CsvBindByName;
+
+import java.util.Objects;
+
 /**
  * Class NewCustomer
  */
@@ -9,6 +13,7 @@ public class NewCustomer extends Customer {
   // Fields
   //
 
+  @CsvBindByName
   private Integer discount;
   
   //
@@ -27,10 +32,10 @@ public class NewCustomer extends Customer {
 
   /**
    * Set the value of discount
-   * @param newVar the new value of discount
+   * @param discount the new value of discount
    */
-  public void setDiscount (Integer newVar) {
-    discount = newVar;
+  public void setDiscount (Integer discount) {
+    this.discount = discount;
   }
 
   /**
@@ -45,4 +50,25 @@ public class NewCustomer extends Customer {
   // Other methods
   //
 
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+    NewCustomer that = (NewCustomer) o;
+    return Objects.equals(discount, that.discount);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), discount);
+  }
+
+  @Override
+  public String toString() {
+    return "NewCustomer{" +
+            "discount=" + discount +
+            '}';
+  }
 }

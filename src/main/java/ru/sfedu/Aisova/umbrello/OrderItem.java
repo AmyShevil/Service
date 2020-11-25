@@ -1,5 +1,9 @@
 package ru.sfedu.Aisova.umbrello;
 
+import com.opencsv.bean.CsvBindByName;
+
+import java.util.Objects;
+
 /**
  * Class OrderItem
  */
@@ -9,9 +13,16 @@ public class OrderItem {
   // Fields
   //
 
+  @CsvBindByName
   private Long number;
+
+  @CsvBindByName
   private Service service;
+
+  @CsvBindByName
   private Double cost;
+
+  @CsvBindByName
   private Integer quantity;
   
   //
@@ -30,10 +41,10 @@ public class OrderItem {
 
   /**
    * Set the value of number
-   * @param newVar the new value of number
+   * @param number the new value of number
    */
-  public void setNumber (Long newVar) {
-    number = newVar;
+  public void setNumber (Long number) {
+    this.number = number;
   }
 
   /**
@@ -46,10 +57,10 @@ public class OrderItem {
 
   /**
    * Set the value of service
-   * @param newVar the new value of service
+   * @param service the new value of service
    */
-  public void setService (Service newVar) {
-    service = newVar;
+  public void setService (Service service) {
+    this.service = service;
   }
 
   /**
@@ -62,10 +73,10 @@ public class OrderItem {
 
   /**
    * Set the value of cost
-   * @param newVar the new value of cost
+   * @param cost the new value of cost
    */
-  public void setCost (Double newVar) {
-    cost = newVar;
+  public void setCost (Double cost) {
+    this.cost = cost;
   }
 
   /**
@@ -78,10 +89,10 @@ public class OrderItem {
 
   /**
    * Set the value of quantity
-   * @param newVar the new value of quantity
+   * @param quantity the new value of quantity
    */
-  public void setQuantity (Integer newVar) {
-    quantity = newVar;
+  public void setQuantity (Integer quantity) {
+    this.quantity = quantity;
   }
 
   /**
@@ -96,4 +107,30 @@ public class OrderItem {
   // Other methods
   //
 
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    OrderItem orderItem = (OrderItem) o;
+    return number.equals(orderItem.number) &&
+            service.equals(orderItem.service) &&
+            cost.equals(orderItem.cost) &&
+            quantity.equals(orderItem.quantity);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(number, service, cost, quantity);
+  }
+
+  @Override
+  public String toString() {
+    return "OrderItem{" +
+            "number=" + number +
+            ", service=" + service +
+            ", cost=" + cost +
+            ", quantity=" + quantity +
+            '}';
+  }
 }

@@ -2,12 +2,13 @@ package ru.sfedu.Aisova.umbrello;
 
 import com.opencsv.bean.CsvBindByName;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Class Customer
  */
-public class Customer {
+public class Customer implements Serializable {
 
   //
   // Fields
@@ -15,12 +16,16 @@ public class Customer {
 
   @CsvBindByName
   private Long id;
+
   @CsvBindByName
   private String firstName;
+
   @CsvBindByName
   private String lastName;
+
   @CsvBindByName
   private String phone;
+
   @CsvBindByName
   private String email;
   
@@ -126,10 +131,10 @@ public class Customer {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Customer customer = (Customer) o;
-    return Objects.equals(id, customer.id) &&
-            Objects.equals(firstName, customer.firstName) &&
-            Objects.equals(lastName, customer.lastName) &&
-            Objects.equals(phone, customer.phone) &&
+    return id.equals(customer.id) &&
+            firstName.equals(customer.firstName) &&
+            lastName.equals(customer.lastName) &&
+            phone.equals(customer.phone) &&
             Objects.equals(email, customer.email);
   }
 

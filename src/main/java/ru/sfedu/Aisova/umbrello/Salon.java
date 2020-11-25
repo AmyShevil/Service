@@ -1,6 +1,9 @@
 package ru.sfedu.Aisova.umbrello;
 
+import com.opencsv.bean.CsvBindByName;
+
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class Salon
@@ -11,8 +14,13 @@ public class Salon {
   // Fields
   //
 
+  @CsvBindByName
   private Long id;
+
+  @CsvBindByName
   private String address;
+
+  @CsvBindByName
   private List<Master> listMaster;
   
   //
@@ -31,10 +39,10 @@ public class Salon {
 
   /**
    * Set the value of id
-   * @param newVar the new value of id
+   * @param id the new value of id
    */
-  public void setId (Long newVar) {
-    id = newVar;
+  public void setId (Long id) {
+    this.id = id;
   }
 
   /**
@@ -47,10 +55,10 @@ public class Salon {
 
   /**
    * Set the value of address
-   * @param newVar the new value of address
+   * @param address the new value of address
    */
-  public void setAddress (String newVar) {
-    address = newVar;
+  public void setAddress (String address) {
+    this.address = address;
   }
 
   /**
@@ -63,10 +71,10 @@ public class Salon {
 
   /**
    * Set the value of listMaster
-   * @param newVar the new value of listMaster
+   * @param listMaster the new value of listMaster
    */
-  public void setListMaster (List<Master> newVar) {
-    listMaster = newVar;
+  public void setListMaster (List<Master> listMaster) {
+    this.listMaster = listMaster;
   }
 
   /**
@@ -81,4 +89,28 @@ public class Salon {
   // Other methods
   //
 
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Salon salon = (Salon) o;
+    return id.equals(salon.id) &&
+            address.equals(salon.address) &&
+            listMaster.equals(salon.listMaster);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, address, listMaster);
+  }
+
+  @Override
+  public String toString() {
+    return "Salon{" +
+            "id=" + id +
+            ", address='" + address + '\'' +
+            ", listMaster=" + listMaster +
+            '}';
+  }
 }
