@@ -1,4 +1,4 @@
-package ru.sfedu.Aisova.umbrello;
+package ru.sfedu.Aisova.bean;
 
 import com.opencsv.bean.CsvBindByName;
 
@@ -17,7 +17,7 @@ public class Master implements Serializable {
   //
 
   @CsvBindByName
-  private Long id;
+  private long id;
 
   @CsvBindByName
   private String firstName;
@@ -55,7 +55,7 @@ public class Master implements Serializable {
    * Set the value of id
    * @param id the new value of id
    */
-  public void setId (Long id) {
+  public void setId (long id) {
     this.id = id;
   }
 
@@ -173,10 +173,10 @@ public class Master implements Serializable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Master master = (Master) o;
-    return id.equals(master.id) &&
+    return id == master.id &&
             firstName.equals(master.firstName) &&
             lastName.equals(master.lastName) &&
-            position.equals(master.position) &&
+            Objects.equals(position, master.position) &&
             serviceList.equals(master.serviceList) &&
             phone.equals(master.phone) &&
             Objects.equals(salary, master.salary);

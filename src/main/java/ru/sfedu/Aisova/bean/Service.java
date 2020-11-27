@@ -1,4 +1,4 @@
-package ru.sfedu.Aisova.umbrello;
+package ru.sfedu.Aisova.bean;
 
 import com.opencsv.bean.CsvBindByName;
 
@@ -14,7 +14,7 @@ public class Service {
   //
 
   @CsvBindByName
-  private Long id;
+  private long id;
 
   @CsvBindByName
   private String name;
@@ -43,7 +43,7 @@ public class Service {
    * Set the value of id
    * @param id the new value of id
    */
-  public void setId (Long id) {
+  public void setId (long id) {
     this.id = id;
   }
 
@@ -113,7 +113,7 @@ public class Service {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Service service = (Service) o;
-    return id.equals(service.id) &&
+    return id == service.id &&
             name.equals(service.name) &&
             price.equals(service.price) &&
             Objects.equals(description, service.description);

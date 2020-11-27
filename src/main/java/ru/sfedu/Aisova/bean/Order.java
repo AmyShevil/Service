@@ -1,4 +1,4 @@
-package ru.sfedu.Aisova.umbrello;
+package ru.sfedu.Aisova.bean;
 
 import com.opencsv.bean.CsvBindByName;
 
@@ -15,7 +15,7 @@ public class Order {
   //
 
   @CsvBindByName
-  private Long id;
+  private long id;
 
   @CsvBindByName
   private Date created;
@@ -56,7 +56,7 @@ public class Order {
    * Set the value of id
    * @param id the new value of id
    */
-  public void setId (Long id) {
+  public void setId (long id) {
     this.id = id;
   }
 
@@ -190,7 +190,7 @@ public class Order {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Order order = (Order) o;
-    return id.equals(order.id) &&
+    return id == order.id &&
             created.equals(order.created) &&
             item.equals(order.item) &&
             cost.equals(order.cost) &&
@@ -218,10 +218,12 @@ public class Order {
             ", completed=" + completed +
             '}';
   }
+
+    public enum OrderStatus{
+        CREATED,
+        PROCESSING,
+        COMPLETED,
+        CANCELED
+    }
 }
-enum OrderStatus{
-  CREATED,
-  PROCESSING,
-  COMPLETED,
-  CANCELED
-}
+

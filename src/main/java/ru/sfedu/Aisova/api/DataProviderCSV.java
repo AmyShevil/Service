@@ -11,6 +11,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sfedu.Aisova.bean.User;
+import ru.sfedu.Aisova.bean.Master;
 import ru.sfedu.Aisova.utils.ConfigurationUtil;
 
 import java.io.FileReader;
@@ -39,7 +40,21 @@ public class DataProviderCSV {
         }
     }
 
-    public User getUserById(long id) throws IOException {
+    public void insertMaster(List<Master> listMaster) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+        try{
+            FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(PATH) + listMaster.get(0).getClass().getSimpleName().toLowerCase() + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
+            CSVWriter csvWriter = new CSVWriter(writer);
+            StatefulBeanToCsv<Master> beanToCsv = new StatefulBeanToCsvBuilder<Master>(csvWriter)
+                    .withApplyQuotesToAll(false)
+                    .build();
+            beanToCsv.write((Master) listMaster);
+            csvWriter.close();
+        }catch (IndexOutOfBoundsException e){
+            log.error(e);
+        }
+    }
+
+        public User getUserById(long id) throws IOException {
         List<User> userList = select(User.class);
         try {
             User user = userList.stream()

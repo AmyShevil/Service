@@ -1,4 +1,4 @@
-package ru.sfedu.Aisova.umbrello;
+package ru.sfedu.Aisova.bean;
 
 import com.opencsv.bean.CsvBindByName;
 
@@ -15,7 +15,7 @@ public class Customer implements Serializable {
   //
 
   @CsvBindByName
-  private Long id;
+  private long id;
 
   @CsvBindByName
   private String firstName;
@@ -47,7 +47,7 @@ public class Customer implements Serializable {
    * Set the value of id
    * @param id the new value of id
    */
-  public void setId (Long id) { this.id = id; }
+  public void setId (long id) { this.id = id; }
 
   /**
    * Get the value of id
@@ -131,7 +131,7 @@ public class Customer implements Serializable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Customer customer = (Customer) o;
-    return id.equals(customer.id) &&
+    return id == customer.id &&
             firstName.equals(customer.firstName) &&
             lastName.equals(customer.lastName) &&
             phone.equals(customer.phone) &&
