@@ -51,7 +51,7 @@ public class OrderItem {
    * Get the value of number
    * @return the value of number
    */
-  public Long getNumber () {
+  public long getNumber () {
     return number;
   }
 

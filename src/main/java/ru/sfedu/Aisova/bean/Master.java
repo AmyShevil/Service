@@ -63,7 +63,7 @@ public class Master implements Serializable {
    * Get the value of id
    * @return the value of id
    */
-  public Long getId () {
+  public long getId () {
     return id;
   }
 

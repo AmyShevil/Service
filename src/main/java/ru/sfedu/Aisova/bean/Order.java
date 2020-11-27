@@ -64,7 +64,7 @@ public class Order {
    * Get the value of id
    * @return the value of id
    */
-  public Long getId () {
+  public long getId () {
     return id;
   }
 
