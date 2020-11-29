@@ -2,7 +2,6 @@ package ru.sfedu.Aisova.bean;
 
 import com.opencsv.bean.CsvBindByName;
 
-import javax.xml.ws.Service;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +28,7 @@ public class Master implements Serializable {
   private String position;
 
   @CsvBindByName
-  private List<Service> serviceList;
+  private List<Service> listService;
 
   @CsvBindByName
   private String phone;
@@ -120,7 +119,7 @@ public class Master implements Serializable {
    * @param serviceList the new value of serviceList
    */
   public void setServiceList (List<Service> serviceList) {
-    this.serviceList = serviceList;
+    this.listService = serviceList;
   }
 
   /**
@@ -128,7 +127,7 @@ public class Master implements Serializable {
    * @return the value of serviceList
    */
   public List<Service> getServiceList () {
-    return serviceList;
+    return listService;
   }
 
   /**
@@ -177,14 +176,14 @@ public class Master implements Serializable {
             firstName.equals(master.firstName) &&
             lastName.equals(master.lastName) &&
             Objects.equals(position, master.position) &&
-            serviceList.equals(master.serviceList) &&
+            listService.equals(master.listService) &&
             phone.equals(master.phone) &&
             Objects.equals(salary, master.salary);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, firstName, lastName, position, serviceList, phone, salary);
+    return Objects.hash(id, firstName, lastName, position, listService, phone, salary);
   }
 
   @Override
@@ -194,7 +193,7 @@ public class Master implements Serializable {
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", position='" + position + '\'' +
-            ", serviceList=" + serviceList +
+            ", listService=" + listService +
             ", phone='" + phone + '\'' +
             ", salary=" + salary +
             '}';

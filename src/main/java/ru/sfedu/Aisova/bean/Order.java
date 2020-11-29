@@ -18,7 +18,7 @@ public class Order {
   private long id;
 
   @CsvBindByName
-  private Date created;
+  private String created;
 
   @CsvBindByName
   private OrderItem item;
@@ -33,10 +33,10 @@ public class Order {
   private Customer customer;
 
   @CsvBindByName
-  private Date lastUpdated;
+  private String lastUpdated;
 
   @CsvBindByName
-  private Date completed;
+  private String completed;
   
   //
   // Constructors
@@ -72,7 +72,7 @@ public class Order {
    * Set the value of created
    * @param created the new value of created
    */
-  public void setCreated (Date created) {
+  public void setCreated (String created) {
     this.created = created;
   }
 
@@ -80,7 +80,7 @@ public class Order {
    * Get the value of created
    * @return the value of created
    */
-  public Date getCreated () {
+  public String getCreated () {
     return created;
   }
 
@@ -152,7 +152,7 @@ public class Order {
    * Set the value of lastUpdated
    * @param lastUpdated the new value of lastUpdated
    */
-  public void setLastUpdated (Date lastUpdated) {
+  public void setLastUpdated (String lastUpdated) {
     this.lastUpdated = lastUpdated;
   }
 
@@ -160,7 +160,7 @@ public class Order {
    * Get the value of lastUpdated
    * @return the value of lastUpdated
    */
-  public Date getLastUpdated () {
+  public String getLastUpdated () {
     return lastUpdated;
   }
 
@@ -168,7 +168,7 @@ public class Order {
    * Set the value of completed
    * @param completed the new value of completed
    */
-  public void setCompleted (Date completed) {
+  public void setCompleted (String completed) {
     this.completed = completed;
   }
 
@@ -176,7 +176,7 @@ public class Order {
    * Get the value of completed
    * @return the value of completed
    */
-  public Date getCompleted () {
+  public String getCompleted () {
     return completed;
   }
 

@@ -256,3 +256,135 @@
 2020-11-14 16:53:45 INFO  ServiceClient:49 - The value of constant is: 1234
 
 2020-11-14 17:54:27 ERROR DataProviderCSV:56 - java.util.NoSuchElementException: No value present
+2020-11-27 22:05:59 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-27 22:05:59 TRACE ServiceClient:133 - Trace_test
+2020-11-27 22:05:59 DEBUG ServiceClient:134 - Debug_test
+2020-11-27 22:05:59 INFO  ServiceClient:135 - Info_test
+2020-11-27 22:05:59 WARN  ServiceClient:136 - Warn_test
+2020-11-27 22:05:59 ERROR ServiceClient:137 - Error_test
+2020-11-27 22:05:59 FATAL ServiceClient:138 - Fatal_test
+2020-11-27 22:05:59 INFO  ServiceClient:139 - SourceName
+2020-11-27 22:05:59 INFO  ServiceClient:140 - The value of constant is: 1234
+
+2020-11-27 22:16:22 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-27 22:16:22 TRACE ServiceClient:133 - Trace_test
+2020-11-27 22:16:22 DEBUG ServiceClient:134 - Debug_test
+2020-11-27 22:16:22 INFO  ServiceClient:135 - Info_test
+2020-11-27 22:16:22 WARN  ServiceClient:136 - Warn_test
+2020-11-27 22:16:22 ERROR ServiceClient:137 - Error_test
+2020-11-27 22:16:22 FATAL ServiceClient:138 - Fatal_test
+2020-11-27 22:16:22 INFO  ServiceClient:139 - SourceName
+2020-11-27 22:16:22 INFO  ServiceClient:140 - The value of constant is: 1234
+
+2020-11-27 22:18:31 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-27 22:18:31 TRACE ServiceClient:133 - Trace_test
+2020-11-27 22:18:31 DEBUG ServiceClient:134 - Debug_test
+2020-11-27 22:18:31 INFO  ServiceClient:135 - Info_test
+2020-11-27 22:18:31 WARN  ServiceClient:136 - Warn_test
+2020-11-27 22:18:31 ERROR ServiceClient:137 - Error_test
+2020-11-27 22:18:31 FATAL ServiceClient:138 - Fatal_test
+2020-11-27 22:18:31 INFO  ServiceClient:139 - SourceName
+2020-11-27 22:18:31 INFO  ServiceClient:140 - The value of constant is: 1234
+
+2020-11-27 22:20:24 ERROR DataProviderCSV:158 - java.util.NoSuchElementException: No value present
+2020-11-27 22:29:50 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-27 22:29:50 TRACE ServiceClient:133 - Trace_test
+2020-11-27 22:29:50 DEBUG ServiceClient:134 - Debug_test
+2020-11-27 22:29:50 INFO  ServiceClient:135 - Info_test
+2020-11-27 22:29:50 WARN  ServiceClient:136 - Warn_test
+2020-11-27 22:29:50 ERROR ServiceClient:137 - Error_test
+2020-11-27 22:29:50 FATAL ServiceClient:138 - Fatal_test
+2020-11-27 22:29:50 INFO  ServiceClient:139 - SourceName
+2020-11-27 22:29:50 INFO  ServiceClient:140 - The value of constant is: 1234
+
+2020-11-27 22:36:34 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-27 22:36:34 TRACE ServiceClient:133 - Trace_test
+2020-11-27 22:36:34 DEBUG ServiceClient:134 - Debug_test
+2020-11-27 22:36:34 INFO  ServiceClient:135 - Info_test
+2020-11-27 22:36:34 WARN  ServiceClient:136 - Warn_test
+2020-11-27 22:36:34 ERROR ServiceClient:137 - Error_test
+2020-11-27 22:36:34 FATAL ServiceClient:138 - Fatal_test
+2020-11-27 22:36:34 INFO  ServiceClient:139 - SourceName
+2020-11-27 22:36:34 INFO  ServiceClient:140 - The value of constant is: 1234
+
+2020-11-27 22:37:33 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-27 22:37:33 TRACE ServiceClient:133 - Trace_test
+2020-11-27 22:37:33 DEBUG ServiceClient:134 - Debug_test
+2020-11-27 22:37:33 INFO  ServiceClient:135 - Info_test
+2020-11-27 22:37:33 WARN  ServiceClient:136 - Warn_test
+2020-11-27 22:37:33 ERROR ServiceClient:137 - Error_test
+2020-11-27 22:37:33 FATAL ServiceClient:138 - Fatal_test
+2020-11-27 22:37:33 INFO  ServiceClient:139 - SourceName
+2020-11-27 22:37:33 INFO  ServiceClient:140 - The value of constant is: 1234
+
+2020-11-28 16:50:59 ERROR DataProviderCSV:77 - java.util.NoSuchElementException: No value present
+2020-11-28 16:51:32 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-28 16:51:32 TRACE ServiceClient:137 - Trace_test
+2020-11-28 16:51:32 DEBUG ServiceClient:138 - Debug_test
+2020-11-28 16:51:32 INFO  ServiceClient:139 - Info_test
+2020-11-28 16:51:32 WARN  ServiceClient:140 - Warn_test
+2020-11-28 16:51:32 ERROR ServiceClient:141 - Error_test
+2020-11-28 16:51:32 FATAL ServiceClient:142 - Fatal_test
+2020-11-28 16:51:32 INFO  ServiceClient:143 - SourceName
+2020-11-28 16:51:32 INFO  ServiceClient:144 - The value of constant is: 1234
+
+2020-11-28 16:58:45 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-28 16:58:45 TRACE ServiceClient:158 - Trace_test
+2020-11-28 16:58:45 DEBUG ServiceClient:159 - Debug_test
+2020-11-28 16:58:45 INFO  ServiceClient:160 - Info_test
+2020-11-28 16:58:45 WARN  ServiceClient:161 - Warn_test
+2020-11-28 16:58:45 ERROR ServiceClient:162 - Error_test
+2020-11-28 16:58:45 FATAL ServiceClient:163 - Fatal_test
+2020-11-28 16:58:45 INFO  ServiceClient:164 - SourceName
+2020-11-28 16:58:45 INFO  ServiceClient:165 - The value of constant is: 1234
+
+2020-11-28 16:59:48 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-28 16:59:48 TRACE ServiceClient:141 - Trace_test
+2020-11-28 16:59:48 DEBUG ServiceClient:142 - Debug_test
+2020-11-28 16:59:48 INFO  ServiceClient:143 - Info_test
+2020-11-28 16:59:48 WARN  ServiceClient:144 - Warn_test
+2020-11-28 16:59:48 ERROR ServiceClient:145 - Error_test
+2020-11-28 16:59:48 FATAL ServiceClient:146 - Fatal_test
+2020-11-28 16:59:48 INFO  ServiceClient:147 - SourceName
+2020-11-28 16:59:48 INFO  ServiceClient:148 - The value of constant is: 1234
+
+2020-11-28 17:25:41 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-28 17:25:41 TRACE ServiceClient:140 - Trace_test
+2020-11-28 17:25:41 DEBUG ServiceClient:141 - Debug_test
+2020-11-28 17:25:41 INFO  ServiceClient:142 - Info_test
+2020-11-28 17:25:41 WARN  ServiceClient:143 - Warn_test
+2020-11-28 17:25:41 ERROR ServiceClient:144 - Error_test
+2020-11-28 17:25:41 FATAL ServiceClient:145 - Fatal_test
+2020-11-28 17:25:41 INFO  ServiceClient:146 - SourceName
+2020-11-28 17:25:41 INFO  ServiceClient:147 - The value of constant is: 1234
+
+2020-11-28 17:28:09 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-28 17:28:09 TRACE ServiceClient:143 - Trace_test
+2020-11-28 17:28:09 DEBUG ServiceClient:144 - Debug_test
+2020-11-28 17:28:09 INFO  ServiceClient:145 - Info_test
+2020-11-28 17:28:09 WARN  ServiceClient:146 - Warn_test
+2020-11-28 17:28:09 ERROR ServiceClient:147 - Error_test
+2020-11-28 17:28:09 FATAL ServiceClient:148 - Fatal_test
+2020-11-28 17:28:09 INFO  ServiceClient:149 - SourceName
+2020-11-28 17:28:09 INFO  ServiceClient:150 - The value of constant is: 1234
+
+2020-11-28 17:32:48 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-28 17:32:48 TRACE ServiceClient:143 - Trace_test
+2020-11-28 17:32:48 DEBUG ServiceClient:144 - Debug_test
+2020-11-28 17:32:48 INFO  ServiceClient:145 - Info_test
+2020-11-28 17:32:48 WARN  ServiceClient:146 - Warn_test
+2020-11-28 17:32:48 ERROR ServiceClient:147 - Error_test
+2020-11-28 17:32:48 FATAL ServiceClient:148 - Fatal_test
+2020-11-28 17:32:48 INFO  ServiceClient:149 - SourceName
+2020-11-28 17:32:48 INFO  ServiceClient:150 - The value of constant is: 1234
+
+2020-11-28 17:34:05 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-11-28 17:34:05 TRACE ServiceClient:143 - Trace_test
+2020-11-28 17:34:05 DEBUG ServiceClient:144 - Debug_test
+2020-11-28 17:34:05 INFO  ServiceClient:145 - Info_test
+2020-11-28 17:34:05 WARN  ServiceClient:146 - Warn_test
+2020-11-28 17:34:05 ERROR ServiceClient:147 - Error_test
+2020-11-28 17:34:05 FATAL ServiceClient:148 - Fatal_test
+2020-11-28 17:34:05 INFO  ServiceClient:149 - SourceName
+2020-11-28 17:34:05 INFO  ServiceClient:150 - The value of constant is: 1234
+
