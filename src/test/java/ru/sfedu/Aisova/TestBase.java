@@ -1,18 +1,11 @@
 package ru.sfedu.Aisova;
 
-import ru.sfedu.Aisova.bean.*;
+import ru.sfedu.Aisova.model.*;
 
 import java.util.Date;
 import java.util.List;
 
 public class TestBase {
-
-    public User createUser (long id, String name){
-        User user = new User();
-        user.setId(id);
-        user.setName(name);
-        return user;
-    }
 
     public Customer createCustomer(long id, String firstName, String lastName, String phone, String email){
         Customer customer = new Customer();
@@ -24,14 +17,24 @@ public class TestBase {
         return customer;
     }
 
-    public NewCustomer createNewCustomer (Integer discount){
+    public NewCustomer createNewCustomer (long id, String firstName, String lastName, String phone, String email, Integer discount){
         NewCustomer newCustomer = new NewCustomer();
+        newCustomer.setId(id);
+        newCustomer.setFirstName(firstName);
+        newCustomer.setLastName(lastName);
+        newCustomer.setPhone(phone);
+        newCustomer.setEmail(email);
         newCustomer.setDiscount(discount);
         return newCustomer;
     }
 
-    public RegularCustomer createRegularCustomer (Integer numberOfOrders){
+    public RegularCustomer createRegularCustomer (long id, String firstName, String lastName, String phone, String email,Integer numberOfOrders){
         RegularCustomer regularCustomer = new RegularCustomer();
+        regularCustomer.setId(id);
+        regularCustomer.setFirstName(firstName);
+        regularCustomer.setLastName(lastName);
+        regularCustomer.setPhone(phone);
+        regularCustomer.setEmail(email);
         regularCustomer.setNumberOfOrders(numberOfOrders);
         return regularCustomer;
     }
@@ -49,7 +52,7 @@ public class TestBase {
         return master;
     }
 
-    public Order createOrder (long id, String created, OrderItem item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed){
+    public Order createOrder (long id, Date created, OrderItem item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed){
         Order order = new Order();
         order.setId(id);
         order.setCreated(created);

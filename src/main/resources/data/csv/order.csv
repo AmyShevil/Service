@@ -1,2 +1,2 @@
 COMPLETED,COST,CREATED,CUSTOMER,ID,ITEM,LASTUPDATED,STATUS
-20.11.2020,1.0,01.11.2020,"Customer{id=1, firstName='firstName1', lastName='lastName1', phone='phone1', email='email1'}",1,"OrderItem{number=10, service=Service{id=1, name='name1', price=1.0, description='description1'}, cost=1.0, quantity=5}",,CREATED
+20.11.2020,1.0,01.11.2020,"Customer{id=1, firstName='firstName1', lastName='lastName1', phone='phone1', email='email1'}",1,"OrderItem{number=10, service=Service{id=2, name='name2', price=2.0, description='description2'}, cost=1.0, quantity=5}",,CREATED

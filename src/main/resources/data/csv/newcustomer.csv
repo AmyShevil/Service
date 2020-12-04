@@ -1,2 +1,3 @@
 DISCOUNT,EMAIL,FIRSTNAME,ID,LASTNAME,PHONE
-10,email2,firstName2,2,lastName2,phone2
+50,rewriteEmail,rewriteFirstName,1,rewriteLastName,rewritePhone
+20,email2,firstName2,2,lastName2,phone2

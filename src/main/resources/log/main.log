@@ -388,3 +388,41 @@
 2020-11-28 17:34:05 INFO  ServiceClient:149 - SourceName
 2020-11-28 17:34:05 INFO  ServiceClient:150 - The value of constant is: 1234
 
+2020-12-02 16:54:20 DEBUG ServiceClient:24 - LogClient: starting application.........
+2020-12-02 16:54:20 TRACE ServiceClient:151 - Trace_test
+2020-12-02 16:54:20 DEBUG ServiceClient:152 - Debug_test
+2020-12-02 16:54:20 INFO  ServiceClient:153 - Info_test
+2020-12-02 16:54:20 WARN  ServiceClient:154 - Warn_test
+2020-12-02 16:54:20 ERROR ServiceClient:155 - Error_test
+2020-12-02 16:54:20 FATAL ServiceClient:156 - Fatal_test
+2020-12-02 16:54:20 INFO  ServiceClient:157 - SourceName
+2020-12-02 16:54:20 INFO  ServiceClient:158 - The value of constant is: 1234
+
+2020-12-02 16:59:19 ERROR DataProviderCSV:160 - java.util.NoSuchElementException: No value present
+2020-12-03 14:53:20 ERROR DataProviderCSV:176 - java.util.NoSuchElementException: No value present
+2020-12-03 14:55:10 ERROR DataProviderCSV:191 - java.util.NoSuchElementException: No value present
+2020-12-03 15:12:44 ERROR DataProviderCSV:191 - java.util.NoSuchElementException: No value present
+2020-12-03 15:30:44 ERROR DataProviderCSV:191 - java.util.NoSuchElementException: No value present
+2020-12-03 16:38:53 ERROR DataProviderCSV:191 - java.util.NoSuchElementException: No value present
+2020-12-03 16:43:28 ERROR DataProviderCSV:191 - java.util.NoSuchElementException: No value present
+2020-12-03 16:48:10 ERROR DataProviderCSVTest:122 - java.lang.IndexOutOfBoundsException: Index: 24, Size: 2
+2020-12-03 17:19:52 ERROR DataProviderCSV:176 - java.util.NoSuchElementException: No value present
+2020-12-03 17:45:37 ERROR DataProviderCSV:207 - java.lang.IndexOutOfBoundsException: Index: 19, Size: 2
+2020-12-03 17:45:37 ERROR DataProviderCSV:176 - java.util.NoSuchElementException: No value present
+2020-12-03 17:56:27 ERROR DataProviderCSV:191 - java.util.NoSuchElementException: No value present
+2020-12-03 17:56:27 ERROR DataProviderCSV:176 - java.util.NoSuchElementException: No value present
+2020-12-03 18:01:22 ERROR DataProviderCSV:191 - java.util.NoSuchElementException: No value present
+2020-12-03 18:01:22 ERROR DataProviderCSV:176 - java.util.NoSuchElementException: No value present
+2020-12-03 18:09:56 ERROR DataProviderCSV:191 - java.util.NoSuchElementException: No value present
+2020-12-03 18:09:56 ERROR DataProviderCSV:176 - java.util.NoSuchElementException: No value present
+2020-12-03 18:16:38 ERROR DataProviderCSV:88 - java.util.NoSuchElementException: No value present
+2020-12-03 19:17:27 ERROR DataProviderCSV:105 - java.util.NoSuchElementException: No value present
+2020-12-03 19:18:09 ERROR DataProviderCSV:139 - java.util.NoSuchElementException: No value present
+2020-12-03 19:25:34 ERROR DataProviderCSV:139 - java.util.NoSuchElementException: No value present
+2020-12-03 19:27:44 ERROR DataProviderCSV:154 - java.util.NoSuchElementException: No value present
+2020-12-03 19:31:56 ERROR DataProviderCSV:123 - java.lang.IndexOutOfBoundsException: Index: 9, Size: 2
+2020-12-03 19:31:56 ERROR DataProviderCSV:90 - java.util.NoSuchElementException: No value present
+2020-12-03 19:33:38 ERROR DataProviderCSV:188 - java.util.NoSuchElementException: No value present
+2020-12-03 19:35:37 ERROR DataProviderCSV:139 - java.util.NoSuchElementException: No value present
+2020-12-03 19:36:04 ERROR DataProviderCSV:172 - java.lang.IndexOutOfBoundsException: Index: 9, Size: 2
+2020-12-03 19:36:04 ERROR DataProviderCSV:139 - java.util.NoSuchElementException: No value present

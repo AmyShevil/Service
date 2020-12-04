@@ -5,7 +5,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sfedu.Aisova.api.DataProviderCSV;
-import ru.sfedu.Aisova.bean.*;
+import ru.sfedu.Aisova.model.*;
 
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.sfedu.Aisova.Constants.*;
-import static ru.sfedu.Aisova.bean.Order.OrderStatus.CREATED;
+import static ru.sfedu.Aisova.model.Order.OrderStatus.CREATED;
 import static ru.sfedu.Aisova.utils.ConfigurationUtil.getConfigurationEntry;
 
 public class ServiceClient {
@@ -30,15 +30,6 @@ public class ServiceClient {
 
         DataProviderCSV providerCSV = new DataProviderCSV();
 
-        User user = new User();
-        user.setId(1);
-        user.setName("Name1");
-
-        List<User> listUser = new ArrayList<>();
-        listUser.add(user);
-
-        providerCSV.insertUser(listUser);
-
         Service service = new Service();
         service.setId(1);
         service.setName("name1");
@@ -50,6 +41,7 @@ public class ServiceClient {
 
         providerCSV.insertService(listService);
 
+/*
         Customer customer = new Customer();
         customer.setId(1);
         customer.setFirstName("firstName1");
@@ -61,6 +53,8 @@ public class ServiceClient {
         listCustomer.add(customer);
 
         providerCSV.insertCustomer(listCustomer);
+
+ */
 
         NewCustomer newCustomer = new NewCustomer();
         newCustomer.setId(2);
@@ -87,6 +81,7 @@ public class ServiceClient {
         listRegularCustomer.add(regularCustomer);
 
         providerCSV.insertRegularCustomer(listRegularCustomer);
+
 
         /*
         Master master = new Master();
@@ -128,11 +123,11 @@ public class ServiceClient {
 
         Order order = new Order();
         order.setId(1);
-        order.setCreated("01.11.2020");
+        //order.setCreated("01.11.2020");
         order.setItem(orderItem);
         order.setCost(1.0);
         order.setStatus(CREATED);
-        order.setCustomer(customer);
+        //order.setCustomer(customer);
         order.setCompleted("20.11.2020");
 
         List<Order> listOrder = new ArrayList<>();

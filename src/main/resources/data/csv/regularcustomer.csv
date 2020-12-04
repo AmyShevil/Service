@@ -1,2 +1,3 @@
 EMAIL,FIRSTNAME,ID,LASTNAME,NUMBEROFORDERS,PHONE
-email3,firstName3,3,lastName3,1,phone3
+rewriteEmail,rewriteFirstName,1,rewriteLastName,5,rewritePhone
+email2,firstName2,2,lastName2,2,phone2

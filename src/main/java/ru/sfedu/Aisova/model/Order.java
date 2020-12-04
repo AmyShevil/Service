@@ -1,6 +1,8 @@
-package ru.sfedu.Aisova.bean;
+package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvDate;
+import ru.sfedu.Aisova.Constants;
 
 import java.util.Date;
 import java.util.Objects;
@@ -18,6 +20,7 @@ public class Order {
   private long id;
 
   @CsvBindByName
+  @CsvDate(value = Constants.DATE_FORMAT)
   private String created;
 
   @CsvBindByName

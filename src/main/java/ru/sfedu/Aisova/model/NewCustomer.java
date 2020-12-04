@@ -1,4 +1,4 @@
-package ru.sfedu.Aisova.bean;
+package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
 
