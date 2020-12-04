@@ -10,14 +10,18 @@ import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.sfedu.Aisova.Constants;
 import ru.sfedu.Aisova.model.*;
 import ru.sfedu.Aisova.utils.ConfigurationUtil;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class DataProviderCSV {
 
@@ -25,7 +29,7 @@ public class DataProviderCSV {
     private final String FILE_EXTENSION = "csv";
     private static Logger log = LogManager.getLogger(DataProviderCSV.class);
 
-    public <T> void insertClass(List<T> listClass) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+    public <T> void insertClass(List<T> listClass) {
         try{
             FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(PATH)
                     + listClass.get(0).getClass().getSimpleName().toLowerCase()
@@ -36,23 +40,45 @@ public class DataProviderCSV {
                     .build();
             beanToCsv.write(listClass);
             csvWriter.close();
-        }catch (IndexOutOfBoundsException e){
+        }catch (IndexOutOfBoundsException | IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e){
             log.error(e);
         }
     }
 
-    public <T> List<T> select(Class cl) throws IOException {
-        FileReader fileReader = new FileReader(ConfigurationUtil.getConfigurationEntry(PATH)
-                + cl.getSimpleName().toLowerCase()
-                + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
-        CSVReader csvReader = new CSVReader(fileReader);
-        CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(csvReader)
-                .withType(cl)
-                .withIgnoreLeadingWhiteSpace(true)
-                .build();
-        List<T> list = csvToBean.parse();
-        return list;
+    public <T> List<T> select(Class<T> tClass) {
+        try {
+            FileReader fileReader = new FileReader(ConfigurationUtil.getConfigurationEntry(PATH)
+                    + tClass.getSimpleName().toLowerCase()
+                    + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
+            CSVReader csvReader = new CSVReader(fileReader);
+            CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(csvReader)
+                    .withType(tClass)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+            return csvToBean.parse();
+        }catch (IOException e){
+            log.error(e);
+            return new ArrayList<>();
+        }
     }
+/*
+    public <T> void deleteClass(Class<T> tClass, long id) throws IOException {
+        List<T> listClass = select(tClass);
+        try {
+            Optional<T> opt = listClass.stream()
+                    .filter(el -> el.getId() == id)
+                    .findFirst().get();
+
+            listClass.remove(opt);
+            insertNewCustomer(listClass);
+        } catch (NoSuchElementException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+            log.error(e);
+        }
+    }
+
+ */
+
+
 
 /*
     public void insertCustomer(List<Customer> listCustomer) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {

@@ -9,4 +9,5 @@ public class Constants {
     public static final String ARRAY_START_SYMBOL = "array.startSymbol";
     public static final String ARRAY_END_SYMBOL = "array.endSymbol";
     public static final String DATE_FORMAT = "dd.MM.yyyy HH:mm:ss";
+
 }

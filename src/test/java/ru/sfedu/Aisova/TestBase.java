@@ -52,7 +52,7 @@ public class TestBase {
         return master;
     }
 
-    public Order createOrder (long id, Date created, OrderItem item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed){
+    public Order createOrder (long id, String created, OrderItem item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed){
         Order order = new Order();
         order.setId(id);
         order.setCreated(created);

@@ -426,3 +426,7 @@
 2020-12-03 19:35:37 ERROR DataProviderCSV:139 - java.util.NoSuchElementException: No value present
 2020-12-03 19:36:04 ERROR DataProviderCSV:172 - java.lang.IndexOutOfBoundsException: Index: 9, Size: 2
 2020-12-03 19:36:04 ERROR DataProviderCSV:139 - java.util.NoSuchElementException: No value present
+2020-12-04 18:49:26 ERROR DataProviderCSV:325 - java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+2020-12-04 18:49:26 ERROR DataProviderCSV:291 - java.util.NoSuchElementException: No value present
+2020-12-04 18:50:18 ERROR DataProviderCSV:325 - java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+2020-12-04 18:50:18 ERROR DataProviderCSV:291 - java.util.NoSuchElementException: No value present
