@@ -197,8 +197,8 @@ public class DataProviderCSVTest extends TestBase {
     }
 
     @Test
-    public void deleteOrderMaster() throws IOException {
-        System.out.println("deleteOrderMaster");
+    public void deleteMasterSuccess() throws IOException {
+        System.out.println("deleteMasterSuccess");
         DataProviderCSV instance = new DataProviderCSV();
         instance.deleteMaster(3);
         assertEquals(Optional.empty(), instance.getMaster(3));
@@ -465,7 +465,7 @@ public class DataProviderCSVTest extends TestBase {
 
     @Test
     public void testGetByIdNewCustomerFail() throws IOException {
-        System.out.println("testGetByIdNewCustomerSuccessFail");
+        System.out.println("testGetByIdNewCustomerFail");
         DataProviderCSV instance = new DataProviderCSV();
         System.out.println(instance.getNewCustomerById(5));
     }
