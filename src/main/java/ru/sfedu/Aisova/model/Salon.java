@@ -1,6 +1,8 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
+import ru.sfedu.Aisova.converters.MastersConverter;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +22,7 @@ public class Salon {
   @CsvBindByName
   private String address;
 
-  @CsvBindByName
+  @CsvCustomBindByName(converter = MastersConverter.class)
   private List<Master> listMaster;
   
   //

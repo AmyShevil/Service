@@ -14,20 +14,48 @@ import ru.sfedu.Aisova.Constants;
 import ru.sfedu.Aisova.model.*;
 import ru.sfedu.Aisova.utils.ConfigurationUtil;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataProviderCSV {
 
     private final String PATH = "csv_path";
     private final String FILE_EXTENSION = "csv";
     private static Logger log = LogManager.getLogger(DataProviderCSV.class);
+
+
+    private <T> List<T> getFromCSV(Class<T> tClass) throws IOException {
+        List<T> tList;
+
+        try {
+            CSVReader csvReader = getCsv(tClass);
+            CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(csvReader)
+                    .withType(tClass)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+            tList = csvToBean.parse();
+            csvReader.close();
+        } catch (IOException e) {
+            log.error(e);
+            throw e;
+        }
+        return tList;
+    }
+
+    private <T> CSVReader getCsv(Class<T> tClass) throws IOException {
+        File file = new File(ConfigurationUtil.getConfigurationEntry(PATH) + tClass.getSimpleName().toLowerCase() + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
+
+        if (!file.exists()) {
+            if (!file.createNewFile()) {
+                throw new IOException(ConfigurationUtil.getConfigurationEntry(Constants.CANNOT_CREATE_FILE));
+            }
+        }
+
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        return new CSVReader(bufferedReader);
+    }
 
     public <T> void insertClass(List<T> listClass) {
         try{
@@ -45,39 +73,140 @@ public class DataProviderCSV {
         }
     }
 
-    public <T> List<T> select(Class<T> tClass) {
+    private <T> List<Service> getServiceList(Class<T> tClass, T object) throws IOException {
+
         try {
-            FileReader fileReader = new FileReader(ConfigurationUtil.getConfigurationEntry(PATH)
-                    + tClass.getSimpleName().toLowerCase()
-                    + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
-            CSVReader csvReader = new CSVReader(fileReader);
-            CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(csvReader)
-                    .withType(tClass)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build();
-            return csvToBean.parse();
-        }catch (IOException e){
+            List<Service> objectServiceList;
+            Master master = (Master) object;
+            objectServiceList = master.getServiceList();
+            List<Service> serviceList = getFromCSV(Service.class);
+            List<Long> idServiceInMaster;
+
+            idServiceInMaster = objectServiceList
+                    .stream()
+                    .map(value -> value.getId())
+                    .collect(Collectors.toList());
+
+            List<Service>serviceListInMaster;
+            serviceListInMaster =serviceList.stream()
+                    .filter(service -> idServiceInMaster
+                            .stream()
+                            .anyMatch(serviceInMaster -> serviceInMaster.longValue() ==  service.getId()))
+                    .collect(Collectors.toList());
+
+            return serviceListInMaster;
+
+        }catch(IOException e){
             log.error(e);
             return new ArrayList<>();
         }
     }
-/*
-    public <T> void deleteClass(Class<T> tClass, long id) throws IOException {
-        List<T> listClass = select(tClass);
-        try {
-            Optional<T> opt = listClass.stream()
-                    .filter(el -> el.getId() == id)
-                    .findFirst().get();
 
-            listClass.remove(opt);
-            insertNewCustomer(listClass);
-        } catch (NoSuchElementException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+    private <T> List<OrderItem> getOrderItemList(Class<T> tClass, T object) throws IOException {
+
+        try {
+            List<OrderItem> objectOrderItemList;
+            Order order = (Order) object;
+            objectOrderItemList = order.getItem();
+            List<OrderItem> orderItemList = getFromCSV(OrderItem.class);
+            List<Long> idOrderItemInOrder;
+
+            idOrderItemInOrder = objectOrderItemList
+                    .stream()
+                    .map(value -> value.getNumber())
+                    .collect(Collectors.toList());
+
+            List<OrderItem>orderItemListInOrder;
+            orderItemListInOrder =orderItemList.stream()
+                    .filter(service -> idOrderItemInOrder
+                            .stream()
+                            .anyMatch(serviceInMaster -> serviceInMaster.longValue() ==  service.getNumber()))
+                    .collect(Collectors.toList());
+
+            return orderItemListInOrder;
+
+        }catch(IOException e){
             log.error(e);
+            return new ArrayList<>();
         }
     }
 
- */
+    private <T> Service getServiceInOrderItem(Class<T> tClass, T object) throws IOException {
+        Service serviceInOrderItem;
+        OrderItem orderItem = (OrderItem) object;
+        Service service = orderItem.getService();
+        List<Service> serviceList = getFromCSV(Service.class);
+        serviceInOrderItem = serviceList
+                .stream()
+                .filter(x -> x.getId() == service.getId())
+                .findAny()
+                .orElse(null);
 
+        return serviceInOrderItem;
+    }
+
+    private <T> Customer getNewCustomerInOrder(Class<T> tClass, T object) throws IOException {
+        NewCustomer newCustomerInOrder;
+        Order order = (Order) object;
+        Customer newCustomer = order.getCustomer();
+        List<NewCustomer> newCustomerList = getFromCSV(NewCustomer.class);
+        newCustomerInOrder = newCustomerList
+                .stream()
+                .filter(x -> x.getId() == newCustomer.getId())
+                .findAny()
+                .orElse(null);
+
+        return newCustomerInOrder;
+    }
+
+    private <T> Customer getRegularCustomerInOrder(Class<T> tClass, T object) throws IOException {
+        RegularCustomer regularCustomerInOrder;
+        Order order = (Order) object;
+        Customer regularCustomer = order.getCustomer();
+        List<RegularCustomer> newCustomerList = getFromCSV(RegularCustomer.class);
+        regularCustomerInOrder = newCustomerList
+                .stream()
+                .filter(x -> x.getId() == regularCustomer.getId())
+                .findAny()
+                .orElse(null);
+
+        return regularCustomerInOrder;
+    }
+
+    private <T> List<Master> getMasterList(Class<T> tClass, T object) throws IOException {
+        try {
+            List<Master> objectMasterList;
+            Salon salon = (Salon) object;
+            objectMasterList = salon.getListMaster();
+            List<Master> masterList = getFromCSV(Master.class);
+            List<Master> masterListInSalon;
+            List<Long> listIdMasterInSalon = new ArrayList<>();
+            List<Master> masterInSalonWithService = new ArrayList<>();
+
+            listIdMasterInSalon = objectMasterList
+                    .stream()
+                    .map(value -> value.getId())
+                    .collect(Collectors.toList());
+
+            List<Long> finalListIdMasterInSalon = listIdMasterInSalon;
+            masterListInSalon = masterList.stream()
+                    .filter(works -> finalListIdMasterInSalon
+                            .stream()
+                            .anyMatch(masterInSalon -> masterInSalon.longValue() ==  works.getId()))
+                    .collect(Collectors.toList());
+
+            for (int i =0;i<masterListInSalon.size();i++)
+            {
+               masterInSalonWithService.add(getMaster(masterListInSalon.get(i).getId()).get());
+            }
+
+            return masterInSalonWithService;
+
+        }catch(IOException e){
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
 
 
 /*
@@ -136,7 +265,7 @@ public class DataProviderCSV {
     }
 
     public NewCustomer getNewCustomerById(long id) throws IOException {
-        List<NewCustomer> listNewCustomer = select(NewCustomer.class);
+        List<NewCustomer> listNewCustomer = getFromCSV(NewCustomer.class);
         try {
             NewCustomer newCustomer = listNewCustomer.stream()
                     .filter(el->el.getId()==id)
@@ -149,7 +278,7 @@ public class DataProviderCSV {
     }
 
     public void deleteNewCustomer(long id) throws IOException {
-        List<NewCustomer> listNewCustomer = select(NewCustomer.class);
+        List<NewCustomer> listNewCustomer = getFromCSV(NewCustomer.class);
         try {
             NewCustomer newCustomer = listNewCustomer.stream()
                     .filter(el -> el.getId() == id)
@@ -163,7 +292,7 @@ public class DataProviderCSV {
     }
 
     public void rewriteNewCustomer(long id, String firstName, String lastName, String phone, String email, Integer discount) throws IOException {
-        List<NewCustomer> listNewCustomer = select(NewCustomer.class);
+        List<NewCustomer> listNewCustomer = getFromCSV(NewCustomer.class);
         try {
             NewCustomer newNewCustomer = new NewCustomer();
             newNewCustomer.setId(id);
@@ -185,7 +314,7 @@ public class DataProviderCSV {
     }
 
     public RegularCustomer getRegularCustomerById(long id) throws IOException {
-        List<RegularCustomer> listRegularCustomer = select(RegularCustomer.class);
+        List<RegularCustomer> listRegularCustomer = getFromCSV(RegularCustomer.class);
         try {
             RegularCustomer regularCustomer = listRegularCustomer.stream()
                     .filter(el->el.getId()==id)
@@ -198,7 +327,7 @@ public class DataProviderCSV {
     }
 
     public void deleteRegularCustomer(long id) throws IOException {
-        List<RegularCustomer> listRegularCustomer = select(RegularCustomer.class);
+        List<RegularCustomer> listRegularCustomer = getFromCSV(RegularCustomer.class);
         try {
             RegularCustomer regularCustomer = listRegularCustomer.stream()
                     .filter(el -> el.getId() == id)
@@ -212,7 +341,7 @@ public class DataProviderCSV {
     }
 
     public void rewriteRegularCustomer(long id, String firstName, String lastName, String phone, String email, Integer numberOfOrders) throws IOException {
-        List<RegularCustomer> listRegularCustomer = select(RegularCustomer.class);
+        List<RegularCustomer> listRegularCustomer = getFromCSV(RegularCustomer.class);
         try {
             RegularCustomer newRegularCustomer = new RegularCustomer();
             newRegularCustomer.setId(id);
@@ -234,7 +363,7 @@ public class DataProviderCSV {
     }
 
     public Service getServiceById(long id) throws IOException {
-        List<Service> listService = select(Service.class);
+        List<Service> listService = getFromCSV(Service.class);
         try {
             Service service = listService.stream()
                     .filter(el->el.getId()==id)
@@ -247,7 +376,7 @@ public class DataProviderCSV {
     }
 
     public void deleteService(long id) throws IOException {
-        List<Service> listService = select(Service.class);
+        List<Service> listService = getFromCSV(Service.class);
         try {
             Service service = listService.stream()
                     .filter(el -> el.getId() == id)
@@ -261,7 +390,7 @@ public class DataProviderCSV {
     }
 
     public void rewriteService(long id, String name, Double price, String description) throws IOException {
-        List<Service> listService = select(Service.class);
+        List<Service> listService = getFromCSV(Service.class);
         try {
             Service newService = new Service();
             newService.setId(id);
@@ -276,12 +405,36 @@ public class DataProviderCSV {
         }
     }
 
-    public void insertMaster(List<Master> listMaster) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+    public void insertMaster(List<Master> listMaster) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         this.insertClass(listMaster);
     }
 
+    Optional<Master> getMaster(long id) {
+        try {
+            List<Master> masterList = getFromCSV(Master.class);
+
+            Optional<Master> optionalMaster = masterList.stream()
+                    .filter(task -> task.getId() == id)
+                    .findAny();
+            if (!optionalMaster.isPresent()) {
+                return optionalMaster;
+            }
+
+            Master master = optionalMaster.get();
+
+            master.setServiceList(getServiceList(Master.class, master));
+
+            return Optional.of(master);
+
+        } catch (IOException | NoSuchElementException e) {
+            log.error(e);
+            return Optional.empty();
+        }
+    }
+
+
     public Master getMasterById(long id) throws IOException {
-        List<Master> listMaster = select(Master.class);
+        List<Master> listMaster = getFromCSV(Master.class);
         try {
             Master master = listMaster.stream()
                     .filter(el->el.getId()==id)
@@ -294,7 +447,7 @@ public class DataProviderCSV {
     }
 
     public void deleteMaster(long id) throws IOException {
-        List<Master> listMaster = select(Master.class);
+        List<Master> listMaster = getFromCSV(Master.class);
         try {
             Master master = listMaster.stream()
                     .filter(el -> el.getId() == id)
@@ -308,7 +461,8 @@ public class DataProviderCSV {
     }
 
     public void rewriteMaster(long id, String firstName, String lastName, String position, List<Service> listService, String phone, Double salary) throws IOException {
-        List<Master> listMaster = select(Master.class);
+        List<Master> listMaster = getFromCSV(Master.class);
+        int newId = Integer.parseInt(String.valueOf(id))-1;
         try {
             Master newMaster = new Master();
             newMaster.setId(id);
@@ -318,7 +472,7 @@ public class DataProviderCSV {
             newMaster.setServiceList(listService);
             newMaster.setPhone(phone);
             newMaster.setSalary(salary);
-            int newId = Integer.parseInt(String.valueOf(id))-1;
+
             listMaster.set(newId,newMaster);
             insertMaster(listMaster);
         } catch (NoSuchElementException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException | IndexOutOfBoundsException e) {
@@ -330,8 +484,27 @@ public class DataProviderCSV {
         this.insertClass(listOrderItem);
     }
 
+    Optional<OrderItem> getOrderItem(long id) {
+        try {
+            List<OrderItem> orderItemList = getFromCSV(OrderItem.class);
+            Optional<OrderItem> optionalOrderItem = orderItemList.stream()
+                    .filter(task -> task.getNumber() == id)
+                    .findAny();
+            if (optionalOrderItem.isPresent()) {
+                return optionalOrderItem;
+            }
+            OrderItem orderItem = optionalOrderItem.get();
+            orderItem.setService(getServiceInOrderItem(OrderItem.class, orderItem));
+            return Optional.of(orderItem);
+
+        } catch (IOException e) {
+            log.error(e);
+            return Optional.empty();
+        }
+    }
+
     public OrderItem getOrderItemById(long id) throws IOException {
-        List<OrderItem> listOrderItem = select(OrderItem.class);
+        List<OrderItem> listOrderItem = getFromCSV(OrderItem.class);
         try {
             OrderItem orderItem = listOrderItem.stream()
                     .filter(el->el.getNumber()==id)
@@ -344,7 +517,7 @@ public class DataProviderCSV {
     }
 
     public void deleteOrderItem(long id) throws IOException {
-        List<OrderItem> listOrderItem = select(OrderItem.class);
+        List<OrderItem> listOrderItem = getFromCSV(OrderItem.class);
         try {
             OrderItem orderItem = listOrderItem.stream()
                     .filter(el -> el.getNumber() == id)
@@ -358,7 +531,7 @@ public class DataProviderCSV {
     }
 
     public void rewriteOrderItem(long number, Service service, Double cost, Integer quantity) throws IOException {
-        List<OrderItem> listOrderItem = select(OrderItem.class);
+        List<OrderItem> listOrderItem = getFromCSV(OrderItem.class);
         try {
             OrderItem newOrderItem = new OrderItem();
             newOrderItem.setNumber(number);
@@ -377,8 +550,28 @@ public class DataProviderCSV {
         this.insertClass(listOrder);
     }
 
+    Optional<Order> getOrder(long id) {
+        try {
+            List<Order> orderList = getFromCSV(Order.class);
+            Optional<Order> optionalOrder = orderList.stream()
+                    .filter(task -> task.getId() == id)
+                    .findAny();
+            if (optionalOrder.isPresent()) {
+                return optionalOrder;
+            }
+            Order order = optionalOrder.get();
+            order.setItem(getOrderItemList(Order.class, order));
+            order.setCustomer(getNewCustomerInOrder(Order.class, order));
+            return Optional.of(order);
+
+        } catch (IOException e) {
+            log.error(e);
+            return Optional.empty();
+        }
+    }
+
     public Order getOrderById(long id) throws IOException {
-        List<Order> listOrder = select(Order.class);
+        List<Order> listOrder = getFromCSV(Order.class);
         try {
             Order order = listOrder.stream()
                     .filter(el->el.getId()==id)
@@ -391,7 +584,7 @@ public class DataProviderCSV {
     }
 
     public void deleteOrder(long id) throws IOException {
-        List<Order> listOrder = select(Order.class);
+        List<Order> listOrder = getFromCSV(Order.class);
         try {
             Order order = listOrder.stream()
                     .filter(el -> el.getId() == id)
@@ -404,8 +597,8 @@ public class DataProviderCSV {
         }
     }
 
-    public void rewriteOrder(long id, String created, OrderItem item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed) throws IOException {
-        List<Order> listOrder = select(Order.class);
+    public void rewriteOrder(long id, String created, List<OrderItem> item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed) throws IOException {
+        List<Order> listOrder = getFromCSV(Order.class);
         try {
             Order newOrder = new Order();
             newOrder.setId(id);
@@ -428,8 +621,27 @@ public class DataProviderCSV {
         this.insertClass(listSalon);
     }
 
+    Optional<Salon> getSalon(long id) {
+        try {
+            List<Salon> salonList = getFromCSV(Salon.class);
+            Optional<Salon> optionalSalon = salonList.stream()
+                    .filter(task -> task.getId() == id)
+                    .findAny();
+            if (optionalSalon.isPresent()) {
+                return optionalSalon;
+            }
+            Salon project = optionalSalon.get();
+            project.setListMaster(getMasterList(Salon.class, project));
+            return Optional.of(project);
+
+        } catch (IOException e) {
+            log.error(e);
+            return Optional.empty();
+        }
+    }
+
     public Salon getSalonById(long id) throws IOException {
-        List<Salon> listSalon = select(Salon.class);
+        List<Salon> listSalon = getFromCSV(Salon.class);
         try {
             Salon salon = listSalon.stream()
                     .filter(el->el.getId()==id)
@@ -442,7 +654,7 @@ public class DataProviderCSV {
     }
 
     public void deleteSalon(long id) throws IOException {
-        List<Salon> listSalon = select(Salon.class);
+        List<Salon> listSalon = getFromCSV(Salon.class);
         try {
             Salon salon = listSalon.stream()
                     .filter(el -> el.getId() == id)
@@ -456,7 +668,7 @@ public class DataProviderCSV {
     }
 
     public void rewriteSalon(long id, String address, List<Master> listMaster) throws IOException {
-        List<Salon> listSalon = select(Salon.class);
+        List<Salon> listSalon = getFromCSV(Salon.class);
         try {
             Salon newSalon = new Salon();
             newSalon.setId(id);

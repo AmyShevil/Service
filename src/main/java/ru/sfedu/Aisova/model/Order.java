@@ -1,10 +1,14 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
 import com.opencsv.bean.CsvDate;
 import ru.sfedu.Aisova.Constants;
+import ru.sfedu.Aisova.converters.NewCustomerConverter;
+import ru.sfedu.Aisova.converters.OrderItemConverter;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -20,11 +24,10 @@ public class Order {
   private long id;
 
   @CsvBindByName
-  @CsvDate(value = Constants.DATE_FORMAT)
   private String created;
 
-  @CsvBindByName
-  private OrderItem item;
+  @CsvCustomBindByName(converter = OrderItemConverter.class)
+  private List<OrderItem> item;
 
   @CsvBindByName
   private Double cost;
@@ -32,7 +35,7 @@ public class Order {
   @CsvBindByName
   private OrderStatus status;
 
-  @CsvBindByName
+  @CsvCustomBindByName(converter = NewCustomerConverter.class)
   private Customer customer;
 
   @CsvBindByName
@@ -91,7 +94,7 @@ public class Order {
    * Set the value of item
    * @param item the new value of item
    */
-  public void setItem (OrderItem item) {
+  public void setItem (List<OrderItem> item) {
     this.item = item;
   }
 
@@ -99,7 +102,7 @@ public class Order {
    * Get the value of item
    * @return the value of item
    */
-  public OrderItem getItem () {
+  public List<OrderItem> getItem () {
     return item;
   }
 

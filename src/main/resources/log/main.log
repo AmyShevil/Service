@@ -430,3 +430,148 @@
 2020-12-04 18:49:26 ERROR DataProviderCSV:291 - java.util.NoSuchElementException: No value present
 2020-12-04 18:50:18 ERROR DataProviderCSV:325 - java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
 2020-12-04 18:50:18 ERROR DataProviderCSV:291 - java.util.NoSuchElementException: No value present
+2020-12-05 15:05:29 DEBUG Service:50 - {3}
+2020-12-05 15:05:29 DEBUG Service:50 - {2}
+2020-12-05 15:05:29 DEBUG Service:50 - {1}
+2020-12-05 15:34:13 DEBUG Service:50 - {1}
+2020-12-05 15:34:13 DEBUG Service:50 - {3}
+2020-12-05 15:34:13 DEBUG Service:50 - {2}
+2020-12-05 15:34:48 DEBUG Service:50 - {1}
+2020-12-05 15:34:48 DEBUG Service:50 - {3}
+2020-12-05 15:34:48 DEBUG Service:50 - {2}
+2020-12-05 15:35:10 DEBUG Service:50 - {1}
+2020-12-05 15:35:10 DEBUG Service:50 - {0}
+2020-12-05 15:35:10 DEBUG Service:50 - {2}
+2020-12-05 15:35:57 DEBUG Service:50 - {3}
+2020-12-05 15:35:57 DEBUG Service:50 - {2}
+2020-12-05 15:35:57 DEBUG Service:50 - {1}
+2020-12-05 15:42:17 DEBUG Service:50 - {2}
+2020-12-05 15:42:17 DEBUG Service:50 - {1}
+2020-12-05 15:42:17 DEBUG Service:50 - {3}
+2020-12-05 15:43:38 DEBUG Service:50 - {2}
+2020-12-05 15:43:38 DEBUG Service:50 - {3}
+2020-12-05 15:43:38 DEBUG Service:50 - {1}
+2020-12-05 15:45:20 DEBUG Service:50 - {6}
+2020-12-05 15:45:20 DEBUG Service:50 - {4}
+2020-12-05 15:45:20 DEBUG Service:50 - {5}
+2020-12-05 15:47:43 DEBUG Service:50 - {5}
+2020-12-05 15:47:43 DEBUG Service:50 - {4}
+2020-12-05 15:49:33 DEBUG Service:50 - {1}
+2020-12-05 15:49:33 DEBUG Service:50 - {5}
+2020-12-05 15:51:30 DEBUG Service:50 - {3}
+2020-12-05 15:51:30 DEBUG Service:50 - {1}
+2020-12-05 15:51:30 DEBUG Service:50 - {2}
+2020-12-05 15:53:56 DEBUG Service:50 - {3}
+2020-12-05 15:53:56 DEBUG Service:50 - {1}
+2020-12-05 15:53:56 DEBUG Service:50 - {2}
+2020-12-05 15:54:08 DEBUG Service:50 - {3}
+2020-12-05 15:54:08 DEBUG Service:50 - {1}
+2020-12-05 15:54:08 DEBUG Service:50 - {2}
+2020-12-05 15:57:05 DEBUG Service:50 - {2}
+2020-12-05 15:57:05 DEBUG Service:50 - {1}
+2020-12-05 15:57:05 DEBUG Service:50 - {3}
+2020-12-05 15:59:19 DEBUG Service:50 - {3}
+2020-12-05 15:59:19 DEBUG Service:50 - {1}
+2020-12-05 15:59:19 DEBUG Service:50 - {2}
+2020-12-05 16:12:24 DEBUG Service:50 - {1}
+2020-12-05 16:12:24 DEBUG Service:50 - {2}
+2020-12-05 16:12:24 DEBUG Service:50 - {3}
+2020-12-05 16:13:21 DEBUG Service:50 - {3}
+2020-12-05 16:13:21 DEBUG Service:50 - {1}
+2020-12-05 16:13:21 DEBUG Service:50 - {2}
+2020-12-05 16:14:51 DEBUG Service:50 - {3}
+2020-12-05 16:14:51 DEBUG Service:50 - {2}
+2020-12-05 16:14:51 DEBUG Service:50 - {1}
+2020-12-05 16:15:26 DEBUG Service:50 - {3}
+2020-12-05 16:15:26 DEBUG Service:50 - {1}
+2020-12-05 16:15:26 DEBUG Service:50 - {2}
+2020-12-05 16:15:26 ERROR DataProviderCSV:477 - java.util.NoSuchElementException: No value present
+2020-12-05 16:16:03 DEBUG Service:50 - {2}
+2020-12-05 16:16:03 DEBUG Service:50 - {3}
+2020-12-05 16:16:03 DEBUG Service:50 - {1}
+2020-12-05 16:16:03 ERROR DataProviderCSV:477 - java.util.NoSuchElementException: No value present
+2020-12-05 16:16:33 DEBUG Service:50 - {3}
+2020-12-05 16:16:33 DEBUG Service:50 - {1}
+2020-12-05 16:16:33 DEBUG Service:50 - {2}
+2020-12-05 16:18:42 DEBUG Service:50 - {2}
+2020-12-05 16:18:42 DEBUG Service:50 - {1}
+2020-12-05 16:18:42 DEBUG Service:50 - {3}
+2020-12-05 16:50:14 DEBUG Service:50 - {2}
+2020-12-05 16:50:14 DEBUG Service:50 - {3}
+2020-12-05 16:50:14 DEBUG Service:50 - {1}
+2020-12-05 16:54:50 DEBUG NewCustomer:48 - {3}
+2020-12-05 16:54:50 DEBUG NewCustomer:48 - {1}
+2020-12-05 16:54:50 DEBUG NewCustomer:48 - {2}
+2020-12-05 16:54:50 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 16:54:50 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 16:54:50 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 16:56:20 DEBUG NewCustomer:48 - {2}
+2020-12-05 16:56:20 DEBUG NewCustomer:48 - {3}
+2020-12-05 16:56:20 DEBUG NewCustomer:48 - {1}
+2020-12-05 16:56:20 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 16:56:20 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 16:56:20 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 17:13:10 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:13:10 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:13:10 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:53 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:53 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:54 DEBUG NewCustomer:48 - {1}
+2020-12-05 17:40:54 DEBUG NewCustomer:48 - {2}
+2020-12-05 17:40:54 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 17:40:54 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 17:40:54 DEBUG NewCustomer:48 - {3}
+2020-12-05 17:40:54 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 17:40:54 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:54 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:54 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:54 ERROR DataProviderCSV:388 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:54 ERROR DataProviderCSV:373 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:54 DEBUG Service:50 - {1}
+2020-12-05 17:40:54 DEBUG Service:50 - {2}
+2020-12-05 17:40:54 DEBUG Service:50 - {3}
+2020-12-05 17:40:54 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:54 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:54 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:54 ERROR DataProviderCSV:373 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:54 ERROR DataProviderCSV:681 - java.lang.IndexOutOfBoundsException: Index: 19, Size: 3
+2020-12-05 17:40:54 ERROR DataProviderCSV:681 - java.lang.IndexOutOfBoundsException: Index: 19, Size: 3
+2020-12-05 17:40:54 ERROR DataProviderCSV:529 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:54 ERROR DataProviderCSV:275 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:54 ERROR DataProviderCSV:290 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:54 ERROR DataProviderCSV:545 - java.lang.IndexOutOfBoundsException: Index: 19, Size: 3
+2020-12-05 17:40:55 ERROR DataProviderCSV:479 - java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+2020-12-05 17:40:55 ERROR DataProviderCSV:373 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:308 - java.lang.IndexOutOfBoundsException: Index: 9, Size: 2
+2020-12-05 17:40:55 ERROR DataProviderCSV:275 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:404 - java.lang.IndexOutOfBoundsException: Index: 19, Size: 2
+2020-12-05 17:40:55 ERROR DataProviderCSV:373 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:339 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 DEBUG Service:50 - {2}
+2020-12-05 17:40:55 DEBUG Service:50 - {1}
+2020-12-05 17:40:55 DEBUG Service:50 - {3}
+2020-12-05 17:40:55 ERROR DataProviderCSV:373 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:459 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:666 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:55 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:55 DEBUG Master:50 - [1,2,3]
+2020-12-05 17:40:55 DEBUG Service:50 - {1}
+2020-12-05 17:40:55 DEBUG Service:50 - {2}
+2020-12-05 17:40:55 DEBUG Service:50 - {3}
+2020-12-05 17:40:55 ERROR DataProviderCSV:479 - java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+2020-12-05 17:40:55 ERROR DataProviderCSV:324 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:357 - java.lang.IndexOutOfBoundsException: Index: 9, Size: 3
+2020-12-05 17:40:55 ERROR DataProviderCSV:324 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:459 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:275 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:324 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 ERROR DataProviderCSV:339 - java.util.NoSuchElementException: No value present
+2020-12-05 17:40:55 DEBUG NewCustomer:48 - {1}
+2020-12-05 17:40:55 DEBUG NewCustomer:48 - {2}
+2020-12-05 17:40:55 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 17:40:55 DEBUG NewCustomer:48 - {3}
+2020-12-05 17:40:55 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 17:40:55 DEBUG OrderItem:50 - [1,2,3]
+2020-12-05 17:40:55 DEBUG Service:50 - {1}
+2020-12-05 17:40:55 DEBUG Service:50 - {2}

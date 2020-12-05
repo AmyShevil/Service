@@ -2,7 +2,7 @@ package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
-import ru.sfedu.Aisova.converters.ServicesConverter;
+import ru.sfedu.Aisova.converters.ServiceListConverter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,7 +29,7 @@ public class Master implements Serializable {
   @CsvBindByName
   private String position;
 
-  @CsvCustomBindByName(converter = ServicesConverter.class)
+  @CsvCustomBindByName(converter = ServiceListConverter.class)
   private List<Service> listService;
 
   @CsvBindByName

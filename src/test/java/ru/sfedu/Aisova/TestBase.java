@@ -40,7 +40,7 @@ public class TestBase {
     }
 
 
-    public Master createMaster (long id, String firstName, String lastName, String position, List<Service> listService, String phone, Double salary){
+    public static Master createMaster(long id, String firstName, String lastName, String position, List<Service> listService, String phone, Double salary){
         Master master = new Master();
         master.setId(id);
         master.setFirstName(firstName);
@@ -52,7 +52,7 @@ public class TestBase {
         return master;
     }
 
-    public Order createOrder (long id, String created, OrderItem item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed){
+    public Order createOrder (long id, String created, List<OrderItem> item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed){
         Order order = new Order();
         order.setId(id);
         order.setCreated(created);
@@ -65,7 +65,7 @@ public class TestBase {
         return order;
     }
 
-    public OrderItem createOrderItem (long number, Service service, Double cost, Integer quantity){
+    public static OrderItem createOrderItem(long number, Service service, Double cost, Integer quantity){
         OrderItem orderItem = new OrderItem();
         orderItem.setNumber(number);
         orderItem.setService(service);
@@ -82,7 +82,7 @@ public class TestBase {
         return salon;
     }
 
-    public Service createService (long id, String name, Double price, String description){
+    public static Service createService(long id, String name, Double price, String description){
         Service service = new Service();
         service.setId(id);
         service.setName(name);

@@ -1,6 +1,9 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
+import ru.sfedu.Aisova.converters.ServiceConverter;
+import ru.sfedu.Aisova.converters.ServiceListConverter;
 
 import java.util.Objects;
 
@@ -16,7 +19,7 @@ public class OrderItem {
   @CsvBindByName
   private long number;
 
-  @CsvBindByName
+  @CsvCustomBindByName(converter = ServiceConverter.class)
   private Service service;
 
   @CsvBindByName

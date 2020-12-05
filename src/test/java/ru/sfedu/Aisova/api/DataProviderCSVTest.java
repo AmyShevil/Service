@@ -6,19 +6,19 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import ru.sfedu.Aisova.TestBase;
 import ru.sfedu.Aisova.model.*;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static sun.management.Agent.error;
+
 
 public class DataProviderCSVTest extends TestBase {
 
@@ -42,35 +42,67 @@ public class DataProviderCSVTest extends TestBase {
     public void tearDown() {
     }
 
+    private static List<Service> getListService(){
+        List<Service> listService = new ArrayList<>();
+        Service service1 = createService(1, "service1", 1000.0, "description1");
+        Service service2 = createService(2, "service2", 2000.0, "description2");
+        Service service3 = createService(3, "service3", 3000.0, "description3");
+        listService.add(service1);
+        listService.add(service2);
+        listService.add(service3);
+        return listService;
+    }
+
+    private static List<Master> getListMaster(){
+        List<Master> listMaster = new ArrayList<>();
+        List<Service> listService = new ArrayList<>();
+        listService.addAll(getListService());
+
+        List<Service> listServiceForMaster = new ArrayList<>();
+        listServiceForMaster.add(listService.get(0));
+        listServiceForMaster.add(listService.get(1));
+
+        Master master1 = createMaster(1, "FirstName1", "LastName1", "Position1", listServiceForMaster, "Phone1", 10000.0);
+        Master master2 = createMaster(2, "FirstName2", "LastName2", "Position2", listServiceForMaster, "Phone2", 20000.0);
+        Master master3 = createMaster(3, "FirstName3", "LastName3", "Position3", listServiceForMaster, "Phone3", 30000.0);
+        listMaster.add(master1);
+        listMaster.add(master2);
+        listMaster.add(master3);
+        return listMaster;
+    }
+
+    private static List<OrderItem> getListOrderItem(){
+        List<OrderItem> listOrderItem = new ArrayList<>();
+        Service service1 = createService(1, "serviceName1", 1111.0, "description1");
+        Service service2 = createService(2, "serviceName2", 2222.0, "description2");
+        Service service3 = createService(3, "serviceName3", 3333.0, "description3");
+
+        OrderItem orderItem1 = createOrderItem(1, service1, 1000.0, 1);
+        OrderItem orderItem2 = createOrderItem(2, service2, 2000.0, 1);
+        OrderItem orderItem3 = createOrderItem(3, service3, 3000.0, 2);
+
+        listOrderItem.add(orderItem1);
+        listOrderItem.add(orderItem2);
+        listOrderItem.add(orderItem3);
+        return listOrderItem;
+    }
 
     @Test
     public void insertServiceSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertServiceSuccess");
         List<Service> listService = new ArrayList<>();
+        listService.addAll(getListService());
         DataProviderCSV instance = new DataProviderCSV();
-        Service service1 = createService(1, "service1", 1.0, "description1");
-        Service service2 = createService(2, "service2", 2.0, "description2");
-        Service service3 = createService(3, "service3", 3.0, "description3");
-        listService.add(service1);
-        listService.add(service2);
-        listService.add(service3);
         instance.insertService(listService);
-        assertEquals(service1, instance.getServiceById(1));
-        assertEquals(service2, instance.getServiceById(2));
-        assertEquals(service3, instance.getServiceById(3));
+        assertEquals(listService.get(0), instance.getServiceById(1));
     }
 
     @Test
     public void insertServiceFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertServiceFail");
         List<Service> listService = new ArrayList<>();
+        listService.addAll(getListService());
         DataProviderCSV instance = new DataProviderCSV();
-        Service service1 = createService(1, "service1", 1.0, "description1");
-        Service service2 = createService(2, "service2", 2.0, "description2");
-        Service service3 = createService(3, "service3", 3.0, "description3");
-        listService.add(service1);
-        listService.add(service2);
-        listService.add(service3);
         instance.insertService(listService);
         assertNull(instance.getServiceById(4));
     }
@@ -127,6 +159,198 @@ public class DataProviderCSVTest extends TestBase {
         String description = "rewriteDescription";
         instance.rewriteService(id,name,price,description);
         System.out.println(instance.getServiceById(id));
+    }
+
+    @Test
+    void insertMasterSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
+        System.out.println("insertMasterSuccess");
+        List<Master> listMaster = new ArrayList<>();
+        listMaster.addAll(getListMaster());
+        DataProviderCSV instance = new DataProviderCSV();
+        instance.insertMaster(listMaster);
+        assertEquals(listMaster.get(1), instance.getMaster(2).get());
+    }
+
+
+    @Test
+    void insertMasterFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
+        System.out.println("insertMasterFail");
+        List<Master> listMaster = new ArrayList<>();
+        listMaster.addAll(getListMaster());
+        DataProviderCSV instance = new DataProviderCSV();
+        instance.insertMaster(listMaster);
+        assertEquals(Optional.empty(), instance.getMaster(15));
+    }
+
+    @Test
+    public void testGetByIdMasterSuccess() throws IOException {
+        System.out.println("testGetByMasterSuccess");
+        DataProviderCSV instance = new DataProviderCSV();
+        System.out.println(instance.getMaster(2).get());
+    }
+
+    @Test
+    public void testGetByIdMasterFail() throws IOException {
+        System.out.println("testGetByMasterFail");
+        DataProviderCSV instance = new DataProviderCSV();
+        assertEquals(Optional.empty(), instance.getMaster(15));
+    }
+
+    @Test
+    public void deleteOrderMaster() throws IOException {
+        System.out.println("deleteOrderMaster");
+        DataProviderCSV instance = new DataProviderCSV();
+        instance.deleteMaster(3);
+        assertEquals(Optional.empty(), instance.getMaster(3));
+    }
+
+    @Test
+    public void deleteMasterFail() throws IOException {
+        System.out.println("deleteMasterFail");
+        DataProviderCSV instance = new DataProviderCSV();
+        instance.deleteMaster(21);
+    }
+
+    @Test
+    public void rewriteMasterSuccess() throws IOException {
+        System.out.println("rewriteMasterSuccess");
+        DataProviderCSV instance = new DataProviderCSV();
+        List<Service> listService = new ArrayList<>();
+        Service newService1 = new Service();
+        long newId = Integer.parseInt(String.valueOf(2));
+        String name = "rewriteServiceName1";
+        Double price = 999.0;
+        String description = "rewriteDescription1";
+        newService1.setId(newId);
+        newService1.setName(name);
+        newService1.setPrice(price);
+        newService1.setDescription(description);
+        listService.add(newService1);
+        Service newService2 = new Service(newId+1, "rewriteServiceName2", price+1000, "rewriteDescription2");
+        listService.add(newService2);
+        long id = 1;
+        String firstName = "rewriteFirstName";
+        String lastName = "rewriteLastName";
+        String position = "rewritePosition";
+        String phone = "rewritePhone";
+        Double salary = 50000.0;
+        instance.rewriteMaster(id, firstName, lastName, position,listService,phone,salary);
+        System.out.println(instance.getMaster(newId).get());
+    }
+
+    @Test
+    public void rewriteMasterFail() throws IOException {
+        System.out.println("rewriteMasterFail");
+        DataProviderCSV instance = new DataProviderCSV();
+        List<Service> listService = new ArrayList<>();
+        Service newService1 = new Service();
+        long newId = Integer.parseInt(String.valueOf(1));
+        String name = "rewriteServiceName1";
+        Double price = 999.0;
+        String description = "rewriteDescription1";
+        newService1.setId(newId);
+        newService1.setName(name);
+        newService1.setPrice(price);
+        newService1.setDescription(description);
+        listService.add(newService1);
+        Service newService2 = new Service(newId+1, "rewriteServiceName2", price+1000, "rewriteDescription2");
+        listService.add(newService2);
+        long id = 1;
+        String firstName = "rewriteFirstName";
+        String lastName = "rewriteLastName";
+        String position = "rewritePosition";
+        String phone = "rewritePhone";
+        Double salary = 50000.0;
+        instance.rewriteMaster(id, firstName, lastName, position,listService,phone,salary);
+    }
+
+    //List<Master> listMaster
+    @Test
+    void insertSalonSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
+        System.out.println("insertSalonSuccess");
+        List<Salon> listSalon = new ArrayList<>();
+        DataProviderCSV instance = new DataProviderCSV();
+        List<Master> listMaster = new ArrayList<>();
+        listMaster.addAll(getListMaster());
+        Salon salon1 = createSalon(1, "address1", listMaster);
+        Salon salon2 = createSalon(2, "address1", listMaster);
+        Salon salon3 = createSalon(3, "address1", listMaster);
+        listSalon.add(salon1);
+        listSalon.add(salon2);
+        listSalon.add(salon3);
+        instance.insertSalon(listSalon);
+        assertEquals(listSalon.get(1), instance.getSalon(2).get());
+
+    }
+
+    @Test
+    void insertSalonFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
+        System.out.println("insertSalonFail");
+        List<Salon> listSalon = new ArrayList<>();
+        DataProviderCSV instance = new DataProviderCSV();
+        List<Master> listMaster = new ArrayList<>();
+        listMaster.addAll(getListMaster());
+        Salon salon1 = createSalon(1, "address1", listMaster);
+        Salon salon2 = createSalon(2, "address1", listMaster);
+        Salon salon3 = createSalon(3, "address1", listMaster);
+        listSalon.add(salon1);
+        listSalon.add(salon2);
+        listSalon.add(salon3);
+        instance.insertSalon(listSalon);
+        assertEquals(Optional.empty(), instance.getSalon(15));
+    }
+
+    @Test
+    public void testGetByIdSalonSuccess() throws IOException {
+        System.out.println("testGetBySalonSuccess");
+        DataProviderCSV instance = new DataProviderCSV();
+        System.out.println(instance.getSalon(2).get());
+    }
+
+    @Test
+    public void testGetByIdSalonFail() throws IOException {
+        System.out.println("testGetBySalonFail");
+        DataProviderCSV instance = new DataProviderCSV();
+        assertEquals(Optional.empty(), instance.getSalon(15));
+    }
+
+    @Test
+    public void deleteSalonSuccess() throws IOException {
+        System.out.println("deleteSalonSuccess");
+        DataProviderCSV instance = new DataProviderCSV();
+        instance.deleteSalon(3);
+        assertEquals(Optional.empty(), instance.getSalon(3));
+    }
+
+    @Test
+    public void deleteSalonFail() throws IOException {
+        System.out.println("deleteSalonFail");
+        DataProviderCSV instance = new DataProviderCSV();
+        instance.deleteSalon(21);
+    }
+
+    @Test
+    public void rewriteSalonSuccess() throws IOException {
+        System.out.println("rewriteSalonSuccess");
+        DataProviderCSV instance = new DataProviderCSV();
+        long id = 1;
+        String address = "rewriteAddress";
+        List<Master> listMaster = new ArrayList<>();
+        listMaster.addAll(getListMaster());
+        instance.rewriteSalon(id, address, listMaster);
+        System.out.println(instance.getSalon(id).get());
+    }
+
+    @Test
+    public void rewriteSalonFail() throws IOException {
+        System.out.println("rewriteSalonFail");
+        DataProviderCSV instance = new DataProviderCSV();
+        long id = 20;
+        String address = "rewriteAddress";
+        List<Master> listMaster = new ArrayList<>();
+        listMaster.addAll(getListMaster());
+        instance.rewriteSalon(id, address, listMaster);
+        instance.rewriteSalon(id, address, listMaster);
     }
 
 /*
@@ -376,30 +600,16 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getRegularCustomerById(id));
     }
 
-    //Service service
     @Test
     public void insertOrderItemSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertOrderItemSuccess");
         List<OrderItem> listOrderItem = new ArrayList<>();
         DataProviderCSV instance = new DataProviderCSV();
-        //Service service1 = new Service(1, "serviceName1", 1111.0, "description1");
-        Service service1 = new Service();
-        service1.setId(1);
-        service1.setName("serviceName1");
-        service1.setPrice(1111.0);
-        service1.setDescription("description1");
-        //Service service2 = new Service(2, "serviceName2", 2222.0, "description2");
-        //Service service3 = new Service(3, "serviceName3", 3333.0, "description3");
-        OrderItem orderItem1 = createOrderItem(1, service1, 100.1, 1);
-        //OrderItem orderItem2 = createOrderItem(2, service2, 200.1, 2);
-        //OrderItem orderItem3 = createOrderItem(3, service3, 300.1, 3);
-        listOrderItem.add(orderItem1);
-        //listOrderItem.add(orderItem2);
-        //listOrderItem.add(orderItem3);
+        listOrderItem.addAll(getListOrderItem());
         instance.insertOrderItem(listOrderItem);
-        assertEquals(orderItem1, instance.getOrderItemById(1));
-        //assertEquals(orderItem2, instance.getOrderItemById(2));
-        //assertEquals(orderItem3, instance.getOrderItemById(3));
+        System.out.println(instance.getOrderItem(1));
+        System.out.println(listOrderItem.get(0));
+        assertEquals(listOrderItem.get(0), instance.getOrderItem(1).get());
     }
 
     @Test
@@ -407,29 +617,25 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println("insertOrderItemFail");
         List<OrderItem> listOrderItem = new ArrayList<>();
         DataProviderCSV instance = new DataProviderCSV();
-        Service service = new Service();
-        OrderItem orderItem1 = createOrderItem(1, service, 100.1, 1);
-        OrderItem orderItem2 = createOrderItem(2, service, 200.1, 2);
-        OrderItem orderItem3 = createOrderItem(3, service, 300.1, 3);
-        listOrderItem.add(orderItem1);
-        listOrderItem.add(orderItem2);
-        listOrderItem.add(orderItem3);
+        listOrderItem.addAll(getListOrderItem());
         instance.insertOrderItem(listOrderItem);
-        assertNull(instance.getOrderItemById(4));
+        System.out.println(instance.getOrderItem(1));
+        System.out.println(listOrderItem.get(0));
+        assertEquals(Optional.empty(), instance.getOrderItem(5));
     }
 
     @Test
     public void testGetByIdOrderItemSuccess() throws IOException {
         System.out.println("testGetByOrderItemSuccess");
         DataProviderCSV instance = new DataProviderCSV();
-        System.out.println(instance.getOrderItemById(2));
+        System.out.println(instance.getOrderItem(2).get());
     }
 
     @Test
     public void testGetByIdOrderItemFail() throws IOException {
         System.out.println("testGetByOrderItemFail");
         DataProviderCSV instance = new DataProviderCSV();
-        System.out.println(instance.getOrderItemById(5));
+        assertEquals(Optional.empty(), instance.getOrderItem(15));
     }
 
     @Test
@@ -437,6 +643,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println("deleteOrderItemSuccess");
         DataProviderCSV instance = new DataProviderCSV();
         instance.deleteOrderItem(3);
+        assertEquals(Optional.empty(), instance.getOrderItem(3));
     }
 
     @Test
@@ -450,12 +657,12 @@ public class DataProviderCSVTest extends TestBase {
     public void rewriteOrderItemSuccess() throws IOException {
         System.out.println("rewriteOrderItemSuccess");
         DataProviderCSV instance = new DataProviderCSV();
-        Service service = new Service();
+        Service service = createService(1, "rewriteServiceName", 999.0, "rewriteDescription");
         long number = 1;
         Double coast = 500.0;
         Integer quantity = 5;
         instance.rewriteOrderItem(number, service, coast, quantity);
-        System.out.println(instance.getOrderItemById(number));
+        System.out.println(instance.getOrderItem(number).get());
     }
 
     @Test
@@ -467,28 +674,28 @@ public class DataProviderCSVTest extends TestBase {
         Double coast = 500.0;
         Integer quantity = 5;
         instance.rewriteOrderItem(number, service, coast, quantity);
-        System.out.println(instance.getOrderItemById(number));
     }
 
-    //OrderItem orderItem
-    //Customer customer
     @Test
     public void insertOrderSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertOrderSuccess");
         List<Order> listOrder = new ArrayList<>();
         DataProviderCSV instance = new DataProviderCSV();
-        OrderItem orderItem = new OrderItem();
-        Customer customer = new Customer();
-        Order order1 = createOrder(1, "created1", orderItem, 100.0, Order.OrderStatus.CREATED, customer, "lastUpdate1", "completed1");
-        Order order2 = createOrder(2, "created2", orderItem, 400.0, Order.OrderStatus.COMPLETED, customer, "lastUpdate2", "completed2");
-        Order order3 = createOrder(3, "created3", orderItem, 900.0, Order.OrderStatus.CANCELED, customer, "lastUpdate3", "completed3");
+        List<OrderItem> orderItem = new ArrayList<>();
+        orderItem.addAll(getListOrderItem());
+        Customer customer1 = createNewCustomer(1, "firstName1", "lastName1", "phone1", "email1", 10);
+        Customer customer2 = createNewCustomer(2, "firstName2", "lastName2", "phone2", "email2", 20);
+        Customer customer3 = createNewCustomer(3, "firstName3", "lastName3", "phone3", "email3", 30);
+
+        Order order1 = createOrder(1, "created1", orderItem, 100.0, Order.OrderStatus.CREATED, customer1, "lastUpdate1", "completed1");
+        Order order2 = createOrder(2, "created2", orderItem, 400.0, Order.OrderStatus.COMPLETED, customer2, "lastUpdate2", "completed2");
+        Order order3 = createOrder(3, "created3", orderItem, 900.0, Order.OrderStatus.CANCELED, customer3, "lastUpdate3", "completed3");
         listOrder.add(order1);
         listOrder.add(order2);
         listOrder.add(order3);
         instance.insertOrder(listOrder);
-        assertEquals(order1, instance.getOrderById(1));
-        assertEquals(order2, instance.getOrderById(2));
-        assertEquals(order3, instance.getOrderById(3));
+        System.out.println(instance.getOrder(1).get());
+        assertEquals(listOrder.get(0), instance.getOrder(1).get());
     }
 
     @Test
@@ -496,30 +703,34 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println("insertOrderFail");
         List<Order> listOrder = new ArrayList<>();
         DataProviderCSV instance = new DataProviderCSV();
-        OrderItem orderItem = new OrderItem();
-        Customer customer = new Customer();
-        Order order1 = createOrder(1, "created1", orderItem, 100.0, Order.OrderStatus.CREATED, customer, "lastUpdate1", "completed1");
-        Order order2 = createOrder(2, "created2", orderItem, 400.0, Order.OrderStatus.COMPLETED, customer, "lastUpdate2", "completed2");
-        Order order3 = createOrder(3, "created3", orderItem, 900.0, Order.OrderStatus.CANCELED, customer, "lastUpdate3", "completed3");
+        List<OrderItem> orderItem = new ArrayList<>();
+        orderItem.addAll(getListOrderItem());
+        Customer customer1 = createNewCustomer(1, "firstName1", "lastName1", "phone1", "email1", 10);
+        Customer customer2 = createNewCustomer(2, "firstName2", "lastName2", "phone2", "email2", 20);
+        Customer customer3 = createNewCustomer(3, "firstName3", "lastName3", "phone3", "email3", 30);
+
+        Order order1 = createOrder(1, "created1", orderItem, 100.0, Order.OrderStatus.CREATED, customer1, "lastUpdate1", "completed1");
+        Order order2 = createOrder(2, "created2", orderItem, 400.0, Order.OrderStatus.COMPLETED, customer2, "lastUpdate2", "completed2");
+        Order order3 = createOrder(3, "created3", orderItem, 900.0, Order.OrderStatus.CANCELED, customer3, "lastUpdate3", "completed3");
         listOrder.add(order1);
         listOrder.add(order2);
         listOrder.add(order3);
         instance.insertOrder(listOrder);
-        assertNull(instance.getOrderById(4));
+        assertEquals(Optional.empty(), instance.getOrder(10));
     }
 
     @Test
     public void testGetByIdOrderSuccess() throws IOException {
         System.out.println("testGetByOrderSuccess");
         DataProviderCSV instance = new DataProviderCSV();
-        System.out.println(instance.getOrderById(2));
+        System.out.println(instance.getOrder(2).get());
     }
 
     @Test
     public void testGetByIdOrderFail() throws IOException {
         System.out.println("testGetByOrderFail");
         DataProviderCSV instance = new DataProviderCSV();
-        System.out.println(instance.getOrderById(20));
+        assertEquals(Optional.empty(), instance.getOrder(5));
     }
 
     @Test
@@ -527,6 +738,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println("deleteOrderSuccess");
         DataProviderCSV instance = new DataProviderCSV();
         instance.deleteOrder(3);
+        assertEquals(Optional.empty(), instance.getOrder(3));
     }
 
     @Test
@@ -540,247 +752,33 @@ public class DataProviderCSVTest extends TestBase {
     public void rewriteOrderSuccess() throws IOException {
         System.out.println("rewriteOrderSuccess");
         DataProviderCSV instance = new DataProviderCSV();
-        OrderItem orderItem = new OrderItem();
-        Customer customer = new Customer();
+        List<OrderItem> orderItem = new ArrayList<>();
+        orderItem.addAll(getListOrderItem());
+        Customer customer = createNewCustomer(1, "rewriteFirstName", "rewriteLastName", "rewritePhone", "rewriteEmail", 90);
         long id = 1;
         String created = "rewriteCreated";
         Double coast = 5000.0;
-        Order.OrderStatus status = Order.OrderStatus.COMPLETED;
+        Order.OrderStatus status = Order.OrderStatus.PROCESSING;
         String lastUpdated = "rewriteLastUpdated";
         String completed = "rewriteCompleted";
         instance.rewriteOrder(id, created, orderItem, coast, status, customer, lastUpdated,completed);
-        System.out.println(instance.getOrderById(id));
+        System.out.println(instance.getOrder(id).get());
     }
 
     @Test
     public void rewriteOrderFail() throws IOException {
         System.out.println("rewriteOrderFail");
         DataProviderCSV instance = new DataProviderCSV();
-        OrderItem orderItem = new OrderItem();
-        Customer customer = new Customer();
-        long id = 20;
+        List<OrderItem> orderItem = new ArrayList<>();
+        orderItem.addAll(getListOrderItem());
+        Customer customer = createNewCustomer(1, "rewriteFirstName", "rewriteLastName", "rewritePhone", "rewriteEmail", 90);
+        long id = 1;
         String created = "rewriteCreated";
         Double coast = 5000.0;
-        Order.OrderStatus status = Order.OrderStatus.COMPLETED;
+        Order.OrderStatus status = Order.OrderStatus.PROCESSING;
         String lastUpdated = "rewriteLastUpdated";
         String completed = "rewriteCompleted";
         instance.rewriteOrder(id, created, orderItem, coast, status, customer, lastUpdated,completed);
-        System.out.println(instance.getOrderById(id));
-    }
-
-    //List<Service> listService
-    @Test
-    void insertMasterSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
-        System.out.println("insertMasterSuccess");
-        List<Master> listMaster = new ArrayList<>();
-        DataProviderCSV instance = new DataProviderCSV();
-
-        List<Service> listService = new ArrayList<>();
-        Service service1 = createService(1, "service1", 1.0, "description1");
-        Service service2 = createService(2, "service2", 2.0, "description2");
-        Service service3 = createService(3, "service3", 3.0, "description3");
-        listService.add(service1);
-        listService.add(service2);
-        listService.add(service3);
-       /*
-        List<Service> listServiceOfMaster1 = new ArrayList<>();
-        listServiceOfMaster1.add(listService.get(0));
-        List<Service> listServiceOfMaster2 = new ArrayList<>();
-        listServiceOfMaster2.add(listService.get(0));
-        listServiceOfMaster2.add(listService.get(1));
-        List<Service> listServiceOfMaster3 = new ArrayList<>();
-        listServiceOfMaster3.add(listService.get(0));
-        listServiceOfMaster3.add(listService.get(1));
-        listServiceOfMaster3.add(listService.get(2));
-
-        */
-
-        Master master1 = createMaster(1, "FirstName1", "LastName1", "Position1", listService, "Phone1", 10000.0);
-        Master master2 = createMaster(2, "FirstName2", "LastName2", "Position2", listService, "Phone2", 20000.0);
-        Master master3 = createMaster(3, "FirstName3", "LastName3", "Position3", listService, "Phone3", 30000.0);
-        listMaster.add(master1);
-        listMaster.add(master2);
-        listMaster.add(master3);
-        instance.insertMaster(listMaster);
-       // assertEquals(master1, instance.getMasterById(1));
-
-
-    }
-
-
-
-    @Test
-    void insertMasterFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
-        System.out.println("insertMasterFail");
-        List<Master> listMaster = new ArrayList<>();
-        DataProviderCSV instance = new DataProviderCSV();
-        List<Service> listService = new ArrayList<>();
-        Master master1 = createMaster(1, "FirstName1", "LastName1", "Position1", listService, "Phone1", 10000.0);
-        Master master2 = createMaster(2, "FirstName2", "LastName2", "Position2", listService, "Phone2", 20000.0);
-        Master master3 = createMaster(3, "FirstName3", "LastName3", "Position3", listService, "Phone3", 30000.0);
-        listMaster.add(master1);
-        listMaster.add(master2);
-        listMaster.add(master3);
-        instance.insertMaster(listMaster);
-        assertNull(instance.getMasterById(4));
-    }
-
-    @Test
-    public void testGetByIdMasterSuccess() throws IOException {
-        System.out.println("testGetByMasterSuccess");
-        DataProviderCSV instance = new DataProviderCSV();
-        System.out.println(instance.getMasterById(2));
-    }
-
-    @Test
-    public void testGetByIdMasterFail() throws IOException {
-        System.out.println("testGetByMasterFail");
-        DataProviderCSV instance = new DataProviderCSV();
-        System.out.println(instance.getMasterById(20));
-    }
-
-    @Test
-    public void deleteOrderMaster() throws IOException {
-        System.out.println("deleteOrderMaster");
-        DataProviderCSV instance = new DataProviderCSV();
-        instance.deleteMaster(3);
-    }
-
-    @Test
-    public void deleteMasterFail() throws IOException {
-        System.out.println("deleteMasterFail");
-        DataProviderCSV instance = new DataProviderCSV();
-        instance.deleteMaster(21);
-    }
-
-    @Test
-    public void rewriteMasterSuccess() throws IOException {
-        System.out.println("rewriteMasterSuccess");
-        DataProviderCSV instance = new DataProviderCSV();
-        List<Service> listService = new ArrayList<>();
-        Service newService1 = new Service();
-        long newId = Integer.parseInt(String.valueOf(2));
-        String name = "rewriteServiceName1";
-        Double price = 999.0;
-        String description = "rewriteDescription1";
-        newService1.setId(newId);
-        newService1.setName(name);
-        newService1.setPrice(price);
-        newService1.setDescription(description);
-        listService.add(newService1);
-        Service newService2 = new Service(newId+1, "rewriteServiceName2", price+1000, "rewriteDescription2");
-        listService.add(newService2);
-        long id = 1;
-        String firstName = "rewriteFirstName";
-        String lastName = "rewriteLastName";
-        String position = "rewritePosition";
-        String phone = "rewritePhone";
-        Double salary = 50000.0;
-        instance.rewriteMaster(id, firstName, lastName, position,listService,phone,salary);
-        System.out.println(instance.getMasterById(id));
-    }
-
-    @Test
-    public void rewriteMasterFail() throws IOException {
-        System.out.println("rewriteMasterFail");
-        DataProviderCSV instance = new DataProviderCSV();
-        List<Service> listService = new ArrayList<>();
-        long id = 1;
-        String firstName = "rewriteFirstName";
-        String lastName = "rewriteLastName";
-        String position = "rewritePosition";
-        String phone = "rewritePhone";
-        Double salary = 50000.0;
-        instance.rewriteMaster(id, firstName, lastName, position,listService,phone,salary);
-        System.out.println(instance.getMasterById(id));
-    }
-
-    //List<Master> listMaster
-    @Test
-    void insertSalonSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
-        System.out.println("insertSalonSuccess");
-        List<Salon> listSalon = new ArrayList<>();
-        DataProviderCSV instance = new DataProviderCSV();
-        List<Master> listMaster = new ArrayList<>();
-        Salon salon1 = createSalon(1, "address1", listMaster);
-        Salon salon2 = createSalon(2, "address1", listMaster);
-        Salon salon3 = createSalon(3, "address1", listMaster);
-        listSalon.add(salon1);
-        listSalon.add(salon2);
-        listSalon.add(salon3);
-        instance.insertSalon(listSalon);
-        assertEquals(salon1, instance.getSalonById(1));
-        assertEquals(salon2, instance.getSalonById(2));
-        assertEquals(salon3, instance.getSalonById(3));
-    }
-
-    @Test
-    void insertSalonFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
-        System.out.println("insertSalonFail");
-        List<Salon> listSalon = new ArrayList<>();
-        DataProviderCSV instance = new DataProviderCSV();
-        List<Master> listMaster = new ArrayList<>();
-        Salon salon1 = createSalon(1, "address1", listMaster);
-        Salon salon2 = createSalon(2, "address1", listMaster);
-        Salon salon3 = createSalon(3, "address1", listMaster);
-        listSalon.add(salon1);
-        listSalon.add(salon2);
-        listSalon.add(salon3);
-        instance.insertSalon(listSalon);
-        assertEquals(salon1, instance.getSalonById(1));
-        assertEquals(salon2, instance.getSalonById(2));
-        assertEquals(salon3, instance.getSalonById(3));
-        assertNull(instance.getSalonById(4));
-    }
-
-    @Test
-    public void testGetByIdSalonSuccess() throws IOException {
-        System.out.println("testGetBySalonSuccess");
-        DataProviderCSV instance = new DataProviderCSV();
-        System.out.println(instance.getSalonById(2));
-    }
-
-    @Test
-    public void testGetByIdSalonFail() throws IOException {
-        System.out.println("testGetBySalonFail");
-        DataProviderCSV instance = new DataProviderCSV();
-        System.out.println(instance.getSalonById(5));
-    }
-
-    @Test
-    public void deleteSalonSuccess() throws IOException {
-        System.out.println("deleteSalonSuccess");
-        DataProviderCSV instance = new DataProviderCSV();
-        instance.deleteSalon(3);
-    }
-
-    @Test
-    public void deleteSalonFail() throws IOException {
-        System.out.println("deleteSalonFail");
-        DataProviderCSV instance = new DataProviderCSV();
-        instance.deleteSalon(21);
-    }
-
-    @Test
-    public void rewriteSalonSuccess() throws IOException {
-        System.out.println("rewriteSalonSuccess");
-        DataProviderCSV instance = new DataProviderCSV();
-        List<Master> listMaster = new ArrayList<>();
-        long id = 1;
-        String address = "rewriteAddress";
-        instance.rewriteSalon(id, address, listMaster);
-        System.out.println(instance.getSalonById(id));
-    }
-
-    @Test
-    public void rewriteSalonFail() throws IOException {
-        System.out.println("rewriteSalonFail");
-        DataProviderCSV instance = new DataProviderCSV();
-        List<Master> listMaster = new ArrayList<>();
-        long id = 20;
-        String address = "rewriteAddress";
-        instance.rewriteSalon(id, address, listMaster);
-        System.out.println(instance.getSalonById(id));
     }
 
 }

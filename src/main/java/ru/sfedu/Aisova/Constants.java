@@ -5,9 +5,15 @@ public class Constants {
     static public final String ENV_CONST="source";
     static public final int NUM_CONST_ONE=1234;
     static public final String TEXT_CONST="The value of constant is: %d%n";
-    public static final String ARRAY_SPLIT = "array.split";
-    public static final String ARRAY_START_SYMBOL = "array.startSymbol";
-    public static final String ARRAY_END_SYMBOL = "array.endSymbol";
+    static public final String SPLIT =",";
+    static public final String LIST_START_SYMBOL ="[";
+    static public final String LIST_END_SYMBOL ="]";
+    static public final String PEOPLE_START_SYMBOL ="{";
+    static public final String PEOPLE_END_SYMBOL ="}";
     public static final String DATE_FORMAT = "dd.MM.yyyy HH:mm:ss";
+    public static final String CANNOT_CREATE_FILE = "config.path";
+    public static final String CONFIG_PATH = "config.path";
+
+
 
 }
