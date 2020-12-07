@@ -12,9 +12,5 @@ class ServiceClientTest {
     public void main() throws IOException {
         ServiceClient client = new ServiceClient();
         client.logBasicSystemInfo();
-        System.out.println("main");
-        System.out.println(Constants.TEST_CONST);
-        System.out.println("Good_test");
-        //fail("bad");
     }
 }

@@ -1437,3 +1437,162 @@
 2020-12-06 23:24:09 DEBUG OrderItemConverter:50 - [1,2,3]
 2020-12-06 23:24:09 DEBUG NewCustomerConverter:48 - {2}
 2020-12-06 23:24:09 DEBUG NewCustomerConverter:48 - {3}
+2020-12-07 16:44:08 ERROR DataProviderCSV:372 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:08 ERROR DataProviderCSV:372 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:08 ERROR DataProviderCSV:387 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:08 ERROR DataProviderCSV:372 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:08 ERROR DataProviderCSV:372 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:403 - java.lang.IndexOutOfBoundsException: Index 19 out of bounds for length 2
+2020-12-07 16:44:09 ERROR DataProviderCSV:372 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 DEBUG DataProviderCSV:416 - [Master{id=1, firstName='FirstName1', lastName='LastName1', position='Position1', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone1', salary=10000.0}, Master{id=2, firstName='FirstName2', lastName='LastName2', position='Position2', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone2', salary=20000.0}, Master{id=3, firstName='FirstName3', lastName='LastName3', position='Position3', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone3', salary=30000.0}]
+2020-12-07 16:44:09 DEBUG DataProviderCSVTest:158 - [Master{id=1, firstName='FirstName1', lastName='LastName1', position='Position1', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone1', salary=10000.0}, Master{id=2, firstName='FirstName2', lastName='LastName2', position='Position2', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone2', salary=20000.0}, Master{id=3, firstName='FirstName3', lastName='LastName3', position='Position3', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone3', salary=30000.0}]
+2020-12-07 16:44:09 DEBUG DataProviderCSV:416 - [Master{id=1, firstName='FirstName1', lastName='LastName1', position='Position1', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone1', salary=10000.0}, Master{id=2, firstName='FirstName2', lastName='LastName2', position='Position2', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone2', salary=20000.0}, Master{id=3, firstName='FirstName3', lastName='LastName3', position='Position3', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone3', salary=30000.0}]
+2020-12-07 16:44:09 ERROR DataProviderCSV:471 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:471 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:491 - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+2020-12-07 16:44:09 ERROR DataProviderCSV:491 - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG DataProviderCSV:642 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address2', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address3', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 16:44:09 DEBUG DataProviderCSV:651 - Salon{id=2, address='address2', listMaster=[]}
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG DataProviderCSV:642 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 16:44:09 DEBUG DataProviderCSV:642 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 16:44:09 DEBUG DataProviderCSV:651 - Salon{id=2, address='address1', listMaster=[]}
+2020-12-07 16:44:09 DEBUG DataProviderCSV:642 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG DataProviderCSV:642 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 16:44:09 ERROR DataProviderCSV:683 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:698 - java.lang.IndexOutOfBoundsException: Index 19 out of bounds for length 2
+2020-12-07 16:44:09 ERROR DataProviderCSV:698 - java.lang.IndexOutOfBoundsException: Index 19 out of bounds for length 2
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG DataProviderCSV:642 - [Salon{id=1, address='rewriteAddress', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 16:44:09 DEBUG DataProviderCSV:651 - Salon{id=1, address='rewriteAddress', listMaster=[]}
+2020-12-07 16:44:09 ERROR DataProviderCSV:274 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:274 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:289 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:307 - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2020-12-07 16:44:09 ERROR DataProviderCSV:274 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:323 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:323 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:338 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 ERROR DataProviderCSV:356 - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2020-12-07 16:44:09 ERROR DataProviderCSV:323 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {1}
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {2}
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {3}
+2020-12-07 16:44:09 DEBUG DataProviderCSV:512 - OrderItem{number=2, service=Service{id=2, name='service2', price=2000.0, description='description2'}, cost=2000.0, quantity=1}
+2020-12-07 16:44:09 DEBUG DataProviderCSV:512 - OrderItem{number=2, service=Service{id=2, name='service2', price=2000.0, description='description2'}, cost=2000.0, quantity=1}
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {2}
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {1}
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {3}
+2020-12-07 16:44:09 DEBUG DataProviderCSV:507 - Optional.empty
+2020-12-07 16:44:09 DEBUG DataProviderCSV:507 - Optional.empty
+2020-12-07 16:44:09 DEBUG DataProviderCSV:512 - OrderItem{number=2, service=Service{id=2, name='service2', price=2000.0, description='description2'}, cost=2000.0, quantity=1}
+2020-12-07 16:44:09 ERROR DataProviderCSV:544 - java.util.NoSuchElementException: No value present
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {1}
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {2}
+2020-12-07 16:44:09 DEBUG DataProviderCSV:507 - Optional.empty
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {1}
+2020-12-07 16:44:09 DEBUG ServiceConverter:50 - {2}
+2020-12-07 16:44:09 DEBUG DataProviderCSV:512 - OrderItem{number=1, service=Service{id=1, name='rewriteName', price=100.0, description='rewriteDescription'}, cost=500.0, quantity=5}
+2020-12-07 16:44:09 ERROR DataProviderCSV:560 - java.lang.IndexOutOfBoundsException: Index 19 out of bounds for length 2
+2020-12-07 16:44:09 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG NewCustomerConverter:48 - {1}
+2020-12-07 16:44:09 DEBUG NewCustomerConverter:48 - {2}
+2020-12-07 16:44:09 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 16:44:09 DEBUG NewCustomerConverter:48 - {3}
+2020-12-07 16:44:10 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 16:44:10 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 16:44:10 DEBUG NewCustomerConverter:48 - {1}
+2020-12-07 16:44:10 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 16:44:10 DEBUG NewCustomerConverter:48 - {2}
+2020-12-07 16:44:10 DEBUG NewCustomerConverter:48 - {3}
+2020-12-07 19:10:29 ERROR DataProviderCSV:361 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:29 ERROR DataProviderCSV:361 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:29 ERROR DataProviderCSV:376 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:29 ERROR DataProviderCSV:361 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:29 ERROR DataProviderCSV:361 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:29 ERROR DataProviderCSV:392 - java.lang.IndexOutOfBoundsException: Index 19 out of bounds for length 2
+2020-12-07 19:10:29 ERROR DataProviderCSV:361 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:29 DEBUG DataProviderCSV:405 - [Master{id=1, firstName='FirstName1', lastName='LastName1', position='Position1', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone1', salary=10000.0}, Master{id=2, firstName='FirstName2', lastName='LastName2', position='Position2', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone2', salary=20000.0}, Master{id=3, firstName='FirstName3', lastName='LastName3', position='Position3', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone3', salary=30000.0}]
+2020-12-07 19:10:29 DEBUG DataProviderCSVTest:158 - [Master{id=1, firstName='FirstName1', lastName='LastName1', position='Position1', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone1', salary=10000.0}, Master{id=2, firstName='FirstName2', lastName='LastName2', position='Position2', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone2', salary=20000.0}, Master{id=3, firstName='FirstName3', lastName='LastName3', position='Position3', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone3', salary=30000.0}]
+2020-12-07 19:10:29 DEBUG DataProviderCSV:405 - [Master{id=1, firstName='FirstName1', lastName='LastName1', position='Position1', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone1', salary=10000.0}, Master{id=2, firstName='FirstName2', lastName='LastName2', position='Position2', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone2', salary=20000.0}, Master{id=3, firstName='FirstName3', lastName='LastName3', position='Position3', listService=[Service{id=1, name='service1', price=1000.0, description='description1'}, Service{id=2, name='service2', price=2000.0, description='description2'}, Service{id=3, name='service3', price=3000.0, description='description3'}], phone='Phone3', salary=30000.0}]
+2020-12-07 19:10:29 ERROR DataProviderCSV:460 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:29 ERROR DataProviderCSV:460 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:29 ERROR DataProviderCSV:480 - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+2020-12-07 19:10:29 ERROR DataProviderCSV:480 - java.lang.IndexOutOfBoundsException: Index 0 out of bounds for length 0
+2020-12-07 19:10:29 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:29 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:29 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG DataProviderCSV:631 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address2', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address3', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 19:10:30 DEBUG DataProviderCSV:640 - Salon{id=2, address='address2', listMaster=[]}
+2020-12-07 19:10:30 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG DataProviderCSV:631 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 19:10:30 DEBUG DataProviderCSV:631 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 19:10:30 DEBUG DataProviderCSV:640 - Salon{id=2, address='address1', listMaster=[]}
+2020-12-07 19:10:30 DEBUG DataProviderCSV:631 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 19:10:30 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG DataProviderCSV:631 - [Salon{id=1, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 19:10:30 ERROR DataProviderCSV:672 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 ERROR DataProviderCSV:687 - java.lang.IndexOutOfBoundsException: Index 19 out of bounds for length 2
+2020-12-07 19:10:30 ERROR DataProviderCSV:687 - java.lang.IndexOutOfBoundsException: Index 19 out of bounds for length 2
+2020-12-07 19:10:30 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG DataProviderCSV:631 - [Salon{id=1, address='rewriteAddress', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address1', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 19:10:30 DEBUG DataProviderCSV:640 - Salon{id=1, address='rewriteAddress', listMaster=[]}
+2020-12-07 19:10:30 ERROR DataProviderCSV:263 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 ERROR DataProviderCSV:263 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 ERROR DataProviderCSV:278 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 ERROR DataProviderCSV:296 - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2020-12-07 19:10:30 ERROR DataProviderCSV:263 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 ERROR DataProviderCSV:312 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 ERROR DataProviderCSV:312 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 ERROR DataProviderCSV:327 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 ERROR DataProviderCSV:345 - java.lang.IndexOutOfBoundsException: Index 9 out of bounds for length 2
+2020-12-07 19:10:30 ERROR DataProviderCSV:312 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {2}
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {3}
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {1}
+2020-12-07 19:10:30 DEBUG DataProviderCSV:501 - OrderItem{number=2, service=Service{id=2, name='service2', price=2000.0, description='description2'}, cost=2000.0, quantity=1}
+2020-12-07 19:10:30 DEBUG DataProviderCSV:501 - OrderItem{number=2, service=Service{id=2, name='service2', price=2000.0, description='description2'}, cost=2000.0, quantity=1}
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {1}
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {2}
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {3}
+2020-12-07 19:10:30 DEBUG DataProviderCSV:496 - Optional.empty
+2020-12-07 19:10:30 DEBUG DataProviderCSV:496 - Optional.empty
+2020-12-07 19:10:30 DEBUG DataProviderCSV:501 - OrderItem{number=2, service=Service{id=2, name='service2', price=2000.0, description='description2'}, cost=2000.0, quantity=1}
+2020-12-07 19:10:30 ERROR DataProviderCSV:533 - java.util.NoSuchElementException: No value present
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {2}
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {1}
+2020-12-07 19:10:30 DEBUG DataProviderCSV:496 - Optional.empty
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {2}
+2020-12-07 19:10:30 DEBUG ServiceConverter:50 - {1}
+2020-12-07 19:10:30 DEBUG DataProviderCSV:501 - OrderItem{number=1, service=Service{id=1, name='rewriteName', price=100.0, description='rewriteDescription'}, cost=500.0, quantity=5}
+2020-12-07 19:10:30 ERROR DataProviderCSV:549 - java.lang.IndexOutOfBoundsException: Index 19 out of bounds for length 2
+2020-12-07 19:10:30 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG NewCustomerConverter:48 - {1}
+2020-12-07 19:10:30 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG NewCustomerConverter:48 - {3}
+2020-12-07 19:10:30 DEBUG NewCustomerConverter:48 - {2}
+2020-12-07 19:10:30 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG NewCustomerConverter:48 - {3}
+2020-12-07 19:10:30 DEBUG NewCustomerConverter:48 - {2}
+2020-12-07 19:10:30 DEBUG OrderItemConverter:50 - [1,2,3]
+2020-12-07 19:10:30 DEBUG NewCustomerConverter:48 - {1}
+2020-12-07 19:15:07 DEBUG MastersConverter:50 - [1,2,3]
+2020-12-07 19:15:07 DEBUG MastersConverter:50 - [1,3]
+2020-12-07 19:15:07 DEBUG MastersConverter:50 - [2]
+2020-12-07 19:15:07 DEBUG DataProviderCSV:631 - [Salon{id=1, address='address1', listMaster=[Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address2', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address3', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
+2020-12-07 19:15:07 DEBUG DataProviderCSV:640 - Salon{id=2, address='address2', listMaster=[]}

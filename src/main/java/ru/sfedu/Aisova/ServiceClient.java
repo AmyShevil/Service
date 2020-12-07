@@ -30,14 +30,17 @@ public class ServiceClient {
     }
 
     public static void logBasicSystemInfo() throws IOException {
-
-        log.trace("Trace_test");
-        log.debug("Debug_test");
-        log.info("Info_test");
-        log.warn("Warn_test");
-        log.error("Error_test");
-        log.fatal("Fatal_test");
-        log.info(getConfigurationEntry(ENV_CONST));
-        log.info(String.format(TEXT_CONST, NUM_CONST_ONE));
+        log.info("Launching the application...");
+        log.info(
+                "Operating System: " + System.getProperty("os.name") + " "
+                        + System.getProperty("os.version")
+        );
+        log.info("JRE: " + System.getProperty("java.version"));
+        log.info("Java Launched From: " + System.getProperty("java.home"));
+        log.info("Class Path: " + System.getProperty("java.class.path"));
+        log.info("Library Path: " + System.getProperty("java.library.path"));
+        log.info("User Home Directory: " + System.getProperty("user.home"));
+        log.info("User Working Directory: " + System.getProperty("user.dir"));
+        log.info("Test INFO logging.");
     }
 }

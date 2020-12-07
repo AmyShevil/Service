@@ -18,17 +18,15 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DataProviderCSV {
+public class DataProviderCSV implements DataProvider {
 
-    private final String PATH = "csv_path";
-    private final String FILE_EXTENSION = "csv";
     private static Logger log = LogManager.getLogger(DataProviderCSV.class);
 
     public <T> void insertClass(List<T> listClass) {
         try{
-            FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(PATH)
+            FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(Constants.PATH)
                     + listClass.get(0).getClass().getSimpleName().toLowerCase()
-                    + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
+                    + ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION));
 
             CSVWriter csvWriter = new CSVWriter(writer);
             StatefulBeanToCsv<T> beanToCsv = new StatefulBeanToCsvBuilder<T>(csvWriter)
@@ -60,8 +58,11 @@ public class DataProviderCSV {
     }
 
     private <T> CSVReader getCsv(Class<T> tClass) throws IOException {
-        File file = new File(ConfigurationUtil.getConfigurationEntry(PATH) + tClass.getSimpleName().toLowerCase() + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
+        // Get the file
+        File file = new File(ConfigurationUtil.getConfigurationEntry(Constants.PATH) + tClass.getSimpleName().toLowerCase() + ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION));
 
+        //createNewFile возвращает истину, если путь к абстрактному файлу не существует и создается новый файл.
+        // Он возвращает false, если имя файла уже существует.
         if (!file.exists()) {
             if (!file.createNewFile()) {
                 throw new IOException(ConfigurationUtil.getConfigurationEntry(Constants.CANNOT_CREATE_FILE));
@@ -74,7 +75,6 @@ public class DataProviderCSV {
     }
 
     private <T> List<Service> getServiceListInMaster(Class<T> tClass, T object) throws IOException {
-
         try {
             List<Service> objectServiceList;
             Master master = (Master) object;
@@ -82,8 +82,7 @@ public class DataProviderCSV {
             List<Service> serviceList = getFromCSV(Service.class);
             List<Long> idServiceInMaster;
 
-            idServiceInMaster = objectServiceList
-                    .stream()
+            idServiceInMaster = objectServiceList.stream()
                     .map(value -> value.getId())
                     .collect(Collectors.toList());
 
@@ -103,7 +102,6 @@ public class DataProviderCSV {
     }
 
     private <T> List<OrderItem> getOrderItemList(Class<T> tClass, T object) throws IOException {
-
         try {
             List<OrderItem> objectOrderItemList;
             Order order = (Order) object;
@@ -111,8 +109,7 @@ public class DataProviderCSV {
             List<OrderItem> orderItemList = getFromCSV(OrderItem.class);
             List<Long> idOrderItemInOrder;
 
-            idOrderItemInOrder = objectOrderItemList
-                    .stream()
+            idOrderItemInOrder = objectOrderItemList.stream()
                     .map(value -> value.getNumber())
                     .collect(Collectors.toList());
 
@@ -120,10 +117,37 @@ public class DataProviderCSV {
             orderItemListInOrder =orderItemList.stream()
                     .filter(service -> idOrderItemInOrder
                             .stream()
-                            .anyMatch(serviceInMaster -> serviceInMaster.longValue() ==  service.getNumber()))
+                            .anyMatch(orderItemInOrder -> orderItemInOrder.longValue() ==  service.getNumber()))
                     .collect(Collectors.toList());
 
             return orderItemListInOrder;
+
+        }catch(IOException e){
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    private <T> List<Master> getMasterList(Class<T> tClass, T object) throws IOException {
+        try {
+            List<Master> objectMasterList;
+            Salon salon = (Salon) object;
+            objectMasterList = salon.getListMaster();
+            List<Master> masterList = getFromCSV(Master.class);
+            List<Long> listIdMasterInSalon;
+
+            listIdMasterInSalon = objectMasterList.stream()
+                    .map(value -> value.getId())
+                    .collect(Collectors.toList());
+
+            List<Master>masterListInSalon;
+            masterListInSalon =masterList.stream()
+                    .filter(service -> listIdMasterInSalon
+                            .stream()
+                            .anyMatch(masterInSalon -> masterInSalon.longValue() ==  service.getId()))
+                    .collect(Collectors.toList());
+
+            return masterListInSalon;
 
         }catch(IOException e){
             log.error(e);
@@ -170,41 +194,6 @@ public class DataProviderCSV {
                 .orElse(null);
 
         return regularCustomerInOrder;
-    }
-
-    private <T> List<Master> getMasterList(Class<T> tClass, T object) throws IOException {
-        try {
-            List<Master> objectMasterList;
-            Salon salon = (Salon) object;
-            objectMasterList = salon.getListMaster();
-            List<Master> masterList = getFromCSV(Master.class);
-            List<Master> masterListInSalon;
-            List<Long> listIdMasterInSalon = new ArrayList<>();
-            List<Master> masterInSalonWithService = new ArrayList<>();
-
-            listIdMasterInSalon = objectMasterList
-                    .stream()
-                    .map(value -> value.getId())
-                    .collect(Collectors.toList());
-
-            List<Long> finalListIdMasterInSalon = listIdMasterInSalon;
-            masterListInSalon = masterList.stream()
-                    .filter(works -> finalListIdMasterInSalon
-                            .stream()
-                            .anyMatch(masterInSalon -> masterInSalon.longValue() ==  works.getId()))
-                    .collect(Collectors.toList());
-
-            for (int i =0;i<masterListInSalon.size();i++)
-            {
-               masterInSalonWithService.add(getMaster(masterListInSalon.get(i).getId()).get());
-            }
-
-            return masterInSalonWithService;
-
-        }catch(IOException e){
-            log.error(e);
-            return new ArrayList<>();
-        }
     }
 
 
@@ -406,9 +395,9 @@ public class DataProviderCSV {
 
     public void insertMaster(List<Master> listMaster) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
        try{
-        FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(PATH)
+        FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(Constants.PATH)
                 + listMaster.get(0).getClass().getSimpleName().toLowerCase()
-                + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
+                + ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION));
         CSVWriter csvWriter = new CSVWriter(writer);
         StatefulBeanToCsv<Master> beanToCsv = new StatefulBeanToCsvBuilder<Master>(csvWriter)
                 .withApplyQuotesToAll(false)
