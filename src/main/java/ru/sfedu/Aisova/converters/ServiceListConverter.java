@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceListConverter extends AbstractBeanField<Service> {
-    private static final Logger log = LogManager.getLogger(Service.class);
+    private static final Logger log = LogManager.getLogger(ServiceListConverter.class);
 
     @Override
     protected Object convert(String s) throws CsvDataTypeMismatchException, CsvConstraintViolationException {

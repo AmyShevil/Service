@@ -10,7 +10,7 @@ import ru.sfedu.Aisova.model.NewCustomer;
 import ru.sfedu.Aisova.model.Service;
 
 public class NewCustomerConverter extends AbstractBeanField<NewCustomer> {
-    private static final Logger log = LogManager.getLogger(NewCustomer.class);
+    private static final Logger log = LogManager.getLogger(NewCustomerConverter.class);
 
     @Override
     protected Object convert(String s) throws CsvDataTypeMismatchException, CsvConstraintViolationException {

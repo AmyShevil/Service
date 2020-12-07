@@ -1,6 +1,7 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvBindByPosition;
 
 import java.util.Objects;
 
@@ -13,16 +14,16 @@ public class Service {
   // Fields
   //
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 0)
   private long id;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 1)
   private String name;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 2)
   private Double price;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 3)
   private String description;
   
   //

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MastersConverter extends AbstractBeanField<Master> {
-    private static final Logger log = LogManager.getLogger(Master.class);
+    private static final Logger log = LogManager.getLogger(MastersConverter.class);
 
     @Override
     protected Object convert(String s) throws CsvDataTypeMismatchException, CsvConstraintViolationException {

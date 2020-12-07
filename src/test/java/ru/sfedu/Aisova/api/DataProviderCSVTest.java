@@ -2,10 +2,8 @@ package ru.sfedu.Aisova.api;
 
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -19,28 +17,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DataProviderCSVTest extends TestBase {
 
-    public DataProviderCSVTest(){
-
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
+    private static Logger log = LogManager.getLogger(DataProviderCSVTest.class);
 
     private static List<Service> getListService(){
         List<Service> listService = new ArrayList<>();
@@ -57,14 +37,14 @@ public class DataProviderCSVTest extends TestBase {
         List<Master> listMaster = new ArrayList<>();
         List<Service> listService = new ArrayList<>();
         listService.addAll(getListService());
-
+/*
         List<Service> listServiceForMaster = new ArrayList<>();
         listServiceForMaster.add(listService.get(0));
         listServiceForMaster.add(listService.get(1));
-
-        Master master1 = createMaster(1, "FirstName1", "LastName1", "Position1", listServiceForMaster, "Phone1", 10000.0);
-        Master master2 = createMaster(2, "FirstName2", "LastName2", "Position2", listServiceForMaster, "Phone2", 20000.0);
-        Master master3 = createMaster(3, "FirstName3", "LastName3", "Position3", listServiceForMaster, "Phone3", 30000.0);
+ */
+        Master master1 = createMaster(1, "FirstName1", "LastName1", "Position1", listService, "Phone1", 10000.0);
+        Master master2 = createMaster(2, "FirstName2", "LastName2", "Position2", listService, "Phone2", 20000.0);
+        Master master3 = createMaster(3, "FirstName3", "LastName3", "Position3", listService, "Phone3", 30000.0);
         listMaster.add(master1);
         listMaster.add(master2);
         listMaster.add(master3);
@@ -73,9 +53,9 @@ public class DataProviderCSVTest extends TestBase {
 
     private static List<OrderItem> getListOrderItem(){
         List<OrderItem> listOrderItem = new ArrayList<>();
-        Service service1 = createService(1, "serviceName1", 1111.0, "description1");
-        Service service2 = createService(2, "serviceName2", 2222.0, "description2");
-        Service service3 = createService(3, "serviceName3", 3333.0, "description3");
+        Service service1 = createService(1, "service1", 1000.0, "description1");
+        Service service2 = createService(2, "service2", 2000.0, "description2");
+        Service service3 = createService(3, "service3", 3000.0, "description3");
 
         OrderItem orderItem1 = createOrderItem(1, service1, 1000.0, 1);
         OrderItem orderItem2 = createOrderItem(2, service2, 2000.0, 1);
@@ -87,6 +67,7 @@ public class DataProviderCSVTest extends TestBase {
         return listOrderItem;
     }
 
+    @org.junit.jupiter.api.Order(0)
     @Test
     public void insertServiceSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertServiceSuccess");
@@ -97,6 +78,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(listService.get(0), instance.getServiceById(1));
     }
 
+    @org.junit.jupiter.api.Order(0)
     @Test
     public void insertServiceFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertServiceFail");
@@ -107,6 +89,7 @@ public class DataProviderCSVTest extends TestBase {
         assertNull(instance.getServiceById(4));
     }
 
+    @org.junit.jupiter.api.Order(1)
     @Test
     public void testGetByIdServiceSuccess() throws IOException {
         System.out.println("testGetByIdServiceSuccess");
@@ -114,6 +97,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getServiceById(2));
     }
 
+    @org.junit.jupiter.api.Order(1)
     @Test
     public void testGetByIdServiceFail() throws IOException {
         System.out.println("testGetByIdServiceFail");
@@ -121,6 +105,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getServiceById(5));
     }
 
+    @org.junit.jupiter.api.Order(2)
     @Test
     public void deleteServiceSuccess() throws IOException {
         System.out.println("deleteServiceSuccess");
@@ -129,6 +114,7 @@ public class DataProviderCSVTest extends TestBase {
         assertNull(instance.getServiceById(3));
     }
 
+    @org.junit.jupiter.api.Order(2)
     @Test
     public void deleteServiceFail() throws IOException {
         System.out.println("deleteServiceFail");
@@ -137,6 +123,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getServiceById(21));
     }
 
+    @org.junit.jupiter.api.Order(3)
     @Test
     public void rewriteServiceSuccess() throws IOException {
         System.out.println("rewriteServiceSuccess");
@@ -149,6 +136,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getServiceById(id));
     }
 
+    @org.junit.jupiter.api.Order(3)
     @Test
     public void rewriteServiceFail() throws IOException {
         System.out.println("rewriteServiceFail");
@@ -161,17 +149,21 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getServiceById(id));
     }
 
+    @org.junit.jupiter.api.Order(4)
     @Test
     void insertMasterSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertMasterSuccess");
         List<Master> listMaster = new ArrayList<>();
         listMaster.addAll(getListMaster());
+        log.debug(listMaster);
         DataProviderCSV instance = new DataProviderCSV();
         instance.insertMaster(listMaster);
+        log.debug(listMaster.get(1));
+        log.debug(instance.getMaster(2).get());
         assertEquals(listMaster.get(1), instance.getMaster(2).get());
     }
 
-
+    @org.junit.jupiter.api.Order(4)
     @Test
     void insertMasterFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertMasterFail");
@@ -182,6 +174,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getMaster(15));
     }
 
+    @org.junit.jupiter.api.Order(5)
     @Test
     public void testGetByIdMasterSuccess() throws IOException {
         System.out.println("testGetByMasterSuccess");
@@ -189,6 +182,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getMaster(2).get());
     }
 
+    @org.junit.jupiter.api.Order(5)
     @Test
     public void testGetByIdMasterFail() throws IOException {
         System.out.println("testGetByMasterFail");
@@ -196,6 +190,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getMaster(15));
     }
 
+    @org.junit.jupiter.api.Order(6)
     @Test
     public void deleteMasterSuccess() throws IOException {
         System.out.println("deleteMasterSuccess");
@@ -204,6 +199,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getMaster(3));
     }
 
+    @org.junit.jupiter.api.Order(6)
     @Test
     public void deleteMasterFail() throws IOException {
         System.out.println("deleteMasterFail");
@@ -211,6 +207,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.deleteMaster(21);
     }
 
+    @org.junit.jupiter.api.Order(7)
     @Test
     public void rewriteMasterSuccess() throws IOException {
         System.out.println("rewriteMasterSuccess");
@@ -238,6 +235,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getMaster(newId).get());
     }
 
+    @org.junit.jupiter.api.Order(7)
     @Test
     public void rewriteMasterFail() throws IOException {
         System.out.println("rewriteMasterFail");
@@ -264,7 +262,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.rewriteMaster(id, firstName, lastName, position,listService,phone,salary);
     }
 
-    //List<Master> listMaster
+    @org.junit.jupiter.api.Order(8)
     @Test
     void insertSalonSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertSalonSuccess");
@@ -273,8 +271,8 @@ public class DataProviderCSVTest extends TestBase {
         List<Master> listMaster = new ArrayList<>();
         listMaster.addAll(getListMaster());
         Salon salon1 = createSalon(1, "address1", listMaster);
-        Salon salon2 = createSalon(2, "address1", listMaster);
-        Salon salon3 = createSalon(3, "address1", listMaster);
+        Salon salon2 = createSalon(2, "address2", listMaster);
+        Salon salon3 = createSalon(3, "address3", listMaster);
         listSalon.add(salon1);
         listSalon.add(salon2);
         listSalon.add(salon3);
@@ -283,6 +281,7 @@ public class DataProviderCSVTest extends TestBase {
 
     }
 
+    @org.junit.jupiter.api.Order(8)
     @Test
     void insertSalonFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertSalonFail");
@@ -300,6 +299,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getSalon(15));
     }
 
+    @org.junit.jupiter.api.Order(9)
     @Test
     public void testGetByIdSalonSuccess() throws IOException {
         System.out.println("testGetBySalonSuccess");
@@ -307,6 +307,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getSalon(2).get());
     }
 
+    @org.junit.jupiter.api.Order(9)
     @Test
     public void testGetByIdSalonFail() throws IOException {
         System.out.println("testGetBySalonFail");
@@ -314,6 +315,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getSalon(15));
     }
 
+    @org.junit.jupiter.api.Order(10)
     @Test
     public void deleteSalonSuccess() throws IOException {
         System.out.println("deleteSalonSuccess");
@@ -322,6 +324,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getSalon(3));
     }
 
+    @org.junit.jupiter.api.Order(10)
     @Test
     public void deleteSalonFail() throws IOException {
         System.out.println("deleteSalonFail");
@@ -329,6 +332,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.deleteSalon(21);
     }
 
+    @org.junit.jupiter.api.Order(11)
     @Test
     public void rewriteSalonSuccess() throws IOException {
         System.out.println("rewriteSalonSuccess");
@@ -341,6 +345,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getSalon(id).get());
     }
 
+    @org.junit.jupiter.api.Order(11)
     @Test
     public void rewriteSalonFail() throws IOException {
         System.out.println("rewriteSalonFail");
@@ -424,6 +429,7 @@ public class DataProviderCSVTest extends TestBase {
 
  */
 
+    @org.junit.jupiter.api.Order(12)
     @Test
     public void insertNewCustomerSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertNewCustomerSuccess");
@@ -441,6 +447,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(newCustomer3, instance.getNewCustomerById(3));
     }
 
+    @org.junit.jupiter.api.Order(12)
     @Test
     public void insertNewCustomerFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertNewCustomerFail");
@@ -456,6 +463,7 @@ public class DataProviderCSVTest extends TestBase {
         assertNull(instance.getNewCustomerById(4));
     }
 
+    @org.junit.jupiter.api.Order(13)
     @Test
     public void testGetByIdNewCustomerSuccess() throws IOException {
         System.out.println("testGetByIdNewCustomerSuccess");
@@ -463,6 +471,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getNewCustomerById(2));
     }
 
+    @org.junit.jupiter.api.Order(13)
     @Test
     public void testGetByIdNewCustomerFail() throws IOException {
         System.out.println("testGetByIdNewCustomerFail");
@@ -470,6 +479,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getNewCustomerById(5));
     }
 
+    @org.junit.jupiter.api.Order(14)
     @Test
     public void deleteNewCustomerSuccess() throws IOException {
         System.out.println("deleteNewCustomerSuccess");
@@ -477,6 +487,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.deleteNewCustomer(3);
     }
 
+    @org.junit.jupiter.api.Order(14)
     @Test
     public void deleteNewCustomerFail() throws IOException {
         System.out.println("deleteNewCustomerFail");
@@ -484,6 +495,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.deleteNewCustomer(21);
     }
 
+    @org.junit.jupiter.api.Order(15)
     @Test
     public void rewriteNewCustomerSuccess() throws IOException {
         System.out.println("rewriteNewCustomerSuccess");
@@ -498,6 +510,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getNewCustomerById(id));
     }
 
+    @org.junit.jupiter.api.Order(15)
     @Test
     public void rewriteNewCustomerFail() throws IOException {
         System.out.println("rewriteNewCustomerFail");
@@ -512,6 +525,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getNewCustomerById(id));
     }
 
+    @org.junit.jupiter.api.Order(16)
     @Test
     public void insertRegularCustomerSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertRegularCustomerSuccess");
@@ -529,6 +543,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(regularCustomer3, instance.getRegularCustomerById(3));
     }
 
+    @org.junit.jupiter.api.Order(16)
     @Test
     public void insertRegularCustomerFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertRegularCustomerFail");
@@ -544,6 +559,7 @@ public class DataProviderCSVTest extends TestBase {
         assertNull(instance.getRegularCustomerById(4));
     }
 
+    @org.junit.jupiter.api.Order(17)
     @Test
     public void testGetByIdRegularCustomerSuccess() throws IOException {
         System.out.println("testGetByRegularNewCustomerSuccess");
@@ -551,6 +567,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getRegularCustomerById(2));
     }
 
+    @org.junit.jupiter.api.Order(17)
     @Test
     public void testGetByIdRegularCustomerFail() throws IOException {
         System.out.println("testGetByRegularNewCustomerFail");
@@ -558,6 +575,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getRegularCustomerById(5));
     }
 
+    @org.junit.jupiter.api.Order(18)
     @Test
     public void deleteRegularCustomerSuccess() throws IOException {
         System.out.println("deleteRegularCustomerSuccess");
@@ -565,6 +583,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.deleteRegularCustomer(3);
     }
 
+    @org.junit.jupiter.api.Order(18)
     @Test
     public void deleteRegularCustomerFail() throws IOException {
         System.out.println("deleteRegularCustomerFail");
@@ -572,6 +591,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.deleteRegularCustomer(21);
     }
 
+    @org.junit.jupiter.api.Order(19)
     @Test
     public void rewriteRegularCustomerSuccess() throws IOException {
         System.out.println("rewriteRegularCustomerSuccess");
@@ -586,6 +606,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getRegularCustomerById(id));
     }
 
+    @org.junit.jupiter.api.Order(19)
     @Test
     public void rewriteRegularCustomerFail() throws IOException {
         System.out.println("rewriteRegularCustomerFail");
@@ -600,6 +621,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getRegularCustomerById(id));
     }
 
+    @org.junit.jupiter.api.Order(20)
     @Test
     public void insertOrderItemSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertOrderItemSuccess");
@@ -607,11 +629,12 @@ public class DataProviderCSVTest extends TestBase {
         DataProviderCSV instance = new DataProviderCSV();
         listOrderItem.addAll(getListOrderItem());
         instance.insertOrderItem(listOrderItem);
-        System.out.println(instance.getOrderItem(1));
-        System.out.println(listOrderItem.get(0));
-        assertEquals(listOrderItem.get(0), instance.getOrderItem(1).get());
+        System.out.println(instance.getOrderItem(2));
+        System.out.println(listOrderItem.get(1));
+        assertEquals(listOrderItem.get(1), instance.getOrderItem(2).get());
     }
 
+    @org.junit.jupiter.api.Order(20)
     @Test
     public void insertOrderItemFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertOrderItemFail");
@@ -619,11 +642,10 @@ public class DataProviderCSVTest extends TestBase {
         DataProviderCSV instance = new DataProviderCSV();
         listOrderItem.addAll(getListOrderItem());
         instance.insertOrderItem(listOrderItem);
-        System.out.println(instance.getOrderItem(1));
-        System.out.println(listOrderItem.get(0));
         assertEquals(Optional.empty(), instance.getOrderItem(5));
     }
 
+    @org.junit.jupiter.api.Order(21)
     @Test
     public void testGetByIdOrderItemSuccess() throws IOException {
         System.out.println("testGetByOrderItemSuccess");
@@ -631,6 +653,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getOrderItem(2).get());
     }
 
+    @org.junit.jupiter.api.Order(21)
     @Test
     public void testGetByIdOrderItemFail() throws IOException {
         System.out.println("testGetByOrderItemFail");
@@ -638,6 +661,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getOrderItem(15));
     }
 
+    @org.junit.jupiter.api.Order(22)
     @Test
     public void deleteOrderItemSuccess() throws IOException {
         System.out.println("deleteOrderItemSuccess");
@@ -646,6 +670,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getOrderItem(3));
     }
 
+    @org.junit.jupiter.api.Order(22)
     @Test
     public void deleteOrderItemFail() throws IOException {
         System.out.println("deleteOrderItemFail");
@@ -653,6 +678,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.deleteOrderItem(21);
     }
 
+    @org.junit.jupiter.api.Order(23)
     @Test
     public void rewriteOrderItemSuccess() throws IOException {
         System.out.println("rewriteOrderItemSuccess");
@@ -665,6 +691,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getOrderItem(number).get());
     }
 
+    @org.junit.jupiter.api.Order(23)
     @Test
     public void rewriteOrderItemFail() throws IOException {
         System.out.println("rewriteOrderItemFail");
@@ -676,6 +703,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.rewriteOrderItem(number, service, coast, quantity);
     }
 
+    @org.junit.jupiter.api.Order(24)
     @Test
     public void insertOrderSuccess() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertOrderSuccess");
@@ -698,6 +726,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(listOrder.get(0), instance.getOrder(1).get());
     }
 
+    @org.junit.jupiter.api.Order(24)
     @Test
     public void insertOrderFail() throws CsvRequiredFieldEmptyException, IOException, CsvDataTypeMismatchException {
         System.out.println("insertOrderFail");
@@ -719,6 +748,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getOrder(10));
     }
 
+    @org.junit.jupiter.api.Order(25)
     @Test
     public void testGetByIdOrderSuccess() throws IOException {
         System.out.println("testGetByOrderSuccess");
@@ -726,6 +756,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getOrder(2).get());
     }
 
+    @org.junit.jupiter.api.Order(25)
     @Test
     public void testGetByIdOrderFail() throws IOException {
         System.out.println("testGetByOrderFail");
@@ -733,6 +764,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getOrder(5));
     }
 
+    @org.junit.jupiter.api.Order(26)
     @Test
     public void deleteOrderSuccess() throws IOException {
         System.out.println("deleteOrderSuccess");
@@ -741,6 +773,7 @@ public class DataProviderCSVTest extends TestBase {
         assertEquals(Optional.empty(), instance.getOrder(3));
     }
 
+    @org.junit.jupiter.api.Order(26)
     @Test
     public void deleteOrderFail() throws IOException {
         System.out.println("deleteOrderFail");
@@ -748,6 +781,7 @@ public class DataProviderCSVTest extends TestBase {
         instance.deleteOrder(21);
     }
 
+    @org.junit.jupiter.api.Order(27)
     @Test
     public void rewriteOrderSuccess() throws IOException {
         System.out.println("rewriteOrderSuccess");
@@ -765,6 +799,7 @@ public class DataProviderCSVTest extends TestBase {
         System.out.println(instance.getOrder(id).get());
     }
 
+    @org.junit.jupiter.api.Order(27)
     @Test
     public void rewriteOrderFail() throws IOException {
         System.out.println("rewriteOrderFail");

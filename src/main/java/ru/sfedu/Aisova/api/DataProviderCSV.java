@@ -24,6 +24,22 @@ public class DataProviderCSV {
     private final String FILE_EXTENSION = "csv";
     private static Logger log = LogManager.getLogger(DataProviderCSV.class);
 
+    public <T> void insertClass(List<T> listClass) {
+        try{
+            FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(PATH)
+                    + listClass.get(0).getClass().getSimpleName().toLowerCase()
+                    + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
+
+            CSVWriter csvWriter = new CSVWriter(writer);
+            StatefulBeanToCsv<T> beanToCsv = new StatefulBeanToCsvBuilder<T>(csvWriter)
+                    .withApplyQuotesToAll(false)
+                    .build();
+            beanToCsv.write(listClass);
+            csvWriter.close();
+        }catch (IndexOutOfBoundsException | IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e){
+            log.error(e);
+        }
+    }
 
     private <T> List<T> getFromCSV(Class<T> tClass) throws IOException {
         List<T> tList;
@@ -57,23 +73,7 @@ public class DataProviderCSV {
         return new CSVReader(bufferedReader);
     }
 
-    public <T> void insertClass(List<T> listClass) {
-        try{
-            FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(PATH)
-                    + listClass.get(0).getClass().getSimpleName().toLowerCase()
-                    + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
-            CSVWriter csvWriter = new CSVWriter(writer);
-            StatefulBeanToCsv<T> beanToCsv = new StatefulBeanToCsvBuilder<T>(csvWriter)
-                    .withApplyQuotesToAll(false)
-                    .build();
-            beanToCsv.write(listClass);
-            csvWriter.close();
-        }catch (IndexOutOfBoundsException | IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e){
-            log.error(e);
-        }
-    }
-
-    private <T> List<Service> getServiceList(Class<T> tClass, T object) throws IOException {
+    private <T> List<Service> getServiceListInMaster(Class<T> tClass, T object) throws IOException {
 
         try {
             List<Service> objectServiceList;
@@ -141,7 +141,6 @@ public class DataProviderCSV {
                 .filter(x -> x.getId() == service.getId())
                 .findAny()
                 .orElse(null);
-
         return serviceInOrderItem;
     }
 
@@ -405,24 +404,37 @@ public class DataProviderCSV {
         }
     }
 
-    public void insertMaster(List<Master> listMaster) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
-        this.insertClass(listMaster);
+    public void insertMaster(List<Master> listMaster) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
+       try{
+        FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(PATH)
+                + listMaster.get(0).getClass().getSimpleName().toLowerCase()
+                + ConfigurationUtil.getConfigurationEntry(FILE_EXTENSION));
+        CSVWriter csvWriter = new CSVWriter(writer);
+        StatefulBeanToCsv<Master> beanToCsv = new StatefulBeanToCsvBuilder<Master>(csvWriter)
+                .withApplyQuotesToAll(false)
+                .build();
+        log.debug(listMaster);
+        beanToCsv.write(listMaster);
+        csvWriter.close();
+    }catch (IndexOutOfBoundsException | IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e){
+        log.error(e);
+    }
     }
 
     Optional<Master> getMaster(long id) {
         try {
             List<Master> masterList = getFromCSV(Master.class);
 
-            Optional<Master> optionalMaster = masterList.stream()
+            var optionalMaster = masterList.stream()
                     .filter(task -> task.getId() == id)
                     .findAny();
-            if (!optionalMaster.isPresent()) {
+            if (optionalMaster.isEmpty()) {
                 return optionalMaster;
             }
 
-            Master master = optionalMaster.get();
+            var master = optionalMaster.get();
 
-            master.setServiceList(getServiceList(Master.class, master));
+            master.setServiceList(getServiceListInMaster(Master.class, master));
 
             return Optional.of(master);
 
@@ -487,17 +499,20 @@ public class DataProviderCSV {
     Optional<OrderItem> getOrderItem(long id) {
         try {
             List<OrderItem> orderItemList = getFromCSV(OrderItem.class);
-            Optional<OrderItem> optionalOrderItem = orderItemList.stream()
+            var optionalOrderItem = orderItemList.stream()
                     .filter(task -> task.getNumber() == id)
                     .findAny();
-            if (optionalOrderItem.isPresent()) {
+
+            if (optionalOrderItem.isEmpty()) {
+                log.debug(optionalOrderItem);
                 return optionalOrderItem;
             }
-            OrderItem orderItem = optionalOrderItem.get();
+            var orderItem = optionalOrderItem.get();
             orderItem.setService(getServiceInOrderItem(OrderItem.class, orderItem));
+            log.debug(orderItem);
             return Optional.of(orderItem);
 
-        } catch (IOException e) {
+        } catch (IOException | NoSuchElementException e) {
             log.error(e);
             return Optional.empty();
         }
@@ -553,13 +568,13 @@ public class DataProviderCSV {
     Optional<Order> getOrder(long id) {
         try {
             List<Order> orderList = getFromCSV(Order.class);
-            Optional<Order> optionalOrder = orderList.stream()
+            var optionalOrder = orderList.stream()
                     .filter(task -> task.getId() == id)
                     .findAny();
-            if (optionalOrder.isPresent()) {
+            if (optionalOrder.isEmpty()) {
                 return optionalOrder;
             }
-            Order order = optionalOrder.get();
+            var order = optionalOrder.get();
             order.setItem(getOrderItemList(Order.class, order));
             order.setCustomer(getNewCustomerInOrder(Order.class, order));
             return Optional.of(order);
@@ -624,14 +639,16 @@ public class DataProviderCSV {
     Optional<Salon> getSalon(long id) {
         try {
             List<Salon> salonList = getFromCSV(Salon.class);
-            Optional<Salon> optionalSalon = salonList.stream()
+            log.debug(salonList);
+            var optionalSalon = salonList.stream()
                     .filter(task -> task.getId() == id)
                     .findAny();
-            if (optionalSalon.isPresent()) {
+            if (optionalSalon.isEmpty()) {
                 return optionalSalon;
             }
-            Salon project = optionalSalon.get();
+            var project = optionalSalon.get();
             project.setListMaster(getMasterList(Salon.class, project));
+            log.debug(project);
             return Optional.of(project);
 
         } catch (IOException e) {

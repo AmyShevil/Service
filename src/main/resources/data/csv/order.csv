@@ -1,4 +1,3 @@
-COMPLETED,COST,CREATED,CUSTOMER,ID,ITEM,LASTUPDATED,STATUS
-completed1,100.0,created1,{1},1,"[1,2,3]",lastUpdate1,CREATED
-completed2,400.0,created2,{2},2,"[1,2,3]",lastUpdate2,COMPLETED
-completed3,900.0,created3,{3},3,"[1,2,3]",lastUpdate3,CANCELED
+1,created1,"[1,2,3]",100.0,CREATED,{1},lastUpdate1,completed1
+2,created2,"[1,2,3]",400.0,COMPLETED,{2},lastUpdate2,completed2
+3,created3,"[1,2,3]",900.0,CANCELED,{3},lastUpdate3,completed3

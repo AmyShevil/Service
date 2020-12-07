@@ -1,7 +1,12 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvCustomBindByName;
+import com.opencsv.bean.CsvCustomBindByPosition;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ru.sfedu.Aisova.api.DataProviderCSV;
 import ru.sfedu.Aisova.converters.ServiceListConverter;
 
 import java.io.Serializable;
@@ -12,6 +17,7 @@ import java.util.Objects;
  * Class Master
  */
 public class Master implements Serializable {
+  private static Logger log = LogManager.getLogger(Master.class);
 
   //
   // Fields
@@ -120,16 +126,14 @@ public class Master implements Serializable {
    * Set the value of serviceList
    * @param serviceList the new value of serviceList
    */
-  public void setServiceList (List<Service> serviceList) {
-    this.listService = serviceList;
+  public void setServiceList (List<Service> serviceList) {this.listService = serviceList;
   }
 
   /**
    * Get the value of serviceList
    * @return the value of serviceList
    */
-  public List<Service> getServiceList () {
-    return listService;
+  public List<Service> getServiceList () {return this.listService;
   }
 
   /**

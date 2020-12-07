@@ -1,4 +1,2 @@
-DESCRIPTION,ID,NAME,PRICE
-description1,1,service1,1000.0
-description2,2,service2,2000.0
-description3,3,service3,3000.0
+1,rewriteName,100.0,rewriteDescription
+2,service2,2000.0,description2

@@ -1,7 +1,9 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvCustomBindByName;
+import com.opencsv.bean.CsvCustomBindByPosition;
 import ru.sfedu.Aisova.converters.ServiceConverter;
 import ru.sfedu.Aisova.converters.ServiceListConverter;
 
@@ -16,16 +18,16 @@ public class OrderItem {
   // Fields
   //
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 0)
   private long number;
 
-  @CsvCustomBindByName(converter = ServiceConverter.class)
+  @CsvCustomBindByPosition(position = 1, converter = ServiceConverter.class)
   private Service service;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 2)
   private Double cost;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 3)
   private Integer quantity;
   
   //

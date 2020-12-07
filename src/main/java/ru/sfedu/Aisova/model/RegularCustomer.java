@@ -1,6 +1,7 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvBindByPosition;
 
 import java.util.Objects;
 
@@ -13,7 +14,7 @@ public class RegularCustomer extends Customer {
   // Fields
   //
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 5)
   private Integer numberOfOrders;
   
   //

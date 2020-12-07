@@ -1,8 +1,6 @@
 package ru.sfedu.Aisova.model;
 
-import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvCustomBindByName;
-import com.opencsv.bean.CsvDate;
+import com.opencsv.bean.*;
 import ru.sfedu.Aisova.Constants;
 import ru.sfedu.Aisova.converters.NewCustomerConverter;
 import ru.sfedu.Aisova.converters.OrderItemConverter;
@@ -20,28 +18,28 @@ public class Order {
   // Fields
   //
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 0)
   private long id;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 1)
   private String created;
 
-  @CsvCustomBindByName(converter = OrderItemConverter.class)
+  @CsvCustomBindByPosition(position = 2, converter = OrderItemConverter.class)
   private List<OrderItem> item;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 3)
   private Double cost;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 4)
   private OrderStatus status;
 
-  @CsvCustomBindByName(converter = NewCustomerConverter.class)
+  @CsvCustomBindByPosition(position = 5, converter = NewCustomerConverter.class)
   private Customer customer;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 6)
   private String lastUpdated;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 7)
   private String completed;
   
   //

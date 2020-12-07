@@ -1,4 +1,2 @@
-EMAIL,FIRSTNAME,ID,LASTNAME,NUMBEROFORDERS,PHONE
-email1,firstName1,1,lastName1,1,phone1
-email2,firstName2,2,lastName2,2,phone2
-email3,firstName3,3,lastName3,3,phone3
+1,rewriteFirstName,rewriteLastName,rewritePhone,rewriteEmail,5
+2,firstName2,lastName2,phone2,email2,2
