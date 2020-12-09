@@ -11,6 +11,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sfedu.Aisova.Constants;
+import ru.sfedu.Aisova.enums.OrderStatus;
 import ru.sfedu.Aisova.model.*;
 import ru.sfedu.Aisova.utils.ConfigurationUtil;
 
@@ -18,9 +19,9 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DataProviderCSV implements DataProvider {
+public class DataProviderCSVOld {
 
-    private static Logger log = LogManager.getLogger(DataProviderCSV.class);
+    private static Logger log = LogManager.getLogger(DataProviderCSVOld.class);
 
     public <T> void insertClass(List<T> listClass) {
         try{
@@ -110,14 +111,14 @@ public class DataProviderCSV implements DataProvider {
             List<Long> idOrderItemInOrder;
 
             idOrderItemInOrder = objectOrderItemList.stream()
-                    .map(value -> value.getNumber())
+                    .map(value -> value.getId())
                     .collect(Collectors.toList());
 
             List<OrderItem>orderItemListInOrder;
             orderItemListInOrder =orderItemList.stream()
                     .filter(service -> idOrderItemInOrder
                             .stream()
-                            .anyMatch(orderItemInOrder -> orderItemInOrder.longValue() ==  service.getNumber()))
+                            .anyMatch(orderItemInOrder -> orderItemInOrder.longValue() ==  service.getId()))
                     .collect(Collectors.toList());
 
             return orderItemListInOrder;
@@ -489,7 +490,7 @@ public class DataProviderCSV implements DataProvider {
         try {
             List<OrderItem> orderItemList = getFromCSV(OrderItem.class);
             var optionalOrderItem = orderItemList.stream()
-                    .filter(task -> task.getNumber() == id)
+                    .filter(task -> task.getId() == id)
                     .findAny();
 
             if (optionalOrderItem.isEmpty()) {
@@ -511,7 +512,7 @@ public class DataProviderCSV implements DataProvider {
         List<OrderItem> listOrderItem = getFromCSV(OrderItem.class);
         try {
             OrderItem orderItem = listOrderItem.stream()
-                    .filter(el->el.getNumber()==id)
+                    .filter(el->el.getId()==id)
                     .findFirst().get();
             return orderItem;
         }catch (NoSuchElementException e){
@@ -524,7 +525,7 @@ public class DataProviderCSV implements DataProvider {
         List<OrderItem> listOrderItem = getFromCSV(OrderItem.class);
         try {
             OrderItem orderItem = listOrderItem.stream()
-                    .filter(el -> el.getNumber() == id)
+                    .filter(el -> el.getId() == id)
                     .findFirst().get();
 
             listOrderItem.remove(orderItem);
@@ -538,7 +539,7 @@ public class DataProviderCSV implements DataProvider {
         List<OrderItem> listOrderItem = getFromCSV(OrderItem.class);
         try {
             OrderItem newOrderItem = new OrderItem();
-            newOrderItem.setNumber(number);
+            newOrderItem.setId(number);
             newOrderItem.setService(service);
             newOrderItem.setCost(cost);
             newOrderItem.setQuantity(quantity);
@@ -601,7 +602,7 @@ public class DataProviderCSV implements DataProvider {
         }
     }
 
-    public void rewriteOrder(long id, String created, List<OrderItem> item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed) throws IOException {
+    public void rewriteOrder(long id, String created, List<OrderItem> item, Double cost, OrderStatus status, Customer customer, String lastUpdated, String completed) throws IOException {
         List<Order> listOrder = getFromCSV(Order.class);
         try {
             Order newOrder = new Order();

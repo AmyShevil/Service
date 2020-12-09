@@ -1,11 +1,8 @@
 package ru.sfedu.Aisova.model;
 
-import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
-import com.opencsv.bean.CsvCustomBindByName;
 import com.opencsv.bean.CsvCustomBindByPosition;
 import ru.sfedu.Aisova.converters.ServiceConverter;
-import ru.sfedu.Aisova.converters.ServiceListConverter;
 
 import java.util.Objects;
 
@@ -19,7 +16,7 @@ public class OrderItem {
   //
 
   @CsvBindByPosition(position = 0)
-  private long number;
+  private long id;
 
   @CsvCustomBindByPosition(position = 1, converter = ServiceConverter.class)
   private Service service;
@@ -46,18 +43,18 @@ public class OrderItem {
 
   /**
    * Set the value of number
-   * @param number the new value of number
+   * @param id the new value of number
    */
-  public void setNumber (long number) {
-    this.number = number;
+  public void setId(long id) {
+    this.id = id;
   }
 
   /**
    * Get the value of number
    * @return the value of number
    */
-  public long getNumber () {
-    return number;
+  public long getId() {
+    return id;
   }
 
   /**
@@ -118,7 +115,7 @@ public class OrderItem {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     OrderItem orderItem = (OrderItem) o;
-    return number == orderItem.number &&
+    return id == orderItem.id &&
             service.equals(orderItem.service) &&
             cost.equals(orderItem.cost) &&
             quantity.equals(orderItem.quantity);
@@ -126,13 +123,13 @@ public class OrderItem {
 
   @Override
   public int hashCode() {
-    return Objects.hash(number, service, cost, quantity);
+    return Objects.hash(id, service, cost, quantity);
   }
 
   @Override
   public String toString() {
     return "OrderItem{" +
-            "number=" + number +
+            "number=" + id +
             ", service=" + service +
             ", cost=" + cost +
             ", quantity=" + quantity +

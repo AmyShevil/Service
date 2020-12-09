@@ -26,12 +26,12 @@ import ru.sfedu.Aisova.utils.WrapperXML;
  *
  * @author sp2
  */
-public class DataProviderXML implements DataProvider{
+public class DataProviderXMLOld {
     
     private final String PATH="xml_path";
     private final String FILE_EXTENTION="xml";
     
-    private static Logger log = LogManager.getLogger(DataProviderXML.class);
+    private static Logger log = LogManager.getLogger(DataProviderXMLOld.class);
     
     public void insertBean1(List<Bean1> bean1List) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, Exception{
         try{

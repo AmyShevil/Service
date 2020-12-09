@@ -1,8 +1,8 @@
 package ru.sfedu.Aisova;
 
+import ru.sfedu.Aisova.enums.OrderStatus;
 import ru.sfedu.Aisova.model.*;
 
-import java.util.Date;
 import java.util.List;
 
 public class TestBase {
@@ -52,7 +52,7 @@ public class TestBase {
         return master;
     }
 
-    public Order createOrder (long id, String created, List<OrderItem> item, Double cost, Order.OrderStatus status, Customer customer, String lastUpdated, String completed){
+    public Order createOrder (long id, String created, List<OrderItem> item, Double cost, OrderStatus status, Customer customer, String lastUpdated, String completed){
         Order order = new Order();
         order.setId(id);
         order.setCreated(created);
@@ -67,7 +67,7 @@ public class TestBase {
 
     public static OrderItem createOrderItem(long number, Service service, Double cost, Integer quantity){
         OrderItem orderItem = new OrderItem();
-        orderItem.setNumber(number);
+        orderItem.setId(number);
         orderItem.setService(service);
         orderItem.setCost(cost);
         orderItem.setQuantity(quantity);

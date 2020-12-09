@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sfedu.Aisova.Constants;
 import ru.sfedu.Aisova.model.OrderItem;
-import ru.sfedu.Aisova.model.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ public class OrderItemConverter extends AbstractBeanField<OrderItem> {
 
             if (!strIndex.isEmpty()) {
                 OrderItem orderItem = new OrderItem();
-                orderItem.setNumber(Long.parseLong(strIndex));
+                orderItem.setId(Long.parseLong(strIndex));
                 indexOrderItemList.add(orderItem);
             }
         }
@@ -41,7 +40,7 @@ public class OrderItemConverter extends AbstractBeanField<OrderItem> {
         StringBuilder builder = new StringBuilder(Constants.LIST_START_SYMBOL);
         if (orderItemList.size() != 0) {
             for (OrderItem modificationRecord : orderItemList) {
-                builder.append(modificationRecord.getNumber());
+                builder.append(modificationRecord.getId());
                 builder.append(Constants.SPLIT);
             }
             builder.delete(builder.length() - 1, builder.length());

@@ -1,11 +1,9 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.*;
-import ru.sfedu.Aisova.Constants;
 import ru.sfedu.Aisova.converters.NewCustomerConverter;
 import ru.sfedu.Aisova.converters.OrderItemConverter;
-
-import java.util.Date;
+import ru.sfedu.Aisova.enums.OrderStatus;
 import java.util.List;
 import java.util.Objects;
 
@@ -223,11 +221,5 @@ public class Order {
             '}';
   }
 
-    public enum OrderStatus{
-        CREATED,
-        PROCESSING,
-        COMPLETED,
-        CANCELED
-    }
 }
 

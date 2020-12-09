@@ -1596,3 +1596,185 @@
 2020-12-07 19:15:07 DEBUG MastersConverter:50 - [2]
 2020-12-07 19:15:07 DEBUG DataProviderCSV:631 - [Salon{id=1, address='address1', listMaster=[Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=2, address='address2', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=2, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}, Salon{id=3, address='address3', listMaster=[Master{id=1, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}, Master{id=3, firstName='null', lastName='null', position='null', listService=null, phone='null', salary=null}]}]
 2020-12-07 19:15:07 DEBUG DataProviderCSV:640 - Salon{id=2, address='address2', listMaster=[]}
+2020-12-08 14:48:12 ERROR DataProviderCSV:361 - java.util.NoSuchElementException: No value present
+2020-12-08 20:20:21 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 20:20:21 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 20:20:21 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 20:20:21 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 20:20:21 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 20:20:21 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 20:20:21 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 20:35:50 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 20:35:50 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 20:35:50 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 20:35:50 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 20:35:50 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 20:35:50 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 20:35:50 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 21:02:59 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:02:59 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:02:59 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:02:59 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:02:59 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:02:59 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:02:59 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 21:02:59 ERROR DataProviderCsv:70 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-08 21:05:43 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:05:43 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:05:43 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:05:43 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:05:43 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:05:43 DEBUG DataProviderCsvTest:26 - false
+2020-12-08 21:05:43 DEBUG DataProviderCsvTest:26 - true
+2020-12-08 21:05:43 ERROR DataProviderCsv:70 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-08 21:19:44 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:19:44 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:19:44 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:19:44 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:19:44 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:19:44 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:19:44 DEBUG DataProviderCsvTest:27 - true
+2020-12-08 21:19:44 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-08 21:21:43 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:21:43 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:21:43 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:21:43 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:21:43 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:21:43 DEBUG DataProviderCsvTest:27 - false
+2020-12-08 21:21:43 DEBUG DataProviderCsvTest:27 - true
+2020-12-08 21:21:43 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 12:56:06 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 12:56:06 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 12:56:06 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 12:56:06 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 12:56:06 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 12:56:06 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 12:56:06 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 12:56:06 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:29:29 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:29:29 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:29:29 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:29:29 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:29:29 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:29:29 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:29:29 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:29:29 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:30:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:30:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:30:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:30:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:30:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:30:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:30:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:30:31 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:32:26 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:26 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:26 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:26 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:26 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:26 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:26 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:32:26 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:32:46 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:46 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:46 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:46 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:47 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:47 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:32:47 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:32:47 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:34:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:34:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:34:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:34:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:34:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:34:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:34:05 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:34:05 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:34:05 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:38:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:38:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:38:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:38:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:38:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:38:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:38:39 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:39:14 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:39:14 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:39:14 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:39:14 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:39:14 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:39:14 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:39:14 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:40:12 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:40:12 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:40:12 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:40:12 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:40:12 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:40:12 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:40:12 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:40:12 ERROR DataProviderCsv:61 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:49:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:49:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:49:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:49:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:49:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:49:39 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:49:39 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:49:39 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:49:39 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:50:34 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:50:34 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:50:34 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:50:34 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:50:34 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:50:34 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:50:34 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:50:34 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:50:34 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:55:40 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:55:40 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:55:40 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:55:40 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:55:40 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:55:40 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:55:40 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:55:40 ERROR DataProviderCsv:98 - something is null
+2020-12-09 13:55:40 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:55:40 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:57:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:57:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:57:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:57:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:57:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:57:05 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:57:05 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:57:05 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:59:30 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:59:30 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:59:30 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:59:30 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:59:30 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:59:30 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 13:59:30 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 13:59:30 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 13:59:30 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 14:00:01 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:01 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:01 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:01 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:01 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:01 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:01 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:01 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 14:00:01 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 14:00:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:31 DEBUG DataProviderCsvTest:27 - false
+2020-12-09 14:00:31 DEBUG DataProviderCsvTest:27 - true
+2020-12-09 14:00:31 ERROR DataProviderCsv:98 - something is null
+2020-12-09 14:00:31 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
+2020-12-09 14:00:31 ERROR DataProviderCsv:79 - java.io.FileNotFoundException: .\src\main\resources\data\csv\service.csv (Не удается найти указанный файл)
