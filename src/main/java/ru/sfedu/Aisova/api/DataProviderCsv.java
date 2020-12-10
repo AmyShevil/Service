@@ -28,7 +28,7 @@ public class DataProviderCsv implements DataProvider{
     private static final Logger log = LogManager.getLogger(DataProviderCsv.class);
 
     private <T> boolean writeToCsv (Class<?> tClass, List<T> object, boolean overwrite) {
-        log.info(object);
+        log.debug(object);
         List<T> fileObjectList;
         if (!overwrite) {
             fileObjectList = (List<T>) readFromCsv(tClass);
@@ -47,9 +47,11 @@ public class DataProviderCsv implements DataProvider{
                     .withApplyQuotesToAll(false)
                     .build();
             beanToCsv.write(fileObjectList);
+            log.info("Write success");
             csvWriter.close();
             return true;
         } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException | IOException e ) {
+            log.info("Write error");
             log.error(e);
             return false;
         }
@@ -57,7 +59,7 @@ public class DataProviderCsv implements DataProvider{
 
     private <T> boolean writeToCsv (T object) {
         if (object == null) {
-            log.error("something is null");
+            log.info("Something is null");
             return false;
         }
         return writeToCsv(object.getClass(), Collections.singletonList(object), false);
@@ -74,8 +76,10 @@ public class DataProviderCsv implements DataProvider{
                     .withType(tClass)
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
+            log.info("Read success");
             return csvToBean.parse();
         } catch (IOException e) {
+            log.info("Read error");
             log.error(e);
             return new ArrayList<>();
         }
@@ -152,11 +156,22 @@ public class DataProviderCsv implements DataProvider{
         return maxId+1;
     }
 
+    private long getNextSalonId(){
+        List<Salon> objectList = readFromCsv(Salon.class);
+        long maxId = -1;
+        for(Salon salon : objectList){
+            if(maxId < salon.getId()){
+                maxId = salon.getId();
+            }
+        }
+        return maxId+1;
+    }
+
     @Override
     public boolean createService(String name, Double price, String description) {
         try {
             if (name == null || price == null || description == null){
-                log.info("Строка не добавлена, так как одно из полей null");
+                log.info(Constants.NULL_VALUE);
                 return false;
             }else {
                 Service service = new Service();
@@ -164,9 +179,12 @@ public class DataProviderCsv implements DataProvider{
                 service.setName(name);
                 service.setPrice(price);
                 service.setDescription(description);
+                log.info(Constants.SERVICE_CREATED);
+                log.debug(service);
                 return writeToCsv(service);
             }
         }catch (NullPointerException e){
+            log.info(Constants.SERVICE_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -177,7 +195,7 @@ public class DataProviderCsv implements DataProvider{
         List<Service> listService = readFromCsv(Service.class);
         try {
             if (getServiceById(id) == null){
-                log.info("Такого id нет в списке");
+                log.info(Constants.SERVICE_ID + id + Constants.NOT_FOUND);
                 return false;
             }
             Service newService = new Service();
@@ -187,9 +205,12 @@ public class DataProviderCsv implements DataProvider{
             newService.setDescription(description);
             listService.removeIf(service -> service.getId() == id);
             writeToCsv(Service.class, listService, true);
+            log.info(Constants.SERVICE_EDITED);
+            log.debug(newService);
             writeToCsv(newService);
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.info(Constants.SERVICE_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -197,10 +218,18 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public boolean deleteService(long id) {
-        List<Service> serviceList = readFromCsv(Service.class);
-        serviceList.removeIf(service -> service.getId() == id);
-        writeToCsv(Service.class, serviceList, true);
-        return true;
+        try {
+            List<Service> serviceList = readFromCsv(Service.class);
+            serviceList.removeIf(service -> service.getId() == id);
+            log.debug(serviceList);
+            writeToCsv(Service.class, serviceList, true);
+            log.info(Constants.SERVICE_DELETED);
+            return true;
+        }catch (NullPointerException e){
+            log.info(Constants.SERVICE_NOT_DELETED);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
@@ -210,8 +239,11 @@ public class DataProviderCsv implements DataProvider{
             Service service = listService.stream()
                     .filter(el->el.getId()==id)
                     .findFirst().get();
+            log.info(Constants.SERVICE_RECEIVED);
+            log.debug(service);
             return service;
         }catch (NoSuchElementException e){
+            log.info(Constants.SERVICE_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -221,7 +253,7 @@ public class DataProviderCsv implements DataProvider{
     public boolean createNewCustomer(String firstName, String lastName, String phone, String email, Integer discount) {
         try {
             if (firstName == null || lastName == null || phone == null || email == null || discount == null){
-                log.info("Строка не добавлена, так как одно из полей null");
+                log.info(Constants.NULL_VALUE);
                 return false;
             }else {
                 NewCustomer customer = new NewCustomer();
@@ -231,9 +263,12 @@ public class DataProviderCsv implements DataProvider{
                 customer.setPhone(phone);
                 customer.setEmail(email);
                 customer.setDiscount(discount);
+                log.info(Constants.NEW_CUSTOMER_CREATED);
+                log.debug(customer);
                 return writeToCsv(customer);
             }
         }catch (NullPointerException e) {
+            log.info(Constants.NEW_CUSTOMER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -244,7 +279,7 @@ public class DataProviderCsv implements DataProvider{
         List<NewCustomer> newCustomerList = readFromCsv(NewCustomer.class);
         try {
             if (getNewCustomerById(id) == null){
-                log.info("Такого id нет в списке");
+                log.info(Constants.NEW_CUSTOMER_ID + id + Constants.NOT_FOUND);
                 return false;
             }
             NewCustomer customer = new NewCustomer();
@@ -257,8 +292,11 @@ public class DataProviderCsv implements DataProvider{
             newCustomerList.removeIf(user -> user.getId() == id);
             writeToCsv(NewCustomer.class, newCustomerList, true);
             writeToCsv(customer);
+            log.info(Constants.NEW_CUSTOMER_EDITED);
+            log.debug(customer);
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.info(Constants.NEW_CUSTOMER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -266,10 +304,18 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public boolean deleteNewCustomer(long id) {
-        List<NewCustomer> newCustomerList = readFromCsv(NewCustomer.class);
-        newCustomerList.removeIf(customer -> customer.getId() == id);
-        writeToCsv(NewCustomer.class, newCustomerList, true);
-        return true;
+        try{
+            List<NewCustomer> newCustomerList = readFromCsv(NewCustomer.class);
+            newCustomerList.removeIf(customer -> customer.getId() == id);
+            log.debug(newCustomerList);
+            writeToCsv(NewCustomer.class, newCustomerList, true);
+            log.info(Constants.NEW_CUSTOMER_DELETED);
+            return true;
+        }catch (NullPointerException e){
+            log.info(Constants.NEW_CUSTOMER_NOT_DELETED);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
@@ -279,8 +325,11 @@ public class DataProviderCsv implements DataProvider{
             NewCustomer newCustomer = listNewCustomer.stream()
                     .filter(el->el.getId()==id)
                     .findFirst().get();
+            log.info(Constants.NEW_CUSTOMER_RECEIVED);
+            log.debug(newCustomer);
             return newCustomer;
         }catch (NoSuchElementException e){
+            log.info(Constants.NEW_CUSTOMER_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -290,7 +339,7 @@ public class DataProviderCsv implements DataProvider{
     public boolean createRegularCustomer(String firstName, String lastName, String phone, String email, Integer countOfOrder) {
         try{
             if (firstName == null || lastName == null || phone == null || email == null || countOfOrder == null){
-                log.info("Строка не добавлена, так как одно из полей null");
+                log.info(Constants.NULL_VALUE);
                 return false;
             }else {
                 RegularCustomer customer = new RegularCustomer();
@@ -300,9 +349,12 @@ public class DataProviderCsv implements DataProvider{
                 customer.setPhone(phone);
                 customer.setEmail(email);
                 customer.setNumberOfOrders(countOfOrder);
+                log.info(Constants.REGULAR_CUSTOMER_CREATED);
+                log.debug(customer);
                 return writeToCsv(customer);
             }
         }catch (NullPointerException e) {
+            log.info(Constants.REGULAR_CUSTOMER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -313,7 +365,7 @@ public class DataProviderCsv implements DataProvider{
         List<RegularCustomer> regularCustomerList = readFromCsv(RegularCustomer.class);
         try {
             if (getRegularCustomerById(id) == null){
-                log.info("Такого id нет в списке");
+                log.info(Constants.REGULAR_CUSTOMER_ID + id + Constants.NOT_FOUND);
                 return false;
             }
             RegularCustomer customer = new RegularCustomer();
@@ -326,8 +378,10 @@ public class DataProviderCsv implements DataProvider{
             regularCustomerList.removeIf(user -> user.getId() == id);
             writeToCsv(RegularCustomer.class, regularCustomerList, true);
             writeToCsv(customer);
+            log.info(Constants.REGULAR_CUSTOMER_EDITED);
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.info(Constants.REGULAR_CUSTOMER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -335,10 +389,18 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public boolean deleteRegularCustomer(long id) {
-        List<RegularCustomer> regularCustomerList = readFromCsv(RegularCustomer.class);
-        regularCustomerList.removeIf(customer -> customer.getId() == id);
-        writeToCsv(RegularCustomer.class, regularCustomerList, true);
-        return true;
+        try{
+            List<RegularCustomer> regularCustomerList = readFromCsv(RegularCustomer.class);
+            regularCustomerList.removeIf(customer -> customer.getId() == id);
+            log.debug(regularCustomerList);
+            writeToCsv(RegularCustomer.class, regularCustomerList, true);
+            log.info(Constants.REGULAR_CUSTOMER_DELETED);
+            return true;
+        }catch (NullPointerException e){
+            log.info(Constants.REGULAR_CUSTOMER_NOT_DELETED);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
@@ -348,8 +410,11 @@ public class DataProviderCsv implements DataProvider{
             RegularCustomer regularCustomer = listRegularCustomer.stream()
                     .filter(el->el.getId()==id)
                     .findFirst().get();
+            log.info(Constants.REGULAR_CUSTOMER_RECEIVED);
+            log.debug(regularCustomer);
             return regularCustomer;
         }catch (NoSuchElementException e){
+            log.info(Constants.REGULAR_CUSTOMER_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -359,7 +424,7 @@ public class DataProviderCsv implements DataProvider{
     public boolean createMaster(String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) {
         try{
             if (firstName == null || lastName == null || position == null || phone == null || salary == null || listService == null){
-                log.info("Строка не добавлена, так как одно из полей null");
+                log.info(Constants.NULL_VALUE);
                 return false;
             }else {
                 Master master = new Master();
@@ -370,10 +435,12 @@ public class DataProviderCsv implements DataProvider{
                 master.setListService(listService);
                 master.setPhone(phone);
                 master.setSalary(salary);
-                log.info(master);
+                log.info(Constants.MASTER_CREATED);
+                log.debug(master);
                 return writeToCsv(master);
             }
         }catch (NullPointerException e) {
+            log.info(Constants.MASTER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -384,7 +451,7 @@ public class DataProviderCsv implements DataProvider{
         List<Master> masterList = readFromCsv(Master.class);
         try {
             if (getMasterById(id) == null){
-                log.info("Такого id нет в списке");
+                log.info(Constants.MASTER_ID + id + Constants.NOT_FOUND);
                 return false;
             }
             Master master = new Master();
@@ -398,8 +465,11 @@ public class DataProviderCsv implements DataProvider{
             masterList.removeIf(user -> user.getId() == id);
             writeToCsv(Master.class, masterList, true);
             writeToCsv(master);
+            log.info(Constants.MASTER_EDITED);
+            log.debug(master);
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.info(Constants.MASTER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -407,10 +477,18 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public boolean deleteMaster(long id) {
-        List<Master> masterList = readFromCsv(Master.class);
-        masterList.removeIf(master -> master.getId() == id);
-        writeToCsv(Master.class, masterList, true);
-        return true;
+        try{
+            List<Master> masterList = readFromCsv(Master.class);
+            masterList.removeIf(master -> master.getId() == id);
+            log.debug(masterList);
+            writeToCsv(Master.class, masterList, true);
+            log.info(Constants.MASTER_DELETED);
+            return true;
+        }catch (NullPointerException e){
+            log.info(Constants.MASTER_NOT_DELETED);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
@@ -420,8 +498,11 @@ public class DataProviderCsv implements DataProvider{
             Master master = listMaster.stream()
                     .filter(el->el.getId()==id)
                     .findFirst().get();
+            log.info(Constants.MASTER_RECEIVED);
+            log.debug(master);
             return master;
         }catch (NoSuchElementException e){
+            log.info(Constants.MASTER_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -429,29 +510,89 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public boolean createSalon(String address, List<Master> listMaster) {
-        return false;
+        try{
+            if (address == null || listMaster == null){
+                log.info(Constants.NULL_VALUE);
+                return false;
+            }else {
+                Salon salon = new Salon();
+                salon.setId(getNextSalonId());
+                salon.setAddress(address);
+                salon.setListMaster(listMaster);
+                log.info(Constants.SALON_CREATED);
+                log.debug(salon);
+                return writeToCsv(salon);
+            }
+        }catch (NullPointerException e) {
+            log.info(Constants.SALON_NOT_CREATED);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
-    public boolean editSalon(long id, Salon editedSalon) {
-        return false;
+    public boolean editSalon(long id, String address, List<Master> listMaster) {
+        List<Salon> salonList = readFromCsv(Salon.class);
+        try {
+            if (getSalonById(id) == null){
+                log.info(Constants.SALON_ID + id + Constants.NOT_FOUND);
+                return false;
+            }
+            Salon salon = new Salon();
+            salon.setId(id);
+            salon.setAddress(address);
+            salon.setListMaster(listMaster);
+            salonList.removeIf(sal -> sal.getId() == id);
+            writeToCsv(Salon.class, salonList, true);
+            writeToCsv(salon);
+            log.info(Constants.SALON_EDITED);
+            log.debug(salon);
+            return true;
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.info(Constants.SALON_NOT_EDITED);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
     public boolean deleteSalon(long id) {
-        return false;
+        try {
+            List<Salon> salonList = readFromCsv(Salon.class);
+            salonList.removeIf(salon -> salon.getId() == id);
+            log.debug(salonList);
+            writeToCsv(Salon.class, salonList, true);
+            log.info(Constants.SALON_DELETED);
+            return true;
+        }catch (NullPointerException e){
+            log.info(Constants.SALON_NOT_DELETED);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
     public Salon getSalonById(long id) {
-        return null;
+        List<Salon> listSalon = readFromCsv(Salon.class);
+        try {
+            Salon salon = listSalon.stream()
+                    .filter(el->el.getId()==id)
+                    .findFirst().get();
+            log.info(Constants.SALON_RECEIVED);
+            log.debug(salon);
+            return salon;
+        }catch (NoSuchElementException e){
+            log.info(Constants.SALON_NOT_RECEIVED);
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
     public boolean createOrderItem(Service service, Double cost, Integer quantity) {
         try{
             if (service == null || cost == null || quantity == null){
-                log.info("Строка не добавлена, так как одно из полей null");
+                log.info(Constants.NULL_VALUE);
                 return false;
             }else {
                 OrderItem orderItem = new OrderItem();
@@ -459,9 +600,12 @@ public class DataProviderCsv implements DataProvider{
                 orderItem.setService(service);
                 orderItem.setCost(cost);
                 orderItem.setQuantity(quantity);
+                log.info(Constants.ORDER_ITEM_CREATED);
+                log.debug(orderItem);
                 return writeToCsv(orderItem);
             }
         }catch (NullPointerException e) {
+            log.info(Constants.ORDER_ITEM_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -472,7 +616,7 @@ public class DataProviderCsv implements DataProvider{
         List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
         try {
             if (getOrderItemById(id) == null){
-                log.info("Такого id нет в списке");
+                log.info(Constants.ORDER_ITEM_ID + id + Constants.NOT_FOUND);
                 return false;
             }
             OrderItem orderItem = new OrderItem();
@@ -483,8 +627,11 @@ public class DataProviderCsv implements DataProvider{
             orderItemList.removeIf(item -> item.getId() == id);
             writeToCsv(OrderItem.class, orderItemList, true);
             writeToCsv(orderItem);
+            log.info(Constants.ORDER_ITEM_EDITED);
+            log.debug(orderItem);
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.info(Constants.ORDER_ITEM_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -492,10 +639,18 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public boolean deleteOrderItem(long id) {
-        List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
-        orderItemList.removeIf(item -> item.getId() == id);
-        writeToCsv(OrderItem.class, orderItemList, true);
-        return true;
+        try{
+            List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
+            orderItemList.removeIf(item -> item.getId() == id);
+            log.debug(orderItemList);
+            writeToCsv(OrderItem.class, orderItemList, true);
+            log.info(Constants.ORDER_ITEM_DELETED);
+            return true;
+        }catch (NullPointerException e){
+            log.info(Constants.ORDER_ITEM_NOT_DELETED);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
@@ -505,8 +660,11 @@ public class DataProviderCsv implements DataProvider{
             OrderItem orderItem = listOrderItem.stream()
                     .filter(el->el.getId()==id)
                     .findFirst().get();
+            log.info(Constants.ORDER_ITEM_RECEIVED);
+            log.debug(orderItem);
             return orderItem;
         }catch (NoSuchElementException e){
+            log.info(Constants.ORDER_ITEM_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -516,7 +674,7 @@ public class DataProviderCsv implements DataProvider{
     public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) {
         try{
             if (created == null || item == null || cost == null || status == null || customer == null){
-                log.info("Строка не добавлена, так как одно из полей null");
+                log.info(Constants.NULL_VALUE);
                 return false;
             }else {
                 Order order = new Order();
@@ -528,9 +686,12 @@ public class DataProviderCsv implements DataProvider{
                 order.setCustomer(customer);
                 order.setLastUpdated(lastUpdated);
                 order.setCompleted(completed);
+                log.info(Constants.ORDER_CREATED);
+                log.debug(order);
                 return writeToCsv(order);
             }
         }catch (NullPointerException e) {
+            log.info(Constants.ORDER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -541,7 +702,7 @@ public class DataProviderCsv implements DataProvider{
         List<Order> orderList = readFromCsv(Order.class);
         try {
             if (getOrderById(id) == null){
-                log.info("Такого id нет в списке");
+                log.info(Constants.ORDER_ID + id + Constants.NOT_FOUND);
                 return false;
             }
             Order order = new Order();
@@ -556,8 +717,11 @@ public class DataProviderCsv implements DataProvider{
             orderList.removeIf(ord -> ord.getId() == id);
             writeToCsv(Order.class, orderList, true);
             writeToCsv(order);
+            log.info(Constants.ORDER_EDITED);
+            log.debug(order);
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.info(Constants.ORDER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -565,10 +729,18 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public boolean deleteOrder(long id) {
-        List<Order> orderList = readFromCsv(Order.class);
-        orderList.removeIf(ord -> ord.getId() == id);
-        writeToCsv(Order.class, orderList, true);
-        return true;
+        try{
+            List<Order> orderList = readFromCsv(Order.class);
+            orderList.removeIf(ord -> ord.getId() == id);
+            log.debug(orderList);
+            writeToCsv(Order.class, orderList, true);
+            log.info(Constants.ORDER_DELETED);
+            return true;
+        }catch (NullPointerException e){
+            log.info(Constants.ORDER_NOT_DELETED);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
@@ -578,8 +750,11 @@ public class DataProviderCsv implements DataProvider{
             Order order = listOrder.stream()
                     .filter(el->el.getId()==id)
                     .findFirst().get();
+            log.info(Constants.ORDER_RECEIVED);
+            log.debug(order);
             return order;
         }catch (NoSuchElementException e){
+            log.info(Constants.ORDER_NOT_RECEIVED);
             log.error(e);
             return null;
         }

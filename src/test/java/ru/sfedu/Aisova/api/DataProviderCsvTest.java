@@ -57,7 +57,6 @@ public class DataProviderCsvTest {
         Assertions.assertTrue(dataProvider.createService("service2", 2000.0, "description2"));
         Assertions.assertTrue(dataProvider.createService("service3", 3000.0, "description3"));
         Assertions.assertTrue(dataProvider.createService("service4", 4000.0, "description4"));
-
     }
 
     @Test
@@ -69,31 +68,37 @@ public class DataProviderCsvTest {
     }
 
     @Test
+    @org.junit.jupiter.api.Order(1)
     void editServiceSuccess() {
         Assertions.assertTrue(dataProvider.editService(2, "rewriteName", 5.0, "rewriteDescription"));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(1)
     void editServiceFail() {
         Assertions.assertFalse(dataProvider.editService(10, "rewriteName", 5.0, "rewriteDescription"));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(2)
     void deleteServiceSuccess() {
         Assertions.assertTrue(dataProvider.deleteService(3));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(2)
     void deleteServiceFail() {
         Assertions.assertTrue(dataProvider.deleteService(10));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(3)
     void getServiceByIdSuccess() {
         log.debug(dataProvider.getServiceById(1));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(3)
     void getServiceByIdFail() {
         log.debug(dataProvider.getServiceById(10));
     }
@@ -118,31 +123,37 @@ public class DataProviderCsvTest {
     }
 
     @Test
+    @org.junit.jupiter.api.Order(1)
     void editNewCustomerSuccess() {
         Assertions.assertTrue(dataProvider.editNewCustomer(2,"rewriteFirstName", "rewriteLastName", "rewritePhone", "rewriteEmail", 50));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(1)
     void editNewCustomerFail() {
         Assertions.assertFalse(dataProvider.editNewCustomer(10,"rewriteFirstName", "rewriteLastName", "rewritePhone", "rewriteEmail", 50));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(2)
     void deleteNewCustomerSuccess() {
         Assertions.assertTrue(dataProvider.deleteNewCustomer(3));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(2)
     void deleteNewCustomerFail() {
         Assertions.assertTrue(dataProvider.deleteNewCustomer(10));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(3)
     void testGetNewCustomerByIdSuccess() {
         log.debug(dataProvider.getNewCustomerById(1));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(3)
     void testGetNewCustomerByIdFail() {
         log.debug(dataProvider.getNewCustomerById(10));
     }
@@ -167,36 +178,43 @@ public class DataProviderCsvTest {
     }
 
     @Test
+    @org.junit.jupiter.api.Order(1)
     void editRegularCustomerSuccess() {
-        Assertions.assertTrue(dataProvider.editRegularCustomer(1,"rewriteFirstName", "rewriteLastName", "rewritePhone", "rewriteEmail", 5));
+        Assertions.assertTrue(dataProvider.editRegularCustomer(2,"rewriteFirstName", "rewriteLastName", "rewritePhone", "rewriteEmail", 5));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(1)
     void editRegularCustomerFail() {
         Assertions.assertFalse(dataProvider.editRegularCustomer(10,"rewriteFirstName", "rewriteLastName", "rewritePhone", "rewriteEmail", 5));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(2)
     void deleteRegularCustomerSuccess() {
-        Assertions.assertTrue(dataProvider.deleteRegularCustomer(2));
+        Assertions.assertTrue(dataProvider.deleteRegularCustomer(3));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(2)
     void deleteRegularCustomerFail() {
         Assertions.assertTrue(dataProvider.deleteRegularCustomer(10));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(3)
     void getRegularCustomerByIdSuccess() {
         log.debug(dataProvider.getRegularCustomerById(1));
 
     }
     @Test
+    @org.junit.jupiter.api.Order(3)
     void getRegularCustomerByIdFail() {
         log.debug(dataProvider.getRegularCustomerById(10));
     }
 
      @Test
+     @org.junit.jupiter.api.Order(4)
      void createMasterSuccess() {
          List<Service> listService1 = new ArrayList<>();
          listService1.add(dataProvider.getServiceById(0));
@@ -212,9 +230,11 @@ public class DataProviderCsvTest {
          Assertions.assertTrue(dataProvider.createMaster("FirstName1", "LastName1", "Position1", "Phone1", 10000.0, listService1));
          Assertions.assertTrue(dataProvider.createMaster("FirstName2", "LastName2", "Position2", "Phone2", 20000.0, listService2));
          Assertions.assertTrue(dataProvider.createMaster("FirstName3", "LastName3", "Position3", "Phone3", 30000.0, listService3));
+         Assertions.assertTrue(dataProvider.createMaster("FirstName4", "LastName4", "Position4", "Phone4", 40000.0, listService3));
      }
 
     @Test
+    @org.junit.jupiter.api.Order(4)
     void createMasterFail() {
         List<Service> listService1 = new ArrayList<>();
         listService1.add(dataProvider.getServiceById(0));
@@ -236,35 +256,124 @@ public class DataProviderCsvTest {
     }
 
      @Test
-     void editMaster() {
+     @org.junit.jupiter.api.Order(5)
+     void editMasterSuccess() {
+         List<Service> listService = new ArrayList<>();
+         listService.add(dataProvider.getServiceById(2));
+         listService.add(dataProvider.getServiceById(1));
+         Assertions.assertTrue(dataProvider.editMaster(2,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService));
      }
 
-     @Test
-     void deleteMaster() {
-     }
-
-     @Test
-     void getMasterById() {
-     }
-/*
-         @Test
-         void createSalon() {
-         }
-
-         @Test
-         void editSalon() {
-         }
-
-         @Test
-         void deleteSalon() {
-         }
-
-         @Test
-         void getSalonById() {
-         }
-     */
     @Test
-    @org.junit.jupiter.api.Order(1)
+    @org.junit.jupiter.api.Order(5)
+    void editMasterFail() {
+        List<Service> listService = new ArrayList<>();
+        listService.add(dataProvider.getServiceById(2));
+        listService.add(dataProvider.getServiceById(1));
+        Assertions.assertFalse(dataProvider.editMaster(10,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService));
+    }
+
+     @Test
+     @org.junit.jupiter.api.Order(6)
+     void deleteMasterSuccess() {
+         Assertions.assertTrue(dataProvider.deleteMaster(3));
+     }
+
+    @Test
+    @org.junit.jupiter.api.Order(6)
+    void deleteMasterFail() {
+        Assertions.assertTrue(dataProvider.deleteMaster(10));
+    }
+
+     @Test
+     @org.junit.jupiter.api.Order(7)
+     void getMasterByIdSuccess() {
+         log.debug(dataProvider.getMasterById(1));
+     }
+
+    @Test
+    @org.junit.jupiter.api.Order(7)
+    void getMasterByIdFail() {
+        log.debug(dataProvider.getMasterById(10));
+    }
+
+     @Test
+     @org.junit.jupiter.api.Order(8)
+     void createSalonSuccess() {
+         List<Master> listMaster1 = new ArrayList<>();
+         listMaster1.add(dataProvider.getMasterById(0));
+         listMaster1.add(dataProvider.getMasterById(1));
+         listMaster1.add(dataProvider.getMasterById(2));
+         List<Master> listMaster2 = new ArrayList<>();
+         listMaster2.add(dataProvider.getMasterById(0));
+         listMaster2.add(dataProvider.getMasterById(1));
+         List<Master> listMaster3 = new ArrayList<>();
+         listMaster3.add(dataProvider.getMasterById(1));
+         listMaster3.add(dataProvider.getMasterById(2));
+
+         Assertions.assertTrue(dataProvider.createSalon("Address1", listMaster1));
+         Assertions.assertTrue(dataProvider.createSalon("Address2", listMaster2));
+         Assertions.assertTrue(dataProvider.createSalon("Address3", listMaster3));
+     }
+
+    @Test
+    @org.junit.jupiter.api.Order(8)
+    void createSalonFail() {
+        List<Master> listMaster1 = new ArrayList<>();
+        listMaster1.add(dataProvider.getMasterById(0));
+        listMaster1.add(dataProvider.getMasterById(1));
+        listMaster1.add(dataProvider.getMasterById(2));
+
+        Assertions.assertFalse(dataProvider.createSalon(null, listMaster1));
+        Assertions.assertFalse(dataProvider.createSalon("Address2", null));
+    }
+
+     @Test
+     @org.junit.jupiter.api.Order(9)
+     void editSalonSuccess() {
+         List<Master> listMaster = new ArrayList<>();
+         listMaster.add(dataProvider.getMasterById(2));
+         listMaster.add(dataProvider.getMasterById(1));
+
+         Assertions.assertTrue(dataProvider.editSalon(1,"rewriteAddress", listMaster));
+     }
+
+    @Test
+    @org.junit.jupiter.api.Order(9)
+    void editSalonFail() {
+        List<Master> listMaster = new ArrayList<>();
+        listMaster.add(dataProvider.getMasterById(2));
+        listMaster.add(dataProvider.getMasterById(1));
+
+        Assertions.assertFalse(dataProvider.editSalon(10,"rewriteAddress", listMaster));
+    }
+
+     @Test
+     @org.junit.jupiter.api.Order(10)
+     void deleteSalonSuccess() {
+         Assertions.assertTrue(dataProvider.deleteSalon(2));
+     }
+
+    @Test
+    @org.junit.jupiter.api.Order(10)
+    void deleteSalonFail() {
+        Assertions.assertTrue(dataProvider.deleteSalon(10));
+    }
+
+     @Test
+     @org.junit.jupiter.api.Order(11)
+     void getSalonByIdSuccess() {
+         log.debug(dataProvider.getSalonById(0));
+     }
+
+    @Test
+    @org.junit.jupiter.api.Order(11)
+    void getSalonByIdFail() {
+        log.debug(dataProvider.getSalonById(10));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(4)
     void createOrderItemSuccess() {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(0));
@@ -280,7 +389,7 @@ public class DataProviderCsvTest {
     }
 
     @Test
-    @org.junit.jupiter.api.Order(1)
+    @org.junit.jupiter.api.Order(4)
     void createOrderItemFail() {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(0));
@@ -294,43 +403,49 @@ public class DataProviderCsvTest {
     }
 
     @Test
+    @org.junit.jupiter.api.Order(5)
     void editOrderItemSuccess() {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(2));
         Service service = listService.stream().filter(el->el.getId()==2).findFirst().get();
-        Assertions.assertTrue(dataProvider.editOrderItem(1,service, 500.0, 5));
+        Assertions.assertTrue(dataProvider.editOrderItem(2, service, 500.0, 5));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(5)
     void editOrderItem() {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(2));
         Service service = listService.stream().filter(el->el.getId()==2).findFirst().get();
-        Assertions.assertFalse(dataProvider.editOrderItem(10,service, 500.0, 5));
+        Assertions.assertFalse(dataProvider.editOrderItem(10, service, 500.0, 5));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(6)
     void deleteOrderItemSuccess() {
-        Assertions.assertTrue(dataProvider.deleteOrderItem(2));
+        Assertions.assertTrue(dataProvider.deleteOrderItem(3));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(6)
     void deleteOrderItemFail() {
         Assertions.assertTrue(dataProvider.deleteOrderItem(10));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(7)
     void getOrderItemByIdSuccess() {
         log.debug(dataProvider.getOrderItemById(1));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(7)
     void getOrderItemByIdFail() {
         log.debug(dataProvider.getOrderItemById(10));
     }
 
     @Test
-    @org.junit.jupiter.api.Order(2)
+    @org.junit.jupiter.api.Order(8)
     void createOrderSuccess() {
         List<NewCustomer> newCustomerList = new ArrayList<>();
         newCustomerList.add(dataProvider.getNewCustomerById(0));
@@ -361,7 +476,7 @@ public class DataProviderCsvTest {
     }
 
     @Test
-    @org.junit.jupiter.api.Order(2)
+    @org.junit.jupiter.api.Order(8)
     void createOrderFail() {
         List<NewCustomer> newCustomerList = new ArrayList<>();
         newCustomerList.add(dataProvider.getNewCustomerById(0));
@@ -390,6 +505,7 @@ public class DataProviderCsvTest {
     }
 
     @Test
+    @org.junit.jupiter.api.Order(9)
     void editOrderSuccess() {
         List<NewCustomer> newCustomerList = new ArrayList<>();
         newCustomerList.add(dataProvider.getNewCustomerById(1));
@@ -399,10 +515,11 @@ public class DataProviderCsvTest {
         orderItemList.add(dataProvider.getOrderItemById(1));
         orderItemList.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertTrue(dataProvider.editOrder(2,"01.12.2020", orderItemList, 10000.0, "COMPLETED", customer, "05.12.2020", "10.12.2020"));
+        Assertions.assertTrue(dataProvider.editOrder(2,"01.12.2020", orderItemList, 50000.0, "COMPLETED", customer, "05.12.2020", "10.12.2020"));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(9)
     void editOrderFail() {
         List<NewCustomer> newCustomerList = new ArrayList<>();
         newCustomerList.add(dataProvider.getNewCustomerById(1));
@@ -412,25 +529,29 @@ public class DataProviderCsvTest {
         orderItemList.add(dataProvider.getOrderItemById(1));
         orderItemList.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList, 10000.0, "COMPLETED", customer, "05.12.2020", "10.12.2020"));
+        Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList, 50000.0, "COMPLETED", customer, "05.12.2020", "10.12.2020"));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(10)
     void deleteOrderSuccess() {
         Assertions.assertTrue(dataProvider.deleteOrder(3));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(10)
     void deleteOrderFail() {
         Assertions.assertTrue(dataProvider.deleteOrder(10));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(11)
     void getOrderByIdSuccess() {
         log.debug(dataProvider.getOrderById(1));
     }
 
     @Test
+    @org.junit.jupiter.api.Order(11)
     void getOrderByIdFail() {
         log.debug(dataProvider.getOrderById(10));
     }

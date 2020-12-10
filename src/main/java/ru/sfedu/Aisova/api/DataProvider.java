@@ -27,7 +27,7 @@ public interface DataProvider {
     Master getMasterById(long id);
 
     boolean createSalon (String address, List<Master> listMaster);
-    boolean editSalon (long id, Salon editedSalon);
+    boolean editSalon (long id, String address, List<Master> listMaster);
     boolean deleteSalon (long id);
     Salon getSalonById(long id);
 
