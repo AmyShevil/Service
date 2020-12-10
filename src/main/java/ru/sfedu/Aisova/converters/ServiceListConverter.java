@@ -31,6 +31,7 @@ public class ServiceListConverter extends AbstractBeanField<Service> {
                 indexServiceList.add(service);
             }
         }
+        log.debug(indexServiceList);
         return indexServiceList;
     }
 

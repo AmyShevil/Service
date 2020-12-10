@@ -1,7 +1,9 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvCustomBindByName;
+import com.opencsv.bean.CsvCustomBindByPosition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sfedu.Aisova.converters.ServiceListConverter;
@@ -20,26 +22,26 @@ public class Master implements Serializable {
   // Fields
   //
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 0)
   private long id;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 1)
   private String firstName;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 2)
   private String lastName;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 3)
   private String position;
 
-  @CsvCustomBindByName(converter = ServiceListConverter.class)
-  private List<Service> listService;
-
-  @CsvBindByName
+  @CsvBindByPosition(position = 4)
   private String phone;
 
-  @CsvBindByName
+  @CsvBindByPosition(position = 5)
   private Double salary;
+
+  @CsvCustomBindByPosition(position = 6, converter = ServiceListConverter.class)
+  private List<Service> listService;
   
   //
   // Constructors

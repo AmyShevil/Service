@@ -8,21 +8,21 @@ import java.util.List;
 public interface DataProvider {
 
     boolean createService (String name, Double price, String description);
-    boolean editService (long id, Service editedService);
+    boolean editService (long id, String name, Double price, String description);
     boolean deleteService (long id);
     Service getServiceById(long id);
 
     boolean createNewCustomer(String firstName, String lastName, String phone, String email, Integer discount);
-    boolean editNewCustomer(long id, NewCustomer editCustomer);
+    boolean editNewCustomer(long id, String firstName, String lastName, String phone, String email, Integer discount);
     boolean deleteNewCustomer(long id);
     NewCustomer getNewCustomerById(long id);
 
     boolean createRegularCustomer(String firstName, String lastName, String phone, String email, Integer countOfOrder);
-    boolean editRegularCustomer(long id, RegularCustomer editCustomer);
+    boolean editRegularCustomer(long id, String firstName, String lastName, String phone, String email, Integer countOfOrder);
     boolean deleteRegularCustomer(long id);
     RegularCustomer getRegularCustomerById(long id);
 
-    boolean createMaster (String firstName, String lastName, String position, List<Service> listService, String phone, Double salary);
+    boolean createMaster (String firstName, String lastName, String position, String phone, Double salary, List<Service> serviceList);
     boolean editMaster (long id, Master editedMaster);
     boolean deleteMaster (long id);
     Master getMasterById(long id);
@@ -32,7 +32,7 @@ public interface DataProvider {
     boolean deleteSalon (long id);
     Salon getSalonById(long id);
 
-    boolean createOrderItem (long number, Service service, Double cost, Integer quantity);
+    boolean createOrderItem (Service service, Double cost, Integer quantity);
     boolean editOrderItem (long id, OrderItem editedOrderItem);
     boolean deleteOrderItem (long id);
     OrderItem getOrderItemById(long id);
