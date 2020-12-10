@@ -141,17 +141,20 @@ public class DataProviderCsv implements DataProvider{
         return maxId+1;
     }
 
+    private long getNextOrderId(){
+        List<Order> objectList = readFromCsv(Order.class);
+        long maxId = -1;
+        for(Order order : objectList){
+            if(maxId < order.getId()){
+                maxId = order.getId();
+            }
+        }
+        return maxId+1;
+    }
+
     @Override
     public boolean createService(String name, Double price, String description) {
         try {
-            /*
-            String str ="";
-            Service service = new Service();
-            service.setId(getNextServiceId());
-            service.setName(str.concat(name));
-            service.setPrice(price);
-            service.setDescription(str.concat(description));
-             */
             if (name == null || price == null || description == null){
                 log.info("Строка не добавлена, так как одно из полей null");
                 return false;
@@ -353,9 +356,9 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createMaster(String firstName, String lastName, String position, String phone, Double salary, List<Service> serviceList) {
+    public boolean createMaster(String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) {
         try{
-            if (firstName == null || lastName == null || position == null || phone == null || salary == null || serviceList == null){
+            if (firstName == null || lastName == null || position == null || phone == null || salary == null || listService == null){
                 log.info("Строка не добавлена, так как одно из полей null");
                 return false;
             }else {
@@ -364,7 +367,7 @@ public class DataProviderCsv implements DataProvider{
                 master.setFirstName(firstName);
                 master.setLastName(lastName);
                 master.setPosition(position);
-                master.setServiceList(serviceList);
+                master.setListService(listService);
                 master.setPhone(phone);
                 master.setSalary(salary);
                 log.info(master);
@@ -377,13 +380,37 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editMaster(long id, Master editedMaster) {
-        return false;
+    public boolean editMaster(long id, String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) {
+        List<Master> masterList = readFromCsv(Master.class);
+        try {
+            if (getMasterById(id) == null){
+                log.info("Такого id нет в списке");
+                return false;
+            }
+            Master master = new Master();
+            master.setId(id);
+            master.setFirstName(firstName);
+            master.setLastName(lastName);
+            master.setPosition(position);
+            master.setPhone(phone);
+            master.setSalary(salary);
+            master.setListService(listService);
+            masterList.removeIf(user -> user.getId() == id);
+            writeToCsv(Master.class, masterList, true);
+            writeToCsv(master);
+            return true;
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
     public boolean deleteMaster(long id) {
-        return false;
+        List<Master> masterList = readFromCsv(Master.class);
+        masterList.removeIf(master -> master.getId() == id);
+        writeToCsv(Master.class, masterList, true);
+        return true;
     }
 
     @Override
@@ -441,13 +468,34 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editOrderItem(long id, OrderItem editedOrderItem) {
-        return false;
+    public boolean editOrderItem(long id, Service service, Double cost, Integer quantity) {
+        List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
+        try {
+            if (getOrderItemById(id) == null){
+                log.info("Такого id нет в списке");
+                return false;
+            }
+            OrderItem orderItem = new OrderItem();
+            orderItem.setId(id);
+            orderItem.setService(service);
+            orderItem.setCost(cost);
+            orderItem.setQuantity(quantity);
+            orderItemList.removeIf(item -> item.getId() == id);
+            writeToCsv(OrderItem.class, orderItemList, true);
+            writeToCsv(orderItem);
+            return true;
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
     public boolean deleteOrderItem(long id) {
-        return false;
+        List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
+        orderItemList.removeIf(item -> item.getId() == id);
+        writeToCsv(OrderItem.class, orderItemList, true);
+        return true;
     }
 
     @Override
@@ -465,18 +513,62 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createOrder(long id, String created, List<OrderItem> item, Double cost, OrderStatus status, Customer customer, String lastUpdated, String completed) {
-        return false;
+    public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) {
+        try{
+            if (created == null || item == null || cost == null || status == null || customer == null){
+                log.info("Строка не добавлена, так как одно из полей null");
+                return false;
+            }else {
+                Order order = new Order();
+                order.setCreated(created);
+                order.setId(getNextOrderId());
+                order.setItem(item);
+                order.setCost(cost);
+                order.setStatus(status);
+                order.setCustomer(customer);
+                order.setLastUpdated(lastUpdated);
+                order.setCompleted(completed);
+                return writeToCsv(order);
+            }
+        }catch (NullPointerException e) {
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
-    public boolean editOrder(long id, Order editedOrder) {
-        return false;
+    public boolean editOrder(long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) {
+        List<Order> orderList = readFromCsv(Order.class);
+        try {
+            if (getOrderById(id) == null){
+                log.info("Такого id нет в списке");
+                return false;
+            }
+            Order order = new Order();
+            order.setCreated(created);
+            order.setId(id);
+            order.setItem(item);
+            order.setCost(cost);
+            order.setStatus(status);
+            order.setCustomer(customer);
+            order.setLastUpdated(lastUpdated);
+            order.setCompleted(completed);
+            orderList.removeIf(ord -> ord.getId() == id);
+            writeToCsv(Order.class, orderList, true);
+            writeToCsv(order);
+            return true;
+        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
     public boolean deleteOrder(long id) {
-        return false;
+        List<Order> orderList = readFromCsv(Order.class);
+        orderList.removeIf(ord -> ord.getId() == id);
+        writeToCsv(Order.class, orderList, true);
+        return true;
     }
 
     @Override

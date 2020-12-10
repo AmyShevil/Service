@@ -22,15 +22,10 @@ public class NewCustomerConverter extends AbstractBeanField<NewCustomer> {
         NewCustomer newCustomer = new NewCustomer();
 
         if (!indexString.isEmpty()) {
-
             newCustomer.setId(Long.parseLong(indexString));
-
         }
-
         return newCustomer;
-
     }
-
 
 
     @Override

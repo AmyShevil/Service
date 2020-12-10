@@ -79,7 +79,7 @@ public class DataProviderCSVOld {
         try {
             List<Service> objectServiceList;
             Master master = (Master) object;
-            objectServiceList = master.getServiceList();
+            objectServiceList = master.getListService();
             List<Service> serviceList = getFromCSV(Service.class);
             List<Long> idServiceInMaster;
 
@@ -424,7 +424,7 @@ public class DataProviderCSVOld {
 
             var master = optionalMaster.get();
 
-            master.setServiceList(getServiceListInMaster(Master.class, master));
+            master.setListService(getServiceListInMaster(Master.class, master));
 
             return Optional.of(master);
 
@@ -471,7 +471,7 @@ public class DataProviderCSVOld {
             newMaster.setFirstName(firstName);
             newMaster.setLastName(lastName);
             newMaster.setPosition(position);
-            newMaster.setServiceList(listService);
+            newMaster.setListService(listService);
             newMaster.setPhone(phone);
             newMaster.setSalary(salary);
 
@@ -602,7 +602,7 @@ public class DataProviderCSVOld {
         }
     }
 
-    public void rewriteOrder(long id, String created, List<OrderItem> item, Double cost, OrderStatus status, Customer customer, String lastUpdated, String completed) throws IOException {
+    public void rewriteOrder(long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) throws IOException {
         List<Order> listOrder = getFromCSV(Order.class);
         try {
             Order newOrder = new Order();

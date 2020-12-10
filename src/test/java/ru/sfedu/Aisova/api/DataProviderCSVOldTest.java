@@ -734,9 +734,9 @@ public class DataProviderCSVOldTest extends TestBase {
         Customer customer2 = createNewCustomer(2, "firstName2", "lastName2", "phone2", "email2", 20);
         Customer customer3 = createNewCustomer(3, "firstName3", "lastName3", "phone3", "email3", 30);
 
-        Order order1 = createOrder(1, "created1", orderItem, 100.0, OrderStatus.CREATED, customer1, "lastUpdate1", "completed1");
-        Order order2 = createOrder(2, "created2", orderItem, 400.0, OrderStatus.COMPLETED, customer2, "lastUpdate2", "completed2");
-        Order order3 = createOrder(3, "created3", orderItem, 900.0, OrderStatus.CANCELED, customer3, "lastUpdate3", "completed3");
+        Order order1 = createOrder(1, "created1", orderItem, 100.0, "CREATED", customer1, "lastUpdate1", "completed1");
+        Order order2 = createOrder(2, "created2", orderItem, 400.0, "COMPLETED", customer2, "lastUpdate2", "completed2");
+        Order order3 = createOrder(3, "created3", orderItem, 900.0, "CANCELED", customer3, "lastUpdate3", "completed3");
         listOrder.add(order1);
         listOrder.add(order2);
         listOrder.add(order3);
@@ -757,9 +757,9 @@ public class DataProviderCSVOldTest extends TestBase {
         Customer customer2 = createNewCustomer(2, "firstName2", "lastName2", "phone2", "email2", 20);
         Customer customer3 = createNewCustomer(3, "firstName3", "lastName3", "phone3", "email3", 30);
 
-        Order order1 = createOrder(1, "created1", orderItem, 100.0, OrderStatus.CREATED, customer1, "lastUpdate1", "completed1");
-        Order order2 = createOrder(2, "created2", orderItem, 400.0, OrderStatus.COMPLETED, customer2, "lastUpdate2", "completed2");
-        Order order3 = createOrder(3, "created3", orderItem, 900.0, OrderStatus.CANCELED, customer3, "lastUpdate3", "completed3");
+        Order order1 = createOrder(1, "created1", orderItem, 100.0, "CREATED", customer1, "lastUpdate1", "completed1");
+        Order order2 = createOrder(2, "created2", orderItem, 400.0, "COMPLETED", customer2, "lastUpdate2", "completed2");
+        Order order3 = createOrder(3, "created3", orderItem, 900.0, "CANCELED", customer3, "lastUpdate3", "completed3");
         listOrder.add(order1);
         listOrder.add(order2);
         listOrder.add(order3);
@@ -811,7 +811,7 @@ public class DataProviderCSVOldTest extends TestBase {
         long id = 1;
         String created = "rewriteCreated";
         Double coast = 5000.0;
-        OrderStatus status = OrderStatus.PROCESSING;
+        String status = "PROCESSING";
         String lastUpdated = "rewriteLastUpdated";
         String completed = "rewriteCompleted";
         instance.rewriteOrder(id, created, orderItem, coast, status, customer, lastUpdated,completed);
@@ -829,7 +829,7 @@ public class DataProviderCSVOldTest extends TestBase {
         long id = 1;
         String created = "rewriteCreated";
         Double coast = 5000.0;
-        OrderStatus status = OrderStatus.PROCESSING;
+        String status = "PROCESSING";
         String lastUpdated = "rewriteLastUpdated";
         String completed = "rewriteCompleted";
         instance.rewriteOrder(id, created, orderItem, coast, status, customer, lastUpdated,completed);

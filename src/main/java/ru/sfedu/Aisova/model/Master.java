@@ -1,8 +1,6 @@
 package ru.sfedu.Aisova.model;
 
-import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
-import com.opencsv.bean.CsvCustomBindByName;
 import com.opencsv.bean.CsvCustomBindByPosition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -122,17 +120,17 @@ public class Master implements Serializable {
   }
 
   /**
-   * Set the value of serviceList
-   * @param serviceList the new value of serviceList
+   * Set the value of listService
+   * @param listService the new value of listService
    */
-  public void setServiceList (List<Service> serviceList) {this.listService = serviceList;
+  public void setListService (List<Service> listService) {this.listService = listService;
   }
 
   /**
-   * Get the value of serviceList
-   * @return the value of serviceList
+   * Get the value of listService
+   * @return the value of listService
    */
-  public List<Service> getServiceList () {return this.listService;
+  public List<Service> getListService () {return this.listService;
   }
 
   /**

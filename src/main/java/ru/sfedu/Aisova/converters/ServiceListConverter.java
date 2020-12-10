@@ -6,6 +6,7 @@ import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sfedu.Aisova.Constants;
+import ru.sfedu.Aisova.model.OrderItem;
 import ru.sfedu.Aisova.model.Service;
 
 import java.util.ArrayList;
@@ -22,25 +23,24 @@ public class ServiceListConverter extends AbstractBeanField<Service> {
         }
         String indexString = s.substring(1, s.length() - 1);
         String[] unparsedIndexList = indexString.split(Constants.SPLIT);
-        List<Service> indexServiceList = new ArrayList<>();
+        List<Service> listService = new ArrayList<>();
         for (String strIndex : unparsedIndexList) {
 
             if (!strIndex.isEmpty()) {
                 Service service = new Service();
                 service.setId(Long.parseLong(strIndex));
-                indexServiceList.add(service);
+                listService.add(service);
             }
         }
-        log.debug(indexServiceList);
-        return indexServiceList;
+        return listService;
     }
 
     @Override
     protected String convertToWrite(Object value) {
-        List<Service> serviceList = (List<Service>) value;
+        List<Service> listService = (List<Service>) value;
         StringBuilder builder = new StringBuilder(Constants.LIST_START_SYMBOL);
-        if (serviceList.size() != 0) {
-            for (Service modificationRecord : serviceList) {
+        if (listService.size() != 0) {
+            for (Service modificationRecord : listService) {
                 builder.append(modificationRecord.getId());
                 builder.append(Constants.SPLIT);
             }

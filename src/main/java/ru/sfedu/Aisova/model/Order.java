@@ -29,7 +29,7 @@ public class Order {
   private Double cost;
 
   @CsvBindByPosition(position = 4)
-  private OrderStatus status;
+  private String status;
 
   @CsvCustomBindByPosition(position = 5, converter = NewCustomerConverter.class)
   private Customer customer;
@@ -122,7 +122,7 @@ public class Order {
    * Set the value of status
    * @param status the new value of status
    */
-  public void setStatus (OrderStatus status) {
+  public void setStatus (String status) {
     this.status = status;
   }
 
@@ -130,7 +130,7 @@ public class Order {
    * Get the value of status
    * @return the value of status
    */
-  public OrderStatus getStatus () {
+  public String getStatus () {
     return status;
   }
 

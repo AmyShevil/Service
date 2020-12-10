@@ -46,13 +46,13 @@ public class TestBase {
         master.setFirstName(firstName);
         master.setLastName(lastName);
         master.setPosition(position);
-        master.setServiceList(listService);
+        master.setListService(listService);
         master.setPhone(phone);
         master.setSalary(salary);
         return master;
     }
 
-    public Order createOrder (long id, String created, List<OrderItem> item, Double cost, OrderStatus status, Customer customer, String lastUpdated, String completed){
+    public Order createOrder (long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed){
         Order order = new Order();
         order.setId(id);
         order.setCreated(created);

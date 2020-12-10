@@ -2,7 +2,6 @@ package ru.sfedu.Aisova.api;
 
 import ru.sfedu.Aisova.enums.OrderStatus;
 import ru.sfedu.Aisova.model.*;
-import java.util.Date;
 import java.util.List;
 
 public interface DataProvider {
@@ -22,8 +21,8 @@ public interface DataProvider {
     boolean deleteRegularCustomer(long id);
     RegularCustomer getRegularCustomerById(long id);
 
-    boolean createMaster (String firstName, String lastName, String position, String phone, Double salary, List<Service> serviceList);
-    boolean editMaster (long id, Master editedMaster);
+    boolean createMaster (String firstName, String lastName, String position, String phone, Double salary, List<Service> service);
+    boolean editMaster (long id, String firstName, String lastName, String position, String phone, Double salary, List<Service> listService);
     boolean deleteMaster (long id);
     Master getMasterById(long id);
 
@@ -33,12 +32,12 @@ public interface DataProvider {
     Salon getSalonById(long id);
 
     boolean createOrderItem (Service service, Double cost, Integer quantity);
-    boolean editOrderItem (long id, OrderItem editedOrderItem);
+    boolean editOrderItem (long id, Service service, Double cost, Integer quantity);
     boolean deleteOrderItem (long id);
     OrderItem getOrderItemById(long id);
 
-    boolean createOrder (long id, String created, List<OrderItem> item, Double cost, OrderStatus status, Customer customer, String lastUpdated, String completed);
-    boolean editOrder (long id, Order editedOrder);
+    boolean createOrder (String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed);
+    boolean editOrder (long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed);
     boolean deleteOrder (long id);
     Order getOrderById(long id);
 
