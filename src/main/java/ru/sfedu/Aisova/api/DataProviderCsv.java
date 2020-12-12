@@ -93,16 +93,11 @@ public class DataProviderCsv implements DataProvider{
             List<Service> serviceList = readFromCsv(Service.class);
             List<Long> idServiceInMaster;
 
-            idServiceInMaster = objectServiceList.stream()
-                    .map(value -> value.getId())
-                    .collect(Collectors.toList());
+            idServiceInMaster = objectServiceList.stream().map(value -> value.getId()).collect(Collectors.toList());
 
             List<Service>serviceListInMaster;
-            serviceListInMaster =serviceList.stream()
-                    .filter(service -> idServiceInMaster
-                            .stream()
-                            .anyMatch(serviceInMaster -> serviceInMaster.longValue() ==  service.getId()))
-                    .collect(Collectors.toList());
+            serviceListInMaster =serviceList.stream().filter(service -> idServiceInMaster.stream()
+                    .anyMatch(serviceInMaster -> serviceInMaster.longValue() ==  service.getId())).collect(Collectors.toList());
 
             return serviceListInMaster;
 

@@ -1,7 +1,5 @@
 package ru.sfedu.Aisova.api;
 
-import com.opencsv.exceptions.CsvDataTypeMismatchException;
-import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.simpleframework.xml.Serializer;
@@ -148,6 +146,7 @@ public class DataProviderXml implements DataProvider{
                 list.add(orderItemById);
             }
             orderItemWithService = list;
+
             return orderItemWithService;
 
         }catch(NullPointerException e){
