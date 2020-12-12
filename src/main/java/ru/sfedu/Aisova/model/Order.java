@@ -4,12 +4,11 @@ import com.opencsv.bean.*;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
-import ru.sfedu.Aisova.converters.NewCustomerConverter;
+import ru.sfedu.Aisova.converters.CustomerConverter;
 import ru.sfedu.Aisova.converters.OrderItemConverter;
-import ru.sfedu.Aisova.enums.OrderStatus;
+
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Class Order
@@ -41,7 +40,7 @@ public class Order {
   private String status;
 
   @Element
-  @CsvCustomBindByPosition(position = 5, converter = NewCustomerConverter.class)
+  @CsvCustomBindByPosition(position = 5, converter = CustomerConverter.class)
   private Customer customer;
 
   @Element
