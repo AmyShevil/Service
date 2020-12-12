@@ -413,7 +413,7 @@ public class DataProviderCsvTest {
 
     @Test
     @org.junit.jupiter.api.Order(5)
-    void editOrderItem() {
+    void editOrderItemFail() {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(2));
         Service service = listService.stream().filter(el->el.getId()==2).findFirst().get();
@@ -473,6 +473,8 @@ public class DataProviderCsvTest {
         Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, 20000.0, "PROCESSING", customer2, "04.12.2020", null));
         Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, 30000.0, "COMPLETED", customer3, "05.12.2020", "10.12.2020"));
         Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, 40000.0, "CANCELED", customer4, null, "05.12.2020"));
+
+        log.debug(dataProvider.getOrderById(2));
     }
 
     @Test
@@ -489,6 +491,9 @@ public class DataProviderCsvTest {
 
         List<OrderItem> orderItemList1 = new ArrayList<>();
         orderItemList1.add(dataProvider.getOrderItemById(1));
+        List<OrderItem> orderItemList2 = new ArrayList<>();
+        orderItemList2.add(dataProvider.getOrderItemById(0));
+        orderItemList2.add(dataProvider.getOrderItemById(1));
         List<OrderItem> orderItemList3 = new ArrayList<>();
         orderItemList3.add(dataProvider.getOrderItemById(0));
         orderItemList3.add(dataProvider.getOrderItemById(1));
@@ -501,7 +506,7 @@ public class DataProviderCsvTest {
         Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, 20000.0, "PROCESSING", customer2, "04.12.2020", null));
         Assertions.assertFalse(dataProvider.createOrder("03.12.2020", orderItemList3, null, "COMPLETED", customer3, "05.12.2020", "10.12.2020"));
         Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, 40000.0, null, customer4, null, "05.12.2020"));
-        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, 40000.0, "COMPLETED", null, "04.12.2020", "05.12.2020"));
+        Assertions.assertFalse(dataProvider.createOrder("05.12.2020", orderItemList2, 50000.0, "COMPLETED", null, "04.12.2020", "05.12.2020"));
     }
 
     @Test
@@ -555,15 +560,26 @@ public class DataProviderCsvTest {
     void getOrderByIdFail() {
         log.debug(dataProvider.getOrderById(10));
     }
-/*
+
     @Test
+    @org.junit.jupiter.api.Order(12)
     void calculateOrderValue() {
     }
 
     @Test
+    @org.junit.jupiter.api.Order(13)
     void viewOrderHistory() {
+        List<NewCustomer> newCustomerList = new ArrayList<>();
+      //  newCustomerList.add(dataProvider.getNewCustomerById(0));
+        newCustomerList.add(dataProvider.getNewCustomerById(1));
+       // newCustomerList.add(dataProvider.getNewCustomerById(2));
+       // NewCustomer customer1 = newCustomerList.stream().filter(el->el.getId()==0).findFirst().get();
+        NewCustomer customer = newCustomerList.stream().filter(el->el.getId()==1).findFirst().get();
+       // NewCustomer customer3 = newCustomerList.stream().filter(el->el.getId()==2).findFirst().get();
+      //  NewCustomer customer4 = newCustomerList.stream().filter(el->el.getId()==1).findFirst().get();
+        log.debug(dataProvider.viewOrderHistory());
     }
-
+/*
     @Test
     void getListOfCurrentOrders() {
     }

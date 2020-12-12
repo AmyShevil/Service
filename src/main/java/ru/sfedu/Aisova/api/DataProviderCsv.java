@@ -10,25 +10,22 @@ import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.maven.artifact.repository.metadata.Metadata;
 import ru.sfedu.Aisova.Constants;
 
-import ru.sfedu.Aisova.enums.OrderStatus;
 import ru.sfedu.Aisova.model.*;
 import ru.sfedu.Aisova.utils.ConfigurationUtil;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataProviderCsv implements DataProvider{
 
     private static final Logger log = LogManager.getLogger(DataProviderCsv.class);
 
     private <T> boolean writeToCsv (Class<?> tClass, List<T> object, boolean overwrite) {
-        log.debug(object);
         List<T> fileObjectList;
         if (!overwrite) {
             fileObjectList = (List<T>) readFromCsv(tClass);
@@ -82,6 +79,133 @@ public class DataProviderCsv implements DataProvider{
             log.info("Read error");
             log.error(e);
             return new ArrayList<>();
+        }
+    }
+
+    private <T> List<Service> getServiceListInMaster(Class<T> tClass, T object) throws IOException {
+        try {
+            List<Service> objectServiceList;
+            Master master = (Master) object;
+            objectServiceList = master.getListService();
+            List<Service> serviceList = readFromCsv(Service.class);
+            List<Long> idServiceInMaster;
+
+            idServiceInMaster = objectServiceList.stream()
+                    .map(value -> value.getId())
+                    .collect(Collectors.toList());
+
+            List<Service>serviceListInMaster;
+            serviceListInMaster =serviceList.stream()
+                    .filter(service -> idServiceInMaster
+                            .stream()
+                            .anyMatch(serviceInMaster -> serviceInMaster.longValue() ==  service.getId()))
+                    .collect(Collectors.toList());
+
+            return serviceListInMaster;
+
+        }catch(NullPointerException e){
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    private <T> List<OrderItem> getOrderItemList(Class<T> tClass, T object) throws IOException {
+        try {
+            List<OrderItem> objectOrderItemList;
+            Order order = (Order) object;
+            objectOrderItemList = order.getItem();
+            List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
+            List<OrderItem> orderItemListInOrder;
+            List<Long> idOrderItemInOrder;
+            List<OrderItem> orderItemWithService = new ArrayList<>();
+
+            idOrderItemInOrder = objectOrderItemList.stream()
+                    .map(value -> value.getId())
+                    .collect(Collectors.toList());
+
+            List<Long> finalListOrderItemIdInOrder = idOrderItemInOrder;
+            orderItemListInOrder =orderItemList.stream()
+                    .filter(service -> finalListOrderItemIdInOrder
+                            .stream()
+                            .anyMatch(orderItemInOrder -> orderItemInOrder.longValue() ==  service.getId()))
+                    .collect(Collectors.toList());
+
+            for(int i=0;i<orderItemListInOrder.size();i++){
+                orderItemWithService.add(getOrderItemById(orderItemListInOrder.get(i).getId()));
+            }
+            return orderItemWithService;
+
+        }catch(NullPointerException e){
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    private <T> List<Master> getMasterList(Class<T> tClass, T object) throws IOException {
+        try {
+            List<Master> objectMasterList;
+            Salon salon = (Salon) object;
+            objectMasterList = salon.getListMaster();
+            List<Master> masterList = readFromCsv(Master.class);
+            List<Master> masterListInSalon;
+            List<Long> idMasterInSalon;
+            List<Master> masterWithService = new ArrayList<>();
+
+            idMasterInSalon = objectMasterList.stream()
+                    .map(value -> value.getId())
+                    .collect(Collectors.toList());
+
+            List<Long> finalListMasterIdInSalon = idMasterInSalon;
+            masterListInSalon =masterList.stream()
+                    .filter(master -> finalListMasterIdInSalon
+                            .stream()
+                            .anyMatch(masterInSalon -> masterInSalon.longValue() ==  master.getId()))
+                    .collect(Collectors.toList());
+
+            for(int i=0;i<masterListInSalon.size();i++){
+                masterWithService.add(getMasterById(masterListInSalon.get(i).getId()));
+            }
+            return masterWithService;
+
+        }catch(NullPointerException e){
+            log.error(e);
+            return new ArrayList<>();
+        }
+    }
+
+    private <T> Service getServiceInOrderItem(Class<T> tClass, T object) throws IOException {
+        try {
+            Service serviceInOrderItem;
+            OrderItem orderItem = (OrderItem) object;
+            Service service = orderItem.getService();
+            List<Service> serviceList = readFromCsv(Service.class);
+            serviceInOrderItem = serviceList
+                    .stream()
+                    .filter(x -> x.getId() == service.getId())
+                    .findAny()
+                    .orElse(null);
+            return serviceInOrderItem;
+        }catch (NullPointerException e){
+            log.error(e);
+            return null;
+        }
+    }
+
+    private <T> Customer getNewCustomerInOrder(Class<T> tClass, T object) throws IOException {
+        try {
+            NewCustomer newCustomerInOrder;
+            Order order = (Order) object;
+            Customer newCustomer = order.getCustomer();
+            List<NewCustomer> newCustomerList = readFromCsv(NewCustomer.class);
+            newCustomerInOrder = newCustomerList
+                    .stream()
+                    .filter(x -> x.getId() == newCustomer.getId())
+                    .findAny()
+                    .orElse(null);
+            return newCustomerInOrder;
+        }catch (NullPointerException e){
+            log.error(e);
+            return null;
         }
     }
 
@@ -493,15 +617,18 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public Master getMasterById(long id) {
-        List<Master> listMaster = readFromCsv(Master.class);
         try {
-            Master master = listMaster.stream()
-                    .filter(el->el.getId()==id)
-                    .findFirst().get();
+            List<Master> masterList = readFromCsv(Master.class);
+            Master master = masterList.stream()
+                    .filter(task -> task.getId() == id)
+                    .findAny()
+                    .orElse(null);
+
+            master.setListService(getServiceListInMaster(Master.class, master));
             log.info(Constants.MASTER_RECEIVED);
             log.debug(master);
             return master;
-        }catch (NoSuchElementException e){
+        } catch (IOException | NoSuchElementException | NullPointerException e) {
             log.info(Constants.MASTER_NOT_RECEIVED);
             log.error(e);
             return null;
@@ -560,7 +687,6 @@ public class DataProviderCsv implements DataProvider{
         try {
             List<Salon> salonList = readFromCsv(Salon.class);
             salonList.removeIf(salon -> salon.getId() == id);
-            log.debug(salonList);
             writeToCsv(Salon.class, salonList, true);
             log.info(Constants.SALON_DELETED);
             return true;
@@ -573,15 +699,18 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public Salon getSalonById(long id) {
-        List<Salon> listSalon = readFromCsv(Salon.class);
         try {
+            List<Salon> listSalon = readFromCsv(Salon.class);
             Salon salon = listSalon.stream()
-                    .filter(el->el.getId()==id)
-                    .findFirst().get();
+                    .filter(task -> task.getId() == id)
+                    .findAny()
+                    .orElse(null);
+
+            salon.setListMaster(getMasterList(Salon.class, salon));
             log.info(Constants.SALON_RECEIVED);
             log.debug(salon);
             return salon;
-        }catch (NoSuchElementException e){
+        } catch (IOException | NoSuchElementException | NullPointerException e) {
             log.info(Constants.SALON_NOT_RECEIVED);
             log.error(e);
             return null;
@@ -630,7 +759,7 @@ public class DataProviderCsv implements DataProvider{
             log.info(Constants.ORDER_ITEM_EDITED);
             log.debug(orderItem);
             return true;
-        } catch (NoSuchElementException | IndexOutOfBoundsException e) {
+        } catch (NoSuchElementException | IndexOutOfBoundsException | NullPointerException e) {
             log.info(Constants.ORDER_ITEM_NOT_EDITED);
             log.error(e);
             return false;
@@ -642,7 +771,6 @@ public class DataProviderCsv implements DataProvider{
         try{
             List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
             orderItemList.removeIf(item -> item.getId() == id);
-            log.debug(orderItemList);
             writeToCsv(OrderItem.class, orderItemList, true);
             log.info(Constants.ORDER_ITEM_DELETED);
             return true;
@@ -655,15 +783,18 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public OrderItem getOrderItemById(long id) {
-        List<OrderItem> listOrderItem = readFromCsv(OrderItem.class);
         try {
-            OrderItem orderItem = listOrderItem.stream()
-                    .filter(el->el.getId()==id)
-                    .findFirst().get();
+            List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
+            OrderItem orderItem = orderItemList.stream()
+                    .filter(task -> task.getId() == id)
+                    .findAny()
+                    .orElse(null);
+
+            orderItem.setService(getServiceInOrderItem(OrderItem.class, orderItem));
             log.info(Constants.ORDER_ITEM_RECEIVED);
             log.debug(orderItem);
             return orderItem;
-        }catch (NoSuchElementException e){
+        } catch (IOException | NoSuchElementException | NullPointerException e) {
             log.info(Constants.ORDER_ITEM_NOT_RECEIVED);
             log.error(e);
             return null;
@@ -732,7 +863,6 @@ public class DataProviderCsv implements DataProvider{
         try{
             List<Order> orderList = readFromCsv(Order.class);
             orderList.removeIf(ord -> ord.getId() == id);
-            log.debug(orderList);
             writeToCsv(Order.class, orderList, true);
             log.info(Constants.ORDER_DELETED);
             return true;
@@ -745,15 +875,19 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public Order getOrderById(long id) {
-        List<Order> listOrder = readFromCsv(Order.class);
-        try {
-            Order order = listOrder.stream()
-                    .filter(el->el.getId()==id)
-                    .findFirst().get();
+        try{
+            List<Order> orderList = readFromCsv(Order.class);
+            Order order = orderList.stream()
+                    .filter(task -> task.getId() == id)
+                    .findAny()
+                    .orElse(null);
+
+            order.setItem(getOrderItemList(Order.class, order));
+            order.setCustomer(getNewCustomerInOrder(Order.class, order));
             log.info(Constants.ORDER_RECEIVED);
             log.debug(order);
             return order;
-        }catch (NoSuchElementException e){
+        } catch (IOException | NoSuchElementException | NullPointerException e) {
             log.info(Constants.ORDER_NOT_RECEIVED);
             log.error(e);
             return null;
@@ -761,13 +895,25 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public Double calculateOrderValue() {
+    public Double calculateOrderValue(long orderId) {
         return null;
     }
 
     @Override
     public List<Order> viewOrderHistory() {
-        return null;
+        try{
+            List<Order> orderList = readFromCsv(Order.class);
+            Order order = orderList.stream()
+                .findAny().orElse(null);
+            order.setItem(getOrderItemList(Order.class, order));
+            order.setCustomer(getNewCustomerInOrder(Order.class, order));
+            log.info("Список заказов: " );
+            log.debug(orderList);
+            return orderList;
+        }catch (NullPointerException | IOException | NoSuchElementException e){
+            log.error(e);
+            return null;
+        }
     }
 
     @Override

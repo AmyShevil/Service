@@ -1,14 +1,40 @@
 package ru.sfedu.Aisova.api;
 
-import ru.sfedu.Aisova.enums.OrderStatus;
 import ru.sfedu.Aisova.model.*;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public interface DataProvider {
 
+    /**
+     * @param name
+     * @param price
+     * @param description
+     * @return
+     */
     boolean createService (String name, Double price, String description);
+
+    /**
+     * @param id
+     * @param name
+     * @param price
+     * @param description
+     * @return
+     */
     boolean editService (long id, String name, Double price, String description);
+
+    /**
+     * @param id
+     * @return
+     */
     boolean deleteService (long id);
+
+    /**
+     * @param id
+     * @return
+     */
     Service getServiceById(long id);
 
     boolean createNewCustomer(String firstName, String lastName, String phone, String email, Integer discount);
@@ -41,7 +67,7 @@ public interface DataProvider {
     boolean deleteOrder (long id);
     Order getOrderById(long id);
 
-    Double calculateOrderValue();
+    Double calculateOrderValue(long orderId);
     List<Order> viewOrderHistory();
     List<Order> getListOfCurrentOrders();
     StringBuffer createCustomerReport();

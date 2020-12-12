@@ -108,20 +108,25 @@ public class DataProviderCSVOld {
             Order order = (Order) object;
             objectOrderItemList = order.getItem();
             List<OrderItem> orderItemList = getFromCSV(OrderItem.class);
+            List<OrderItem> orderItemListInOrder;
             List<Long> idOrderItemInOrder;
+            List<OrderItem> orderItemWithService = new ArrayList<>();
 
             idOrderItemInOrder = objectOrderItemList.stream()
                     .map(value -> value.getId())
                     .collect(Collectors.toList());
 
-            List<OrderItem>orderItemListInOrder;
+            List<Long> finalListOrderItemIdInOrder = idOrderItemInOrder;
             orderItemListInOrder =orderItemList.stream()
-                    .filter(service -> idOrderItemInOrder
+                    .filter(service -> finalListOrderItemIdInOrder
                             .stream()
                             .anyMatch(orderItemInOrder -> orderItemInOrder.longValue() ==  service.getId()))
                     .collect(Collectors.toList());
 
-            return orderItemListInOrder;
+            for(int i=0;i<orderItemListInOrder.size();i++){
+                orderItemWithService.add(getOrderItem(orderItemListInOrder.get(i).getId()).get());
+            }
+            return orderItemWithService;
 
         }catch(IOException e){
             log.error(e);
@@ -550,7 +555,7 @@ public class DataProviderCSVOld {
             log.error(e);
         }
     }
-
+/*
     public void insertOrder(List<Order> listOrder) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         this.insertClass(listOrder);
     }
@@ -622,6 +627,8 @@ public class DataProviderCSVOld {
         }
     }
 
+ */
+
     public void insertSalon(List<Salon> listSalon) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         this.insertClass(listSalon);
     }
@@ -636,10 +643,10 @@ public class DataProviderCSVOld {
             if (optionalSalon.isEmpty()) {
                 return optionalSalon;
             }
-            var project = optionalSalon.get();
-            project.setListMaster(getMasterList(Salon.class, project));
-            log.debug(project);
-            return Optional.of(project);
+            var salon = optionalSalon.get();
+            salon.setListMaster(getMasterList(Salon.class, salon));
+            log.debug(salon);
+            return Optional.of(salon);
 
         } catch (IOException e) {
             log.error(e);
