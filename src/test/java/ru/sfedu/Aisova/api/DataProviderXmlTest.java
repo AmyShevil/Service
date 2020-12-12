@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import ru.sfedu.Aisova.Constants;
+import ru.sfedu.Aisova.TestBase;
 import ru.sfedu.Aisova.model.*;
 import ru.sfedu.Aisova.model.Order;
 import ru.sfedu.Aisova.utils.ConfigurationUtil;
@@ -13,17 +14,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DataProviderCsvTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private static final Logger log = LogManager.getLogger(DataProviderCsvTest.class);
-    private static final DataProvider dataProvider = new DataProviderCsv();
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class DataProviderXmlTest extends TestBase {
+
+    private static final Logger log = LogManager.getLogger(DataProviderXmlTest.class);
+    private static final DataProvider dataProvider = new DataProviderXml();
 
     private static <T> void deleteFile(Class<T> tClass) {
         try {
-            log.debug(new File(ConfigurationUtil.getConfigurationEntry(Constants.PATH_CSV)
+            log.debug(new File(ConfigurationUtil.getConfigurationEntry(Constants.PATH_XML)
                     + tClass.getSimpleName().toLowerCase()
-                    + ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION_CSV)).delete());
+                    + ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION_XML)).delete());
         } catch (IOException e) {
             log.error(e);
         }
@@ -37,7 +40,7 @@ public class DataProviderCsvTest {
         classList.add(RegularCustomer.class);
         classList.add(Salon.class);
         classList.add(Service.class);
-        classList.forEach(DataProviderCsvTest::deleteFile);
+        classList.forEach(DataProviderXmlTest::deleteFile);
     }
 
     @BeforeAll
@@ -208,25 +211,25 @@ public class DataProviderCsvTest {
         log.debug(dataProvider.getRegularCustomerById(10));
     }
 
-     @Test
-     @org.junit.jupiter.api.Order(12)
-     void createMasterSuccess() throws Exception {
-         List<Service> listService1 = new ArrayList<>();
-         listService1.add(dataProvider.getServiceById(0));
-         listService1.add(dataProvider.getServiceById(1));
-         List<Service> listService2 = new ArrayList<>();
-         listService2.add(dataProvider.getServiceById(1));
-         listService2.add(dataProvider.getServiceById(2));
-         List<Service> listService3 = new ArrayList<>();
-         listService3.add(dataProvider.getServiceById(0));
-         listService3.add(dataProvider.getServiceById(1));
-         listService3.add(dataProvider.getServiceById(2));
+    @Test
+    @org.junit.jupiter.api.Order(12)
+    void createMasterSuccess() throws Exception {
+        List<Service> listService1 = new ArrayList<>();
+        listService1.add(dataProvider.getServiceById(0));
+        listService1.add(dataProvider.getServiceById(1));
+        List<Service> listService2 = new ArrayList<>();
+        listService2.add(dataProvider.getServiceById(1));
+        listService2.add(dataProvider.getServiceById(2));
+        List<Service> listService3 = new ArrayList<>();
+        listService3.add(dataProvider.getServiceById(0));
+        listService3.add(dataProvider.getServiceById(1));
+        listService3.add(dataProvider.getServiceById(2));
 
-         Assertions.assertTrue(dataProvider.createMaster("FirstName1", "LastName1", "Position1", "Phone1", 10000.0, listService1));
-         Assertions.assertTrue(dataProvider.createMaster("FirstName2", "LastName2", "Position2", "Phone2", 20000.0, listService2));
-         Assertions.assertTrue(dataProvider.createMaster("FirstName3", "LastName3", "Position3", "Phone3", 30000.0, listService3));
-         Assertions.assertTrue(dataProvider.createMaster("FirstName4", "LastName4", "Position4", "Phone4", 40000.0, listService3));
-     }
+        Assertions.assertTrue(dataProvider.createMaster("FirstName1", "LastName1", "Position1", "Phone1", 10000.0, listService1));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName2", "LastName2", "Position2", "Phone2", 20000.0, listService2));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName3", "LastName3", "Position3", "Phone3", 30000.0, listService3));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName4", "LastName4", "Position4", "Phone4", 40000.0, listService3));
+    }
 
     @Test
     @org.junit.jupiter.api.Order(12)
@@ -250,14 +253,14 @@ public class DataProviderCsvTest {
         Assertions.assertFalse(dataProvider.createMaster("FirstName6", "LastName6", "Position6", "Phone6", 60000.0, null));
     }
 
-     @Test
-     @org.junit.jupiter.api.Order(13)
-     void editMasterSuccess() throws Exception {
-         List<Service> listService = new ArrayList<>();
-         listService.add(dataProvider.getServiceById(2));
-         listService.add(dataProvider.getServiceById(1));
-         Assertions.assertTrue(dataProvider.editMaster(2,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService));
-     }
+    @Test
+    @org.junit.jupiter.api.Order(13)
+    void editMasterSuccess() throws Exception {
+        List<Service> listService = new ArrayList<>();
+        listService.add(dataProvider.getServiceById(2));
+        listService.add(dataProvider.getServiceById(1));
+        Assertions.assertTrue(dataProvider.editMaster(2,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService));
+    }
 
     @Test
     @org.junit.jupiter.api.Order(13)
@@ -268,11 +271,11 @@ public class DataProviderCsvTest {
         Assertions.assertFalse(dataProvider.editMaster(10,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService));
     }
 
-     @Test
-     @org.junit.jupiter.api.Order(14)
-     void deleteMasterSuccess() throws Exception {
-         Assertions.assertTrue(dataProvider.deleteMaster(3));
-     }
+    @Test
+    @org.junit.jupiter.api.Order(14)
+    void deleteMasterSuccess() throws Exception {
+        Assertions.assertTrue(dataProvider.deleteMaster(3));
+    }
 
     @Test
     @org.junit.jupiter.api.Order(14)
@@ -280,11 +283,11 @@ public class DataProviderCsvTest {
         Assertions.assertTrue(dataProvider.deleteMaster(10));
     }
 
-     @Test
-     @org.junit.jupiter.api.Order(15)
-     void getMasterByIdSuccess() throws Exception {
-         log.debug(dataProvider.getMasterById(1));
-     }
+    @Test
+    @org.junit.jupiter.api.Order(15)
+    void getMasterByIdSuccess() throws Exception {
+        log.debug(dataProvider.getMasterById(1));
+    }
 
     @Test
     @org.junit.jupiter.api.Order(15)
@@ -292,24 +295,24 @@ public class DataProviderCsvTest {
         log.debug(dataProvider.getMasterById(10));
     }
 
-     @Test
-     @org.junit.jupiter.api.Order(16)
-     void createSalonSuccess() throws Exception {
-         List<Master> listMaster1 = new ArrayList<>();
-         listMaster1.add(dataProvider.getMasterById(0));
-         listMaster1.add(dataProvider.getMasterById(1));
-         listMaster1.add(dataProvider.getMasterById(2));
-         List<Master> listMaster2 = new ArrayList<>();
-         listMaster2.add(dataProvider.getMasterById(0));
-         listMaster2.add(dataProvider.getMasterById(1));
-         List<Master> listMaster3 = new ArrayList<>();
-         listMaster3.add(dataProvider.getMasterById(1));
-         listMaster3.add(dataProvider.getMasterById(2));
+    @Test
+    @org.junit.jupiter.api.Order(16)
+    void createSalonSuccess() throws Exception {
+        List<Master> listMaster1 = new ArrayList<>();
+        listMaster1.add(dataProvider.getMasterById(0));
+        listMaster1.add(dataProvider.getMasterById(1));
+        listMaster1.add(dataProvider.getMasterById(2));
+        List<Master> listMaster2 = new ArrayList<>();
+        listMaster2.add(dataProvider.getMasterById(0));
+        listMaster2.add(dataProvider.getMasterById(1));
+        List<Master> listMaster3 = new ArrayList<>();
+        listMaster3.add(dataProvider.getMasterById(1));
+        listMaster3.add(dataProvider.getMasterById(2));
 
-         Assertions.assertTrue(dataProvider.createSalon("Address1", listMaster1));
-         Assertions.assertTrue(dataProvider.createSalon("Address2", listMaster2));
-         Assertions.assertTrue(dataProvider.createSalon("Address3", listMaster3));
-     }
+        Assertions.assertTrue(dataProvider.createSalon("Address1", listMaster1));
+        Assertions.assertTrue(dataProvider.createSalon("Address2", listMaster2));
+        Assertions.assertTrue(dataProvider.createSalon("Address3", listMaster3));
+    }
 
     @Test
     @org.junit.jupiter.api.Order(16)
@@ -323,15 +326,15 @@ public class DataProviderCsvTest {
         Assertions.assertFalse(dataProvider.createSalon("Address2", null));
     }
 
-     @Test
-     @org.junit.jupiter.api.Order(17)
-     void editSalonSuccess() throws Exception {
-         List<Master> listMaster = new ArrayList<>();
-         listMaster.add(dataProvider.getMasterById(2));
-         listMaster.add(dataProvider.getMasterById(1));
+    @Test
+    @org.junit.jupiter.api.Order(17)
+    void editSalonSuccess() throws Exception {
+        List<Master> listMaster = new ArrayList<>();
+        listMaster.add(dataProvider.getMasterById(2));
+        listMaster.add(dataProvider.getMasterById(1));
 
-         Assertions.assertTrue(dataProvider.editSalon(1,"rewriteAddress", listMaster));
-     }
+        Assertions.assertTrue(dataProvider.editSalon(1,"rewriteAddress", listMaster));
+    }
 
     @Test
     @org.junit.jupiter.api.Order(17)
@@ -343,11 +346,11 @@ public class DataProviderCsvTest {
         Assertions.assertFalse(dataProvider.editSalon(10,"rewriteAddress", listMaster));
     }
 
-     @Test
-     @org.junit.jupiter.api.Order(18)
-     void deleteSalonSuccess() throws Exception {
-         Assertions.assertTrue(dataProvider.deleteSalon(2));
-     }
+    @Test
+    @org.junit.jupiter.api.Order(18)
+    void deleteSalonSuccess() throws Exception {
+        Assertions.assertTrue(dataProvider.deleteSalon(2));
+    }
 
     @Test
     @org.junit.jupiter.api.Order(18)
@@ -355,11 +358,11 @@ public class DataProviderCsvTest {
         Assertions.assertTrue(dataProvider.deleteSalon(10));
     }
 
-     @Test
-     @org.junit.jupiter.api.Order(19)
-     void getSalonByIdSuccess() throws Exception {
-         log.debug(dataProvider.getSalonById(0));
-     }
+    @Test
+    @org.junit.jupiter.api.Order(19)
+    void getSalonByIdSuccess() throws Exception {
+        log.debug(dataProvider.getSalonById(0));
+    }
 
     @Test
     @org.junit.jupiter.api.Order(19)
@@ -464,10 +467,10 @@ public class DataProviderCsvTest {
         orderItemList4.add(dataProvider.getOrderItemById(0));
         orderItemList4.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, 10000.0, "CREATED", customer1, null, null));
-        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, 20000.0, "PROCESSING", customer2, "04.12.2020", null));
-        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, 30000.0, "COMPLETED", customer3, "05.12.2020", "10.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, 40000.0, "CANCELED", customer4, null, "05.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, 10000.0, "CREATED", customer1, "05.12.2020", "09.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, 20000.0, "PROCESSING", customer2, "06.12.2020", "10.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, 30000.0, "COMPLETED", customer3, "07.12.2020", "11.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, 40000.0, "CANCELED", customer4, "08.12.2020", "12.12.2020"));
 
         log.debug(dataProvider.getOrderById(2));
     }
@@ -555,49 +558,5 @@ public class DataProviderCsvTest {
     void getOrderByIdFail() throws Exception {
         log.debug(dataProvider.getOrderById(10));
     }
-/*
-    @Test
-    @org.junit.jupiter.api.Order(28)
-    void calculateOrderValue() {
-    }
 
-    @Test
-    @org.junit.jupiter.api.Order(28)
-    void viewOrderHistory() {
-        List<Order> orderList = new ArrayList<>();
-        orderList.add(dataProvider.getOrderById(0));
-        orderList.add(dataProvider.getOrderById(1));
-        orderList.add(dataProvider.getOrderById(2));
-        Order order = orderList.stream().findAny().orElse(null);
-        //Order order2 = orderList.stream().filter(el->el.getId()==1).findFirst().get();
-        //Order order3 = orderList.stream().filter(el->el.getId()==2).findFirst().get();
-
-        log.debug(dataProvider.viewOrderHistory(order));
-    }
-/*
-    @Test
-    void getListOfCurrentOrders() {
-    }
-
-    @Test
-    void createCustomerReport() {
-    }
-
-    @Test
-    void changeTheLisOfMaster() {
-    }
-
-    @Test
-    void calculateSalaryOfTheMaster() {
-    }
-
-    @Test
-    void assignService() {
-    }
-
-    @Test
-    void createMasterProgressReport() {
-    }
-
- */
 }

@@ -1,0 +1,17 @@
+<main>
+   <object class="ru.sfedu.Aisova.model.Service" id="0">
+      <name>service1</name>
+      <price>1000.0</price>
+      <description>description1</description>
+   </object>
+   <object class="ru.sfedu.Aisova.model.Service" id="1">
+      <name>service2</name>
+      <price>2000.0</price>
+      <description>description2</description>
+   </object>
+   <object class="ru.sfedu.Aisova.model.Service" id="2">
+      <name>rewriteName</name>
+      <price>5.0</price>
+      <description>rewriteDescription</description>
+   </object>
+</main>

@@ -1,83 +1,87 @@
 package ru.sfedu.Aisova.api;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 import ru.sfedu.Aisova.Constants;
-
 import ru.sfedu.Aisova.model.*;
 import ru.sfedu.Aisova.utils.ConfigurationUtil;
+import ru.sfedu.Aisova.utils.WrapperXML;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
- * The type Data provider csv.
+ * The type Data provider xml.
  */
-public class DataProviderCsv implements DataProvider{
+public class DataProviderXml implements DataProvider{
 
-    private static final Logger log = LogManager.getLogger(DataProviderCsv.class);
+    private static Logger log = LogManager.getLogger(DataProviderXml.class);
 
-    private <T> boolean writeToCsv (Class<?> tClass, List<T> object, boolean overwrite) {
+    public <T> boolean writeToXml(Class<?> tClass, List<T> object, boolean overwrite) throws Exception{
         List<T> fileObjectList;
         if (!overwrite) {
-            fileObjectList = (List<T>) readFromCsv(tClass);
+            fileObjectList = (List<T>) readFromXml(tClass);
             fileObjectList.addAll(object);
         }
         else {
             fileObjectList = new ArrayList<>(object);
         }
-        CSVWriter csvWriter;
-        try {
-            FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(Constants.PATH_CSV)
-                    + tClass.getSimpleName().toLowerCase()
-                    + ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION_CSV));
-            csvWriter = new CSVWriter(writer);
-            StatefulBeanToCsv<T> beanToCsv = new StatefulBeanToCsvBuilder<T>(csvWriter)
-                    .withApplyQuotesToAll(false)
-                    .build();
-            beanToCsv.write(fileObjectList);
-            log.info("Write success");
-            csvWriter.close();
+        try{
+            //Проверяем, создан ли файл? Если нет, то создаём.
+            //createNewFile возвращает истину, если путь к абстрактному файлу не существует и создается новый файл.
+            // Он возвращает false, если имя файла уже существует.
+            (new File(this.getFilePath(tClass))).createNewFile();
+            //Подключаемся к потоку записи файла
+            FileWriter writer = new FileWriter(this.getFilePath(tClass), false);
+            //Определяем сериалайзер
+            Serializer serializer = new Persister();
+
+            //Определяем контейнер, в котором будут находиться все объекты
+            WrapperXML xml = new WrapperXML();
+            //Записываем список объектов в котнейнер
+            xml.setList(fileObjectList);
+
+            //Записываем в файл
+            serializer.write(xml, writer);
             return true;
-        } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException | IOException e ) {
-            log.info("Write error");
+        }catch(IndexOutOfBoundsException e){
             log.error(e);
             return false;
         }
     }
 
-    private <T> boolean writeToCsv (T object) {
+    private <T> boolean writeToXml (T object) throws Exception {
         if (object == null) {
             log.info("Something is null");
             return false;
         }
-        return writeToCsv(object.getClass(), Collections.singletonList(object), false);
+        return writeToXml(object.getClass(), Collections.singletonList(object), false);
     }
 
-    private <T> List<T> readFromCsv (Class<T> tClass) {
+    public <T> List<T> readFromXml(Class cl) throws IOException, Exception{
         try {
-            FileReader reader = new FileReader(ConfigurationUtil.getConfigurationEntry(Constants.PATH_CSV)
-                    + tClass.getSimpleName().toLowerCase()
-                    + ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION_CSV));
-
-            CSVReader csvReader = new CSVReader(reader);
-            CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(csvReader)
-                    .withType(tClass)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build();
+            //Подключаемся к считывающему потоку из файла
+            FileReader fileReader = new FileReader(this.getFilePath(cl));
+            //Определяем сериалайзер
+            Serializer serializer = new Persister();
+            //Определяем контейнер и записываем в него объекты
+            WrapperXML xml = serializer.read(WrapperXML.class, fileReader);
+            //Если список null, то делаем его пустым списком
+            if (xml.getList() == null) xml.setList(new ArrayList<T>());
+            //Возвращаем список объектов
             log.info("Read success");
-            return csvToBean.parse();
+            return xml.getList();
         } catch (IOException e) {
             log.info("Read error");
             log.error(e);
@@ -85,12 +89,22 @@ public class DataProviderCsv implements DataProvider{
         }
     }
 
-    private <T> List<Service> getServiceListInMaster(Class<T> tClass, T object) throws IOException {
+    /**
+     * Получаем путь к файлу
+     * @param cl
+     * @return
+     * @throws IOException
+     */
+    private String getFilePath(Class cl) throws IOException{
+        return ConfigurationUtil.getConfigurationEntry(Constants.PATH_XML)+cl.getSimpleName().toString().toLowerCase()+ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION_XML);
+    }
+
+    private <T> List<Service> getServiceListInMaster(Class<T> tClass, T object) throws Exception {
         try {
             List<Service> objectServiceList;
             Master master = (Master) object;
             objectServiceList = master.getListService();
-            List<Service> serviceList = readFromCsv(Service.class);
+            List<Service> serviceList = readFromXml(Service.class);
             List<Long> idServiceInMaster;
 
             idServiceInMaster = objectServiceList.stream()
@@ -112,12 +126,12 @@ public class DataProviderCsv implements DataProvider{
         }
     }
 
-    private <T> List<OrderItem> getOrderItemList(Class<T> tClass, T object) throws IOException {
+    private <T> List<OrderItem> getOrderItemList(Class<T> tClass, T object) throws Exception {
         try {
             List<OrderItem> objectOrderItemList;
             Order order = (Order) object;
             objectOrderItemList = order.getItem();
-            List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
+            List<OrderItem> orderItemList = readFromXml(OrderItem.class);
             List<OrderItem> orderItemListInOrder;
             List<Long> idOrderItemInOrder;
             List<OrderItem> orderItemWithService;
@@ -128,7 +142,12 @@ public class DataProviderCsv implements DataProvider{
             orderItemListInOrder =orderItemList.stream().filter(service -> finalListOrderItemIdInOrder.stream()
                     .anyMatch(orderItemInOrder -> orderItemInOrder.longValue() ==  service.getId())).collect(Collectors.toList());
 
-            orderItemWithService = orderItemListInOrder.stream().map(orderItem -> getOrderItemById(orderItem.getId())).collect(Collectors.toList());
+            List<OrderItem> list = new ArrayList<>();
+            for (OrderItem orderItem : orderItemListInOrder) {
+                OrderItem orderItemById = getOrderItemById(orderItem.getId());
+                list.add(orderItemById);
+            }
+            orderItemWithService = list;
             return orderItemWithService;
 
         }catch(NullPointerException e){
@@ -137,12 +156,12 @@ public class DataProviderCsv implements DataProvider{
         }
     }
 
-    private <T> List<Master> getMasterList(Class<T> tClass, T object) throws IOException {
+    private <T> List<Master> getMasterList(Class<T> tClass, T object) throws Exception {
         try {
             List<Master> objectMasterList;
             Salon salon = (Salon) object;
             objectMasterList = salon.getListMaster();
-            List<Master> masterList = readFromCsv(Master.class);
+            List<Master> masterList = readFromXml(Master.class);
             List<Master> masterListInSalon;
             List<Long> idMasterInSalon;
             List<Master> masterWithService;
@@ -153,7 +172,12 @@ public class DataProviderCsv implements DataProvider{
             masterListInSalon =masterList.stream().filter(master -> finalListMasterIdInSalon.stream()
                     .anyMatch(masterInSalon -> masterInSalon.longValue() ==  master.getId())).collect(Collectors.toList());
 
-            masterWithService = masterListInSalon.stream().map(master -> getMasterById(master.getId())).collect(Collectors.toList());
+            List<Master> list = new ArrayList<>();
+            for (Master master : masterListInSalon) {
+                Master masterById = getMasterById(master.getId());
+                list.add(masterById);
+            }
+            masterWithService = list;
             return masterWithService;
 
         }catch(NullPointerException e){
@@ -162,12 +186,12 @@ public class DataProviderCsv implements DataProvider{
         }
     }
 
-    private <T> Service getServiceInOrderItem(Class<T> tClass, T object) throws IOException {
+    private <T> Service getServiceInOrderItem(Class<T> tClass, T object) throws Exception {
         try {
             Service serviceInOrderItem;
             OrderItem orderItem = (OrderItem) object;
             Service service = orderItem.getService();
-            List<Service> serviceList = readFromCsv(Service.class);
+            List<Service> serviceList = readFromXml(Service.class);
             serviceInOrderItem = serviceList
                     .stream()
                     .filter(x -> x.getId() == service.getId())
@@ -180,12 +204,12 @@ public class DataProviderCsv implements DataProvider{
         }
     }
 
-    private <T> Customer getNewCustomerInOrder(Class<T> tClass, T object) throws IOException {
+    private <T> Customer getNewCustomerInOrder(Class<T> tClass, T object) throws Exception {
         try {
             NewCustomer newCustomerInOrder;
             Order order = (Order) object;
             Customer newCustomer = order.getCustomer();
-            List<NewCustomer> newCustomerList = readFromCsv(NewCustomer.class);
+            List<NewCustomer> newCustomerList = readFromXml(NewCustomer.class);
             newCustomerInOrder = newCustomerList
                     .stream()
                     .filter(x -> x.getId() == newCustomer.getId())
@@ -198,8 +222,8 @@ public class DataProviderCsv implements DataProvider{
         }
     }
 
-    private long getNextServiceId(){
-        List<Service> objectList = readFromCsv(Service.class);
+    private long getNextServiceId() throws Exception {
+        List<Service> objectList = readFromXml(Service.class);
         long maxId = -1;
         for(Service service : objectList){
             if(maxId < service.getId()){
@@ -209,8 +233,8 @@ public class DataProviderCsv implements DataProvider{
         return maxId+1;
     }
 
-    private long getNextOrderItemId(){
-        List<OrderItem> objectList = readFromCsv(OrderItem.class);
+    private long getNextOrderItemId() throws Exception {
+        List<OrderItem> objectList = readFromXml(OrderItem.class);
         long maxId = -1;
         for(OrderItem orderItem : objectList){
             if(maxId < orderItem.getId()){
@@ -220,9 +244,9 @@ public class DataProviderCsv implements DataProvider{
         return maxId+1;
     }
 
-    private long getNextNewCustomerId(){
+    private long getNextNewCustomerId() throws Exception {
         try {
-            List<NewCustomer> objectList = readFromCsv(NewCustomer.class);
+            List<NewCustomer> objectList = readFromXml(NewCustomer.class);
             long maxId = -1;
             for(NewCustomer newCustomer : objectList){
                 if(maxId < newCustomer.getId()){
@@ -236,8 +260,8 @@ public class DataProviderCsv implements DataProvider{
         }
     }
 
-    private long getNextMasterId(){
-        List<Master> objectList = readFromCsv(Master.class);
+    private long getNextMasterId() throws Exception {
+        List<Master> objectList = readFromXml(Master.class);
         long maxId = -1;
         for(Master master : objectList){
             if(maxId < master.getId()){
@@ -247,8 +271,8 @@ public class DataProviderCsv implements DataProvider{
         return maxId+1;
     }
 
-    private long getNextRegularCustomerId(){
-        List<RegularCustomer> objectList = readFromCsv(RegularCustomer.class);
+    private long getNextRegularCustomerId() throws Exception {
+        List<RegularCustomer> objectList = readFromXml(RegularCustomer.class);
         long maxId = -1;
         for(RegularCustomer regularCustomer : objectList){
             if(maxId < regularCustomer.getId()){
@@ -258,8 +282,8 @@ public class DataProviderCsv implements DataProvider{
         return maxId+1;
     }
 
-    private long getNextOrderId(){
-        List<Order> objectList = readFromCsv(Order.class);
+    private long getNextOrderId() throws Exception {
+        List<Order> objectList = readFromXml(Order.class);
         long maxId = -1;
         for(Order order : objectList){
             if(maxId < order.getId()){
@@ -269,8 +293,8 @@ public class DataProviderCsv implements DataProvider{
         return maxId+1;
     }
 
-    private long getNextSalonId(){
-        List<Salon> objectList = readFromCsv(Salon.class);
+    private long getNextSalonId() throws Exception {
+        List<Salon> objectList = readFromXml(Salon.class);
         long maxId = -1;
         for(Salon salon : objectList){
             if(maxId < salon.getId()){
@@ -281,7 +305,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createService(String name, Double price, String description) {
+    public boolean createService(String name, Double price, String description) throws Exception {
         try {
             if (name == null || price == null || description == null){
                 log.info(Constants.NULL_VALUE);
@@ -294,7 +318,7 @@ public class DataProviderCsv implements DataProvider{
                 service.setDescription(description);
                 log.info(Constants.SERVICE_CREATED);
                 log.debug(service);
-                return writeToCsv(service);
+                return writeToXml(service);
             }
         }catch (NullPointerException e){
             log.info(Constants.SERVICE_NOT_CREATED);
@@ -304,8 +328,8 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editService(long id, String name, Double price, String description) {
-        List<Service> listService = readFromCsv(Service.class);
+    public boolean editService(long id, String name, Double price, String description) throws Exception {
+        List<Service> listService = readFromXml(Service.class);
         try {
             if (getServiceById(id) == null){
                 log.info(Constants.SERVICE_ID + id + Constants.NOT_FOUND);
@@ -317,10 +341,10 @@ public class DataProviderCsv implements DataProvider{
             newService.setPrice(price);
             newService.setDescription(description);
             listService.removeIf(service -> service.getId() == id);
-            writeToCsv(Service.class, listService, true);
+            writeToXml(Service.class, listService, true);
             log.info(Constants.SERVICE_EDITED);
             log.debug(newService);
-            writeToCsv(newService);
+            writeToXml(newService);
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException | NullPointerException e) {
             log.info(Constants.SERVICE_NOT_EDITED);
@@ -330,12 +354,12 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean deleteService(long id) {
+    public boolean deleteService(long id) throws Exception {
         try {
-            List<Service> serviceList = readFromCsv(Service.class);
+            List<Service> serviceList = readFromXml(Service.class);
             serviceList.removeIf(service -> service.getId() == id);
             log.debug(serviceList);
-            writeToCsv(Service.class, serviceList, true);
+            writeToXml(Service.class, serviceList, true);
             log.info(Constants.SERVICE_DELETED);
             return true;
         }catch (NullPointerException e){
@@ -346,16 +370,17 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public Service getServiceById(long id) {
-        List<Service> listService = readFromCsv(Service.class);
-        try {
-            Service service = listService.stream()
+    public Service getServiceById(long id) throws Exception {
+        List<Service> list = this.readFromXml(Service.class);
+        try{
+            Service service =list.stream()
                     .filter(el->el.getId()==id)
+                    .limit(1)
                     .findFirst().get();
             log.info(Constants.SERVICE_RECEIVED);
             log.debug(service);
             return service;
-        }catch (NoSuchElementException | NullPointerException e){
+        }catch(NoSuchElementException e){
             log.info(Constants.SERVICE_NOT_RECEIVED);
             log.error(e);
             return null;
@@ -363,7 +388,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createNewCustomer(String firstName, String lastName, String phone, String email, Integer discount) {
+    public boolean createNewCustomer(String firstName, String lastName, String phone, String email, Integer discount) throws Exception {
         try {
             if (firstName == null || lastName == null || phone == null || email == null || discount == null){
                 log.info(Constants.NULL_VALUE);
@@ -378,7 +403,7 @@ public class DataProviderCsv implements DataProvider{
                 customer.setDiscount(discount);
                 log.info(Constants.NEW_CUSTOMER_CREATED);
                 log.debug(customer);
-                return writeToCsv(customer);
+                return writeToXml(customer);
             }
         }catch (NullPointerException e) {
             log.info(Constants.NEW_CUSTOMER_NOT_CREATED);
@@ -388,8 +413,8 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editNewCustomer(long id, String firstName, String lastName, String phone, String email, Integer discount) {
-        List<NewCustomer> newCustomerList = readFromCsv(NewCustomer.class);
+    public boolean editNewCustomer(long id, String firstName, String lastName, String phone, String email, Integer discount) throws Exception {
+        List<NewCustomer> newCustomerList = readFromXml(NewCustomer.class);
         try {
             if (getNewCustomerById(id) == null){
                 log.info(Constants.NEW_CUSTOMER_ID + id + Constants.NOT_FOUND);
@@ -403,8 +428,8 @@ public class DataProviderCsv implements DataProvider{
             customer.setEmail(email);
             customer.setDiscount(discount);
             newCustomerList.removeIf(user -> user.getId() == id);
-            writeToCsv(NewCustomer.class, newCustomerList, true);
-            writeToCsv(customer);
+            writeToXml(NewCustomer.class, newCustomerList, true);
+            writeToXml(customer);
             log.info(Constants.NEW_CUSTOMER_EDITED);
             log.debug(customer);
             return true;
@@ -416,12 +441,12 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean deleteNewCustomer(long id) {
+    public boolean deleteNewCustomer(long id) throws Exception {
         try{
-            List<NewCustomer> newCustomerList = readFromCsv(NewCustomer.class);
+            List<NewCustomer> newCustomerList = readFromXml(NewCustomer.class);
             newCustomerList.removeIf(customer -> customer.getId() == id);
             log.debug(newCustomerList);
-            writeToCsv(NewCustomer.class, newCustomerList, true);
+            writeToXml(NewCustomer.class, newCustomerList, true);
             log.info(Constants.NEW_CUSTOMER_DELETED);
             return true;
         }catch (NullPointerException e){
@@ -432,11 +457,12 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public NewCustomer getNewCustomerById(long id) {
-        List<NewCustomer> listNewCustomer = readFromCsv(NewCustomer.class);
+    public NewCustomer getNewCustomerById(long id) throws Exception {
+        List<NewCustomer> listNewCustomer = readFromXml(NewCustomer.class);
         try {
             NewCustomer newCustomer = listNewCustomer.stream()
                     .filter(el->el.getId()==id)
+                    .limit(1)
                     .findFirst().get();
             log.info(Constants.NEW_CUSTOMER_RECEIVED);
             log.debug(newCustomer);
@@ -449,7 +475,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createRegularCustomer(String firstName, String lastName, String phone, String email, Integer countOfOrder) {
+    public boolean createRegularCustomer(String firstName, String lastName, String phone, String email, Integer countOfOrder) throws Exception {
         try{
             if (firstName == null || lastName == null || phone == null || email == null || countOfOrder == null){
                 log.info(Constants.NULL_VALUE);
@@ -464,7 +490,7 @@ public class DataProviderCsv implements DataProvider{
                 customer.setNumberOfOrders(countOfOrder);
                 log.info(Constants.REGULAR_CUSTOMER_CREATED);
                 log.debug(customer);
-                return writeToCsv(customer);
+                return writeToXml(customer);
             }
         }catch (NullPointerException e) {
             log.info(Constants.REGULAR_CUSTOMER_NOT_CREATED);
@@ -474,8 +500,8 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editRegularCustomer(long id, String firstName, String lastName, String phone, String email, Integer countOfOrder) {
-        List<RegularCustomer> regularCustomerList = readFromCsv(RegularCustomer.class);
+    public boolean editRegularCustomer(long id, String firstName, String lastName, String phone, String email, Integer countOfOrder) throws Exception {
+        List<RegularCustomer> regularCustomerList = readFromXml(RegularCustomer.class);
         try {
             if (getRegularCustomerById(id) == null){
                 log.info(Constants.REGULAR_CUSTOMER_ID + id + Constants.NOT_FOUND);
@@ -489,8 +515,8 @@ public class DataProviderCsv implements DataProvider{
             customer.setEmail(email);
             customer.setNumberOfOrders(countOfOrder);
             regularCustomerList.removeIf(user -> user.getId() == id);
-            writeToCsv(RegularCustomer.class, regularCustomerList, true);
-            writeToCsv(customer);
+            writeToXml(RegularCustomer.class, regularCustomerList, true);
+            writeToXml(customer);
             log.info(Constants.REGULAR_CUSTOMER_EDITED);
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
@@ -501,12 +527,12 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean deleteRegularCustomer(long id) {
+    public boolean deleteRegularCustomer(long id) throws Exception {
         try{
-            List<RegularCustomer> regularCustomerList = readFromCsv(RegularCustomer.class);
+            List<RegularCustomer> regularCustomerList = readFromXml(RegularCustomer.class);
             regularCustomerList.removeIf(customer -> customer.getId() == id);
             log.debug(regularCustomerList);
-            writeToCsv(RegularCustomer.class, regularCustomerList, true);
+            writeToXml(RegularCustomer.class, regularCustomerList, true);
             log.info(Constants.REGULAR_CUSTOMER_DELETED);
             return true;
         }catch (NullPointerException e){
@@ -517,11 +543,12 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public RegularCustomer getRegularCustomerById(long id) {
-        List<RegularCustomer> listRegularCustomer = readFromCsv(RegularCustomer.class);
+    public RegularCustomer getRegularCustomerById(long id) throws Exception {
+        List<RegularCustomer> listRegularCustomer = readFromXml(RegularCustomer.class);
         try {
             RegularCustomer regularCustomer = listRegularCustomer.stream()
                     .filter(el->el.getId()==id)
+                    .limit(1)
                     .findFirst().get();
             log.info(Constants.REGULAR_CUSTOMER_RECEIVED);
             log.debug(regularCustomer);
@@ -534,7 +561,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createMaster(String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) {
+    public boolean createMaster(String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) throws Exception {
         try{
             if (firstName == null || lastName == null || position == null || phone == null || salary == null || listService == null){
                 log.info(Constants.NULL_VALUE);
@@ -550,7 +577,7 @@ public class DataProviderCsv implements DataProvider{
                 master.setSalary(salary);
                 log.info(Constants.MASTER_CREATED);
                 log.debug(master);
-                return writeToCsv(master);
+                return writeToXml(master);
             }
         }catch (NullPointerException e) {
             log.info(Constants.MASTER_NOT_CREATED);
@@ -560,8 +587,8 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editMaster(long id, String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) {
-        List<Master> masterList = readFromCsv(Master.class);
+    public boolean editMaster(long id, String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) throws Exception {
+        List<Master> masterList = readFromXml(Master.class);
         try {
             if (getMasterById(id) == null){
                 log.info(Constants.MASTER_ID + id + Constants.NOT_FOUND);
@@ -576,8 +603,8 @@ public class DataProviderCsv implements DataProvider{
             master.setSalary(salary);
             master.setListService(listService);
             masterList.removeIf(user -> user.getId() == id);
-            writeToCsv(Master.class, masterList, true);
-            writeToCsv(master);
+            writeToXml(Master.class, masterList, true);
+            writeToXml(master);
             log.info(Constants.MASTER_EDITED);
             log.debug(master);
             return true;
@@ -589,12 +616,12 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean deleteMaster(long id) {
+    public boolean deleteMaster(long id) throws Exception {
         try{
-            List<Master> masterList = readFromCsv(Master.class);
+            List<Master> masterList = readFromXml(Master.class);
             masterList.removeIf(master -> master.getId() == id);
             log.debug(masterList);
-            writeToCsv(Master.class, masterList, true);
+            writeToXml(Master.class, masterList, true);
             log.info(Constants.MASTER_DELETED);
             return true;
         }catch (NullPointerException e){
@@ -605,14 +632,13 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public Master getMasterById(long id) {
+    public Master getMasterById(long id) throws Exception {
         try {
-            List<Master> masterList = readFromCsv(Master.class);
+            List<Master> masterList = readFromXml(Master.class);
             Master master = masterList.stream()
-                    .filter(task -> task.getId() == id)
-                    .findAny()
-                    .orElse(null);
-
+                    .filter(el->el.getId()==id)
+                    .limit(1)
+                    .findFirst().get();
             master.setListService(getServiceListInMaster(Master.class, master));
             log.info(Constants.MASTER_RECEIVED);
             log.debug(master);
@@ -625,7 +651,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createSalon(String address, List<Master> listMaster) {
+    public boolean createSalon(String address, List<Master> listMaster) throws Exception {
         try{
             if (address == null || listMaster == null){
                 log.info(Constants.NULL_VALUE);
@@ -637,7 +663,7 @@ public class DataProviderCsv implements DataProvider{
                 salon.setListMaster(listMaster);
                 log.info(Constants.SALON_CREATED);
                 log.debug(salon);
-                return writeToCsv(salon);
+                return writeToXml(salon);
             }
         }catch (NullPointerException e) {
             log.info(Constants.SALON_NOT_CREATED);
@@ -647,8 +673,8 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editSalon(long id, String address, List<Master> listMaster) {
-        List<Salon> salonList = readFromCsv(Salon.class);
+    public boolean editSalon(long id, String address, List<Master> listMaster) throws Exception {
+        List<Salon> salonList = readFromXml(Salon.class);
         try {
             if (getSalonById(id) == null){
                 log.info(Constants.SALON_ID + id + Constants.NOT_FOUND);
@@ -659,8 +685,8 @@ public class DataProviderCsv implements DataProvider{
             salon.setAddress(address);
             salon.setListMaster(listMaster);
             salonList.removeIf(sal -> sal.getId() == id);
-            writeToCsv(Salon.class, salonList, true);
-            writeToCsv(salon);
+            writeToXml(Salon.class, salonList, true);
+            writeToXml(salon);
             log.info(Constants.SALON_EDITED);
             log.debug(salon);
             return true;
@@ -672,11 +698,11 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean deleteSalon(long id) {
+    public boolean deleteSalon(long id) throws Exception {
         try {
-            List<Salon> salonList = readFromCsv(Salon.class);
+            List<Salon> salonList = readFromXml(Salon.class);
             salonList.removeIf(salon -> salon.getId() == id);
-            writeToCsv(Salon.class, salonList, true);
+            writeToXml(Salon.class, salonList, true);
             log.info(Constants.SALON_DELETED);
             return true;
         }catch (NullPointerException e){
@@ -687,9 +713,9 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public Salon getSalonById(long id) {
+    public Salon getSalonById(long id) throws Exception {
         try {
-            List<Salon> listSalon = readFromCsv(Salon.class);
+            List<Salon> listSalon = readFromXml(Salon.class);
             Salon salon = listSalon.stream()
                     .filter(task -> task.getId() == id)
                     .findAny()
@@ -707,7 +733,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createOrderItem(Service service, Double cost, Integer quantity) {
+    public boolean createOrderItem(Service service, Double cost, Integer quantity) throws Exception {
         try{
             if (service == null || cost == null || quantity == null){
                 log.info(Constants.NULL_VALUE);
@@ -720,7 +746,7 @@ public class DataProviderCsv implements DataProvider{
                 orderItem.setQuantity(quantity);
                 log.info(Constants.ORDER_ITEM_CREATED);
                 log.debug(orderItem);
-                return writeToCsv(orderItem);
+                return writeToXml(orderItem);
             }
         }catch (NullPointerException e) {
             log.info(Constants.ORDER_ITEM_NOT_CREATED);
@@ -730,8 +756,8 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editOrderItem(long id, Service service, Double cost, Integer quantity) {
-        List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
+    public boolean editOrderItem(long id, Service service, Double cost, Integer quantity) throws Exception {
+        List<OrderItem> orderItemList = readFromXml(OrderItem.class);
         try {
             if (getOrderItemById(id) == null){
                 log.info(Constants.ORDER_ITEM_ID + id + Constants.NOT_FOUND);
@@ -743,8 +769,8 @@ public class DataProviderCsv implements DataProvider{
             orderItem.setCost(cost);
             orderItem.setQuantity(quantity);
             orderItemList.removeIf(item -> item.getId() == id);
-            writeToCsv(OrderItem.class, orderItemList, true);
-            writeToCsv(orderItem);
+            writeToXml(OrderItem.class, orderItemList, true);
+            writeToXml(orderItem);
             log.info(Constants.ORDER_ITEM_EDITED);
             log.debug(orderItem);
             return true;
@@ -756,11 +782,11 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean deleteOrderItem(long id) {
+    public boolean deleteOrderItem(long id) throws Exception {
         try{
-            List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
+            List<OrderItem> orderItemList = readFromXml(OrderItem.class);
             orderItemList.removeIf(item -> item.getId() == id);
-            writeToCsv(OrderItem.class, orderItemList, true);
+            writeToXml(OrderItem.class, orderItemList, true);
             log.info(Constants.ORDER_ITEM_DELETED);
             return true;
         }catch (NullPointerException e){
@@ -771,9 +797,9 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public OrderItem getOrderItemById(long id) {
+    public OrderItem getOrderItemById(long id) throws Exception {
         try {
-            List<OrderItem> orderItemList = readFromCsv(OrderItem.class);
+            List<OrderItem> orderItemList = readFromXml(OrderItem.class);
             OrderItem orderItem = orderItemList.stream()
                     .filter(task -> task.getId() == id)
                     .findAny()
@@ -791,7 +817,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) {
+    public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) throws Exception {
         try{
             if (created == null || item == null || cost == null || status == null || customer == null){
                 log.info(Constants.NULL_VALUE);
@@ -808,7 +834,7 @@ public class DataProviderCsv implements DataProvider{
                 order.setCompleted(completed);
                 log.info(Constants.ORDER_CREATED);
                 log.debug(order);
-                return writeToCsv(order);
+                return writeToXml(order);
             }
         }catch (NullPointerException e) {
             log.info(Constants.ORDER_NOT_CREATED);
@@ -818,8 +844,8 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editOrder(long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) {
-        List<Order> orderList = readFromCsv(Order.class);
+    public boolean editOrder(long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) throws Exception {
+        List<Order> orderList = readFromXml(Order.class);
         try {
             if (getOrderById(id) == null){
                 log.info(Constants.ORDER_ID + id + Constants.NOT_FOUND);
@@ -835,8 +861,8 @@ public class DataProviderCsv implements DataProvider{
             order.setLastUpdated(lastUpdated);
             order.setCompleted(completed);
             orderList.removeIf(ord -> ord.getId() == id);
-            writeToCsv(Order.class, orderList, true);
-            writeToCsv(order);
+            writeToXml(Order.class, orderList, true);
+            writeToXml(order);
             log.info(Constants.ORDER_EDITED);
             log.debug(order);
             return true;
@@ -848,11 +874,11 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean deleteOrder(long id) {
+    public boolean deleteOrder(long id) throws Exception {
         try{
-            List<Order> orderList = readFromCsv(Order.class);
+            List<Order> orderList = readFromXml(Order.class);
             orderList.removeIf(ord -> ord.getId() == id);
-            writeToCsv(Order.class, orderList, true);
+            writeToXml(Order.class, orderList, true);
             log.info(Constants.ORDER_DELETED);
             return true;
         }catch (NullPointerException e){
@@ -863,9 +889,9 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public Order getOrderById(long id) {
+    public Order getOrderById(long id) throws Exception {
         try{
-            List<Order> orderList = readFromCsv(Order.class);
+            List<Order> orderList = readFromXml(Order.class);
             Order order = orderList.stream()
                     .filter(task -> task.getId() == id)
                     .findAny()
@@ -890,36 +916,12 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public List<Order> viewOrderHistory(Order order) {
-        try{
-            List<Order> orderList = readFromCsv(Order.class);
-            order.setItem(getOrderItemList(Order.class, order));
-            order.setCustomer(getNewCustomerInOrder(Order.class, order));
-            log.info("Список заказов: " );
-            log.debug(orderList);
-            return orderList;
-        }catch (NullPointerException | IOException | NoSuchElementException e){
-            log.error(e);
-            return null;
-        }
+        return null;
     }
 
     @Override
     public List<Order> getListOfCurrentOrders(Order order, String status) {
-        try{
-            if(status.equals("PROCESSING")){
-                List<Order> orderList = readFromCsv(Order.class);
-                order.setItem(getOrderItemList(Order.class, order));
-                order.setCustomer(getNewCustomerInOrder(Order.class, order));
-                log.info("Список текущих заказов: " );
-                log.debug(orderList);
-                return orderList;
-            }else {
-                return null;
-            }
-        }catch (NullPointerException | IOException | NoSuchElementException e){
-            log.error(e);
-            return null;
-        }
+        return null;
     }
 
     @Override

@@ -4,6 +4,9 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvCustomBindByName;
 import com.opencsv.bean.CsvCustomBindByPosition;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import ru.sfedu.Aisova.converters.MastersConverter;
 
 import java.util.List;
@@ -18,12 +21,15 @@ public class Salon {
   // Fields
   //
 
+  @Attribute
   @CsvBindByPosition(position = 0)
   private long id;
 
+  @Element
   @CsvBindByPosition(position = 1)
   private String address;
 
+  @ElementList
   @CsvCustomBindByPosition(position = 2, converter = MastersConverter.class)
   private List<Master> listMaster;
   

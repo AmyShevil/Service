@@ -1,6 +1,9 @@
 package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.*;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import ru.sfedu.Aisova.converters.NewCustomerConverter;
 import ru.sfedu.Aisova.converters.OrderItemConverter;
 import ru.sfedu.Aisova.enums.OrderStatus;
@@ -17,27 +20,35 @@ public class Order {
   // Fields
   //
 
+  @Attribute
   @CsvBindByPosition(position = 0)
   private long id;
 
+  @Element
   @CsvBindByPosition(position = 1)
   private String created;
 
+  @ElementList
   @CsvCustomBindByPosition(position = 2, converter = OrderItemConverter.class)
   private List<OrderItem> item;
 
+  @Element
   @CsvBindByPosition(position = 3)
   private Double cost;
 
+  @Element
   @CsvBindByPosition(position = 4)
   private String status;
 
+  @Element
   @CsvCustomBindByPosition(position = 5, converter = NewCustomerConverter.class)
   private Customer customer;
 
+  @Element
   @CsvBindByPosition(position = 6)
   private String lastUpdated;
 
+  @Element
   @CsvBindByPosition(position = 7)
   private String completed;
   

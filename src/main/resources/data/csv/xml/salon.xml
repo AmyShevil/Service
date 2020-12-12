@@ -1,0 +1,107 @@
+<main>
+   <object class="ru.sfedu.Aisova.model.Salon" id="0">
+      <address>Address1</address>
+      <listMaster class="java.util.ArrayList">
+         <master id="0">
+            <firstName>FirstName1</firstName>
+            <lastName>LastName1</lastName>
+            <position>Position1</position>
+            <phone>Phone1</phone>
+            <salary>10000.0</salary>
+            <listService class="java.util.ArrayList">
+               <service id="0">
+                  <name>service1</name>
+                  <price>1000.0</price>
+                  <description>description1</description>
+               </service>
+               <service id="1">
+                  <name>service2</name>
+                  <price>2000.0</price>
+                  <description>description2</description>
+               </service>
+            </listService>
+         </master>
+         <master id="1">
+            <firstName>FirstName2</firstName>
+            <lastName>LastName2</lastName>
+            <position>Position2</position>
+            <phone>Phone2</phone>
+            <salary>20000.0</salary>
+            <listService class="java.util.ArrayList">
+               <service id="1">
+                  <name>service2</name>
+                  <price>2000.0</price>
+                  <description>description2</description>
+               </service>
+               <service id="2">
+                  <name>rewriteName</name>
+                  <price>5.0</price>
+                  <description>rewriteDescription</description>
+               </service>
+            </listService>
+         </master>
+         <master id="2">
+            <firstName>rewriteFirstName</firstName>
+            <lastName>rewriteLastName</lastName>
+            <position>rewritePosition</position>
+            <phone>rewritePhone</phone>
+            <salary>50000.0</salary>
+            <listService class="java.util.ArrayList">
+               <service id="1">
+                  <name>service2</name>
+                  <price>2000.0</price>
+                  <description>description2</description>
+               </service>
+               <service id="2">
+                  <name>rewriteName</name>
+                  <price>5.0</price>
+                  <description>rewriteDescription</description>
+               </service>
+            </listService>
+         </master>
+      </listMaster>
+   </object>
+   <object class="ru.sfedu.Aisova.model.Salon" id="1">
+      <address>rewriteAddress</address>
+      <listMaster class="java.util.ArrayList">
+         <master id="2">
+            <firstName>rewriteFirstName</firstName>
+            <lastName>rewriteLastName</lastName>
+            <position>rewritePosition</position>
+            <phone>rewritePhone</phone>
+            <salary>50000.0</salary>
+            <listService class="java.util.ArrayList">
+               <service id="1">
+                  <name>service2</name>
+                  <price>2000.0</price>
+                  <description>description2</description>
+               </service>
+               <service id="2">
+                  <name>rewriteName</name>
+                  <price>5.0</price>
+                  <description>rewriteDescription</description>
+               </service>
+            </listService>
+         </master>
+         <master id="1">
+            <firstName>FirstName2</firstName>
+            <lastName>LastName2</lastName>
+            <position>Position2</position>
+            <phone>Phone2</phone>
+            <salary>20000.0</salary>
+            <listService class="java.util.ArrayList">
+               <service id="1">
+                  <name>service2</name>
+                  <price>2000.0</price>
+                  <description>description2</description>
+               </service>
+               <service id="2">
+                  <name>rewriteName</name>
+                  <price>5.0</price>
+                  <description>rewriteDescription</description>
+               </service>
+            </listService>
+         </master>
+      </listMaster>
+   </object>
+</main>

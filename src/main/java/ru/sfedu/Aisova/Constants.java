@@ -8,8 +8,10 @@ public class Constants {
     static public final String PEOPLE_END_SYMBOL ="}";
     public static final String CANNOT_CREATE_FILE = "config.path";
     public static final String CONFIG_PATH = "config.path";
-    public static final String PATH = "csv_path";
-    public static final String FILE_EXTENSION = "csv";
+    public static final String PATH_CSV = "csv_path";
+    public static final String FILE_EXTENSION_CSV = "csv";
+    public static final String PATH_XML = "xml_path";
+    public static final String FILE_EXTENSION_XML = "xml";
     public static final String NULL_VALUE = "Null value. No entry added";
     public static final String NOT_FOUND = " not found";
     public static final String SERVICE_CREATED = "Service created";

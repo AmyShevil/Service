@@ -2,6 +2,8 @@ package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvCustomBindByPosition;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
 import ru.sfedu.Aisova.converters.ServiceConverter;
 
 import java.util.Objects;
@@ -15,15 +17,19 @@ public class OrderItem {
   // Fields
   //
 
+  @Attribute
   @CsvBindByPosition(position = 0)
   private long id;
 
+  @Element
   @CsvCustomBindByPosition(position = 1, converter = ServiceConverter.class)
   private Service service;
 
+  @Element
   @CsvBindByPosition(position = 2)
   private Double cost;
 
+  @Element
   @CsvBindByPosition(position = 3)
   private Integer quantity;
   

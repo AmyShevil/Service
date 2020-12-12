@@ -2,6 +2,8 @@ package ru.sfedu.Aisova.model;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,18 +17,23 @@ public class Customer implements Serializable {
   // Fields
   //
 
+  @Attribute
   @CsvBindByPosition(position = 0)
   private long id;
 
+  @Element
   @CsvBindByPosition(position = 1)
   private String firstName;
 
+  @Element
   @CsvBindByPosition(position = 2)
   private String lastName;
 
+  @Element
   @CsvBindByPosition(position = 3)
   private String phone;
 
+  @Element
   @CsvBindByPosition(position = 4)
   private String email;
   

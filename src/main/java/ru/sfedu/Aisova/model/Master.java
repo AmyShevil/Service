@@ -4,6 +4,9 @@ import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvCustomBindByPosition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import ru.sfedu.Aisova.converters.ServiceListConverter;
 
 import java.io.Serializable;
@@ -20,24 +23,31 @@ public class Master implements Serializable {
   // Fields
   //
 
+  @Attribute
   @CsvBindByPosition(position = 0)
   private long id;
 
+  @Element
   @CsvBindByPosition(position = 1)
   private String firstName;
 
+  @Element
   @CsvBindByPosition(position = 2)
   private String lastName;
 
+  @Element
   @CsvBindByPosition(position = 3)
   private String position;
 
+  @Element
   @CsvBindByPosition(position = 4)
   private String phone;
 
+  @Element
   @CsvBindByPosition(position = 5)
   private Double salary;
 
+  @ElementList
   @CsvCustomBindByPosition(position = 6, converter = ServiceListConverter.class)
   private List<Service> listService;
   
