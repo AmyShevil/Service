@@ -380,10 +380,10 @@ public class DataProviderXmlTest extends TestBase {
         Service service1 = listService.stream().filter(el->el.getId()==0).findFirst().get();
         Service service2 = listService.stream().filter(el->el.getId()==1).findFirst().get();
         Service service3 = listService.stream().filter(el->el.getId()==2).findFirst().get();
-        Assertions.assertTrue(dataProvider.createOrderItem(service1, 1111.0, 1));
-        Assertions.assertTrue(dataProvider.createOrderItem(service2, 2222.0, 2));
-        Assertions.assertTrue(dataProvider.createOrderItem(service3, 3333.0, 3));
-        Assertions.assertTrue(dataProvider.createOrderItem(service2, 4444.0, 4));
+        Assertions.assertTrue(dataProvider.createOrderItem(service1,1));
+        Assertions.assertTrue(dataProvider.createOrderItem(service2,2));
+        Assertions.assertTrue(dataProvider.createOrderItem(service3,3));
+        Assertions.assertTrue(dataProvider.createOrderItem(service2,4));
     }
 
     @Test
@@ -395,9 +395,8 @@ public class DataProviderXmlTest extends TestBase {
         listService.add(dataProvider.getServiceById(2));
         Service service2 = listService.stream().filter(el->el.getId()==1).findFirst().get();
         Service service3 = listService.stream().filter(el->el.getId()==2).findFirst().get();
-        Assertions.assertFalse(dataProvider.createOrderItem(null, 1111.0, 1));
-        Assertions.assertFalse(dataProvider.createOrderItem(service2, null, 2));
-        Assertions.assertFalse(dataProvider.createOrderItem(service3, 3333.0, null));
+        Assertions.assertFalse(dataProvider.createOrderItem(null,1));
+        Assertions.assertFalse(dataProvider.createOrderItem(service3,null));
     }
 
     @Test
@@ -467,10 +466,10 @@ public class DataProviderXmlTest extends TestBase {
         orderItemList4.add(dataProvider.getOrderItemById(0));
         orderItemList4.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, 10000.0, "CREATED", customer1, "05.12.2020", "09.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, 20000.0, "PROCESSING", customer2, "06.12.2020", "10.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, 30000.0, "COMPLETED", customer3, "07.12.2020", "11.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, 40000.0, "CANCELED", customer4, "08.12.2020", "12.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, "CREATED", customer1, "05.12.2020", "09.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, "PROCESSING", customer2, "06.12.2020", "10.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, "COMPLETED", customer3, "07.12.2020", "11.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, "CANCELED", customer4, "08.12.2020", "12.12.2020"));
 
         log.debug(dataProvider.getOrderById(2));
     }
@@ -500,11 +499,10 @@ public class DataProviderXmlTest extends TestBase {
         orderItemList4.add(dataProvider.getOrderItemById(0));
         orderItemList4.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, 10000.0, "CREATED", customer1, null, null));
-        Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, 20000.0, "PROCESSING", customer2, "04.12.2020", null));
-        Assertions.assertFalse(dataProvider.createOrder("03.12.2020", orderItemList3, null, "COMPLETED", customer3, "05.12.2020", "10.12.2020"));
-        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, 40000.0, null, customer4, null, "05.12.2020"));
-        Assertions.assertFalse(dataProvider.createOrder("05.12.2020", orderItemList2, 50000.0, "COMPLETED", null, "04.12.2020", "05.12.2020"));
+        Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, "CREATED", customer1, null, null));
+        Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, "PROCESSING", customer2, "04.12.2020", null));
+        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, null, customer4, null, "05.12.2020"));
+        Assertions.assertFalse(dataProvider.createOrder("05.12.2020", orderItemList2, "COMPLETED", null, "04.12.2020", "05.12.2020"));
     }
 
     @Test
@@ -518,7 +516,7 @@ public class DataProviderXmlTest extends TestBase {
         orderItemList.add(dataProvider.getOrderItemById(1));
         orderItemList.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertTrue(dataProvider.editOrder(2,"01.12.2020", orderItemList, 50000.0, "COMPLETED", customer, "05.12.2020", "10.12.2020"));
+        Assertions.assertTrue(dataProvider.editOrder(2,"01.12.2020", orderItemList, "COMPLETED", customer, "05.12.2020", "10.12.2020"));
     }
 
     @Test
@@ -532,7 +530,7 @@ public class DataProviderXmlTest extends TestBase {
         orderItemList.add(dataProvider.getOrderItemById(1));
         orderItemList.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList, 50000.0, "COMPLETED", customer, "05.12.2020", "10.12.2020"));
+        Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList, "COMPLETED", customer, "05.12.2020", "10.12.2020"));
     }
 
     @Test

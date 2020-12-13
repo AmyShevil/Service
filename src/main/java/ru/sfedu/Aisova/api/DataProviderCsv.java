@@ -702,16 +702,16 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createOrderItem(Service service, Double cost, Integer quantity) {
+    public boolean createOrderItem(Service service, Integer quantity) {
         try{
-            if (service == null || cost == null || quantity == null){
+            if (service == null || quantity == null){
                 log.info(Constants.NULL_VALUE);
                 return false;
             }else {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setId(getNextOrderItemId());
                 orderItem.setService(service);
-                orderItem.setCost(cost);
+                orderItem.setCost(service.getPrice());
                 orderItem.setQuantity(quantity);
                 log.info(Constants.ORDER_ITEM_CREATED);
                 log.debug(orderItem);
@@ -786,9 +786,9 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) {
+    public boolean createOrder(String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) {
         try{
-            if (created == null || item == null || cost == null || status == null || customer == null){
+            if (created == null || item == null || status == null || customer == null){
                 log.info(Constants.NULL_VALUE);
                 return false;
             }else {
@@ -796,7 +796,6 @@ public class DataProviderCsv implements DataProvider{
                 order.setCreated(created);
                 order.setId(getNextOrderId());
                 order.setItem(item);
-                order.setCost(cost);
                 order.setStatus(status);
                 order.setCustomer(customer);
                 order.setLastUpdated(lastUpdated);
@@ -813,7 +812,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editOrder(long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) {
+    public boolean editOrder(long id, String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) {
         List<Order> orderList = readFromCsv(Order.class);
         try {
             if (getOrderById(id) == null){
@@ -824,7 +823,7 @@ public class DataProviderCsv implements DataProvider{
             order.setCreated(created);
             order.setId(id);
             order.setItem(item);
-            order.setCost(cost);
+            order.setCost(calculateOrderValue(id));
             order.setStatus(status);
             order.setCustomer(customer);
             order.setLastUpdated(lastUpdated);
@@ -880,13 +879,27 @@ public class DataProviderCsv implements DataProvider{
 
     @Override
     public Double calculateOrderValue(long orderId) {
-        return null;
+        try{
+            Order order = getOrderById(orderId);
+            List<OrderItem> orderItemList = getOrderItemList(Order.class, order);
+            List<Double> price = orderItemList.stream()
+                    .map(value -> value.getCost()*value.getQuantity())
+                    .collect(Collectors.toList());
+            Double cost = price.stream().map(value -> value.doubleValue())
+                    .filter(a -> a != null).mapToDouble(a -> a).sum();
+            log.info("Order cost " + orderId + " = " + cost);
+            return cost;
+        } catch (NoSuchElementException | NullPointerException | IOException e) {
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
     public List<Order> viewOrderHistory(Order order) {
         try{
             List<Order> orderList = readFromCsv(Order.class);
+            
             order.setItem(getOrderItemList(Order.class, order));
             order.setCustomer(getNewCustomerInOrder(Order.class, order));
             log.info("Список заказов: " );
@@ -917,6 +930,7 @@ public class DataProviderCsv implements DataProvider{
         }
     }
 
+    //убрать
     @Override
     public StringBuffer createCustomerReport() {
         return null;
@@ -927,6 +941,7 @@ public class DataProviderCsv implements DataProvider{
         return null;
     }
 
+    //убрать
     @Override
     public Double calculateSalaryOfTheMaster() {
         return null;

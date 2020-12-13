@@ -51,12 +51,11 @@ public class TestBase {
         return master;
     }
 
-    public Order createOrder (long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed){
+    public Order createOrder (long id, String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed){
         Order order = new Order();
         order.setId(id);
         order.setCreated(created);
         order.setItem(item);
-        order.setCost(cost);
         order.setStatus(status);
         order.setCustomer(customer);
         order.setLastUpdated(lastUpdated);

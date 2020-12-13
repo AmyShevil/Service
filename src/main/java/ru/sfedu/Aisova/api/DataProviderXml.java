@@ -732,16 +732,16 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public boolean createOrderItem(Service service, Double cost, Integer quantity) throws Exception {
+    public boolean createOrderItem(Service service, Integer quantity) throws Exception {
         try{
-            if (service == null || cost == null || quantity == null){
+            if (service == null || quantity == null){
                 log.info(Constants.NULL_VALUE);
                 return false;
             }else {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setId(getNextOrderItemId());
                 orderItem.setService(service);
-                orderItem.setCost(cost);
+                orderItem.setCost(service.getPrice());
                 orderItem.setQuantity(quantity);
                 log.info(Constants.ORDER_ITEM_CREATED);
                 log.debug(orderItem);
@@ -816,9 +816,9 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) throws Exception {
+    public boolean createOrder(String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) throws Exception {
         try{
-            if (created == null || item == null || cost == null || status == null || customer == null){
+            if (created == null || item == null || status == null || customer == null){
                 log.info(Constants.NULL_VALUE);
                 return false;
             }else {
@@ -826,7 +826,6 @@ public class DataProviderXml implements DataProvider{
                 order.setCreated(created);
                 order.setId(getNextOrderId());
                 order.setItem(item);
-                order.setCost(cost);
                 order.setStatus(status);
                 order.setCustomer(customer);
                 order.setLastUpdated(lastUpdated);
@@ -843,7 +842,7 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public boolean editOrder(long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) throws Exception {
+    public boolean editOrder(long id, String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) throws Exception {
         List<Order> orderList = readFromXml(Order.class);
         try {
             if (getOrderById(id) == null){
@@ -854,7 +853,7 @@ public class DataProviderXml implements DataProvider{
             order.setCreated(created);
             order.setId(id);
             order.setItem(item);
-            order.setCost(cost);
+            order.setCost(calculateOrderValue(id));
             order.setStatus(status);
             order.setCustomer(customer);
             order.setLastUpdated(lastUpdated);

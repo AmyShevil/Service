@@ -231,12 +231,11 @@ public interface DataProvider {
      * Create order item.
      *
      * @param service the value of service
-     * @param cost the value of cost
      * @param quantity the value of quantity
      * @return is created
      * @throws NullPointerException when input variables are null
      */
-    boolean createOrderItem (Service service, Double cost, Integer quantity) throws Exception;
+    boolean createOrderItem (Service service, Integer quantity) throws Exception;
 
     /**
      * Edit order item.
@@ -273,7 +272,6 @@ public interface DataProvider {
      *
      * @param created the value of created
      * @param item the value of item
-     * @param cost the value of cost
      * @param status the value of status
      * @param customer the value of customer
      * @param lastUpdated the value of last updated
@@ -281,7 +279,7 @@ public interface DataProvider {
      * @return is created
      * @throws NullPointerException when input variables are null
      */
-    boolean createOrder (String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) throws Exception;
+    boolean createOrder (String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) throws Exception;
 
     /**
      * Edit order.
@@ -289,7 +287,6 @@ public interface DataProvider {
      * @param id the value of id
      * @param created the value of created
      * @param item the value of item
-     * @param cost the value of cost
      * @param status the value of status
      * @param customer the value of customer
      * @param lastUpdated the value of last updated
@@ -297,7 +294,7 @@ public interface DataProvider {
      * @return is edited
      * @throws NullPointerException when input variables are null
      */
-    boolean editOrder (long id, String created, List<OrderItem> item, Double cost, String status, Customer customer, String lastUpdated, String completed) throws Exception;
+    boolean editOrder (long id, String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) throws Exception;
 
     /**
      * Delete order.
