@@ -40,8 +40,8 @@ public class Order {
   private String status;
 
   @Element
-  @CsvCustomBindByPosition(position = 5, converter = CustomerConverter.class)
-  private Customer customer;
+  @CsvBindByPosition(position = 5)
+  private long customerId;
 
   @Element
   @CsvBindByPosition(position = 6)
@@ -147,18 +147,18 @@ public class Order {
 
   /**
    * Set the value of customer
-   * @param customer the new value of customer
+   * @param customerId the new value of customerId
    */
-  public void setCustomer (Customer customer) {
-    this.customer = customer;
+  public void setCustomerId (long customerId) {
+    this.customerId = customerId;
   }
 
   /**
    * Get the value of customer
    * @return the value of customer
    */
-  public Customer getCustomer () {
-    return customer;
+  public long getCustomerId () {
+    return customerId;
   }
 
   /**
@@ -208,14 +208,14 @@ public class Order {
             item.equals(order.item) &&
             cost.equals(order.cost) &&
             status == order.status &&
-            customer.equals(order.customer) &&
+            customerId == order.customerId &&
             Objects.equals(lastUpdated, order.lastUpdated) &&
             completed.equals(order.completed);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, created, item, cost, status, customer, lastUpdated, completed);
+    return Objects.hash(id, created, item, cost, status, customerId, lastUpdated, completed);
   }
 
   @Override
@@ -226,7 +226,7 @@ public class Order {
             ", item=" + item +
             ", cost=" + cost +
             ", status=" + status +
-            ", customer=" + customer +
+            ", customer=" + customerId +
             ", lastUpdated=" + lastUpdated +
             ", completed=" + completed +
             '}';

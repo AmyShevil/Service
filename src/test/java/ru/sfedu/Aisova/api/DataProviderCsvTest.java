@@ -441,15 +441,6 @@ public class DataProviderCsvTest {
     @Test
     @org.junit.jupiter.api.Order(24)
     void createOrderSuccess() throws Exception {
-        List<NewCustomer> newCustomerList = new ArrayList<>();
-        newCustomerList.add(dataProvider.getNewCustomerById(0));
-        newCustomerList.add(dataProvider.getNewCustomerById(1));
-        newCustomerList.add(dataProvider.getNewCustomerById(2));
-        NewCustomer customer1 = newCustomerList.stream().filter(el->el.getId()==0).findFirst().get();
-        NewCustomer customer2 = newCustomerList.stream().filter(el->el.getId()==1).findFirst().get();
-        NewCustomer customer3 = newCustomerList.stream().filter(el->el.getId()==2).findFirst().get();
-        NewCustomer customer4 = newCustomerList.stream().filter(el->el.getId()==1).findFirst().get();
-
         List<OrderItem> orderItemList1 = new ArrayList<>();
         orderItemList1.add(dataProvider.getOrderItemById(1));
         List<OrderItem> orderItemList2 = new ArrayList<>();
@@ -463,23 +454,15 @@ public class DataProviderCsvTest {
         orderItemList4.add(dataProvider.getOrderItemById(0));
         orderItemList4.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, "CREATED", customer1, null, null));
-        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, "PROCESSING", customer2, "04.12.2020", null));
-        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, "COMPLETED", customer3, "05.12.2020", "10.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, "CANCELED", customer4, null, "05.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, "CREATED", 0, null, null));
+        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, "PROCESSING", 1, "04.12.2020", null));
+        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, "COMPLETED", 2, "05.12.2020", "10.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, "CANCELED", 3, null, "05.12.2020"));
     }
 
     @Test
     @org.junit.jupiter.api.Order(24)
     void createOrderFail() throws Exception {
-        List<NewCustomer> newCustomerList = new ArrayList<>();
-        newCustomerList.add(dataProvider.getNewCustomerById(0));
-        newCustomerList.add(dataProvider.getNewCustomerById(1));
-        newCustomerList.add(dataProvider.getNewCustomerById(2));
-        NewCustomer customer1 = newCustomerList.stream().filter(el->el.getId()==0).findFirst().get();
-        NewCustomer customer2 = newCustomerList.stream().filter(el->el.getId()==1).findFirst().get();
-        NewCustomer customer4 = newCustomerList.stream().filter(el->el.getId()==1).findFirst().get();
-
         List<OrderItem> orderItemList1 = new ArrayList<>();
         orderItemList1.add(dataProvider.getOrderItemById(1));
         List<OrderItem> orderItemList2 = new ArrayList<>();
@@ -489,23 +472,14 @@ public class DataProviderCsvTest {
         orderItemList4.add(dataProvider.getOrderItemById(0));
         orderItemList4.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, "CREATED", customer1, null, null));
-        Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, "PROCESSING", customer2, "04.12.2020", null));
-        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, null, customer4, null, "05.12.2020"));
-        Assertions.assertFalse(dataProvider.createOrder("05.12.2020", orderItemList2, "COMPLETED", null, "04.12.2020", "05.12.2020"));
+        Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, "CREATED", 0, null, null));
+        Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, "PROCESSING", 1, "04.12.2020", null));
+        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, null, 2, null, "05.12.2020"));
     }
 
     @Test
     @org.junit.jupiter.api.Order(25)
     void editOrderSuccess() throws Exception {
-        List<NewCustomer> newCustomerList = new ArrayList<>();
-        newCustomerList.add(dataProvider.getNewCustomerById(0));
-        newCustomerList.add(dataProvider.getNewCustomerById(1));
-        newCustomerList.add(dataProvider.getNewCustomerById(2));
-        NewCustomer customer1 = newCustomerList.stream().filter(el->el.getId()==0).findFirst().get();
-        NewCustomer customer2 = newCustomerList.stream().filter(el->el.getId()==1).findFirst().get();
-        NewCustomer customer3 = newCustomerList.stream().filter(el->el.getId()==2).findFirst().get();
-
         List<OrderItem> orderItemList1 = new ArrayList<>();
         orderItemList1.add(dataProvider.getOrderItemById(1));
         List<OrderItem> orderItemList2 = new ArrayList<>();
@@ -516,24 +490,20 @@ public class DataProviderCsvTest {
         orderItemList3.add(dataProvider.getOrderItemById(1));
         orderItemList3.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertTrue(dataProvider.editOrder(0,"01.12.2020", orderItemList1, "CREATED", customer1, null, null));
-        Assertions.assertTrue(dataProvider.editOrder(1,"02.12.2020", orderItemList2, "PROCESSING", customer2, "04.12.2020", null));
-        Assertions.assertTrue(dataProvider.editOrder(2,"03.12.2020", orderItemList3, "COMPLETED", customer3, "05.12.2020", "10.12.2020"));
+        Assertions.assertTrue(dataProvider.editOrder(0,"01.12.2020", orderItemList1, "CREATED", 0, null, null));
+        Assertions.assertTrue(dataProvider.editOrder(1,"02.12.2020", orderItemList2, "PROCESSING", 1, "04.12.2020", null));
+        Assertions.assertTrue(dataProvider.editOrder(2,"03.12.2020", orderItemList3, "COMPLETED", 1, "05.12.2020", "10.12.2020"));
 
     }
 
     @Test
     @org.junit.jupiter.api.Order(25)
     void editOrderFail() throws Exception {
-        List<NewCustomer> newCustomerList = new ArrayList<>();
-        newCustomerList.add(dataProvider.getNewCustomerById(1));
-        NewCustomer customer = newCustomerList.stream().filter(el->el.getId()==1).findFirst().get();
-
         List<OrderItem> orderItemList = new ArrayList<>();
         orderItemList.add(dataProvider.getOrderItemById(1));
         orderItemList.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList,  "COMPLETED", customer, "05.12.2020", "10.12.2020"));
+        Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList,  "COMPLETED", 0, "05.12.2020", "10.12.2020"));
     }
 
     @Test
@@ -576,6 +546,24 @@ public class DataProviderCsvTest {
     }
 
     @Test
+    void assignServiceSuccess() throws Exception {
+        List<Service> listService = new ArrayList<>();
+        listService.add(dataProvider.getServiceById(0));
+        listService.add(dataProvider.getServiceById(1));
+        listService.add(dataProvider.getServiceById(2));
+        Assertions.assertTrue(dataProvider.assignService(listService, 1));
+    }
+
+    @Test
+    void assignServiceFail() throws Exception {
+        List<Service> listService = new ArrayList<>();
+        listService.add(dataProvider.getServiceById(0));
+        listService.add(dataProvider.getServiceById(1));
+        listService.add(dataProvider.getServiceById(2));
+        Assertions.assertFalse(dataProvider.assignService(listService, 10));
+    }
+
+    @Test
     @org.junit.jupiter.api.Order(28)
     void viewOrderHistory() throws Exception {
         List<Order> orderList = new ArrayList<>();
@@ -586,7 +574,7 @@ public class DataProviderCsvTest {
         //Order order2 = orderList.stream().filter(el->el.getId()==1).findFirst().get();
         //Order order3 = orderList.stream().filter(el->el.getId()==2).findFirst().get();
 
-        log.debug(dataProvider.viewOrderHistory(order));
+        //log.debug(dataProvider.viewOrderHistory(order));
     }
 /*
     @Test
@@ -603,10 +591,6 @@ public class DataProviderCsvTest {
 
     @Test
     void calculateSalaryOfTheMaster() {
-    }
-
-    @Test
-    void assignService() {
     }
 
     @Test

@@ -273,13 +273,13 @@ public interface DataProvider {
      * @param created the value of created
      * @param item the value of item
      * @param status the value of status
-     * @param customer the value of customer
+     * @param customerId the value of customer id
      * @param lastUpdated the value of last updated
      * @param completed the value of completed
      * @return is created
      * @throws NullPointerException when input variables are null
      */
-    boolean createOrder (String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) throws Exception;
+    boolean createOrder (String created, List<OrderItem> item, String status, long customerId, String lastUpdated, String completed) throws Exception;
 
     /**
      * Edit order.
@@ -288,13 +288,13 @@ public interface DataProvider {
      * @param created the value of created
      * @param item the value of item
      * @param status the value of status
-     * @param customer the value of customer
+     * @param customerId the value of customer id
      * @param lastUpdated the value of last updated
      * @param completed the value of completed
      * @return is edited
      * @throws NullPointerException when input variables are null
      */
-    boolean editOrder (long id, String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) throws Exception;
+    boolean editOrder (long id, String created, List<OrderItem> item, String status, long customerId, String lastUpdated, String completed) throws Exception;
 
     /**
      * Delete order.
@@ -315,12 +315,12 @@ public interface DataProvider {
     Order getOrderById(long id) throws Exception;
 
     Double calculateOrderValue(long orderId);
-    List<Order> viewOrderHistory(Order order);
-    List<Order> getListOfCurrentOrders(Order order, String status);
+    List<Order> viewOrderHistory(long customerId);
+    List<Order> getListOfCurrentOrders(long customerId, String status);
     StringBuffer createCustomerReport();
     List<Master> changeTheLisOfMaster();
     Double calculateSalaryOfTheMaster();
-    boolean assignService(long serviceId, long masterId);
+    boolean assignService(List<Service> service, long masterId);
     StringBuffer createMasterProgressReport();
 
 }

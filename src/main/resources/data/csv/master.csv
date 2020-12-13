@@ -1,3 +1,3 @@
 0,FirstName1,LastName1,Position1,Phone1,10000.0,"[0,1]"
-1,FirstName2,LastName2,Position2,Phone2,20000.0,"[1,2]"
 2,rewriteFirstName,rewriteLastName,rewritePosition,rewritePhone,50000.0,"[2,1]"
+1,FirstName2,LastName2,Position2,Phone2,20000.0,"[0,1,2]"

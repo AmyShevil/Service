@@ -203,24 +203,6 @@ public class DataProviderXml implements DataProvider{
         }
     }
 
-    private <T> Customer getNewCustomerInOrder(Class<T> tClass, T object) throws Exception {
-        try {
-            NewCustomer newCustomerInOrder;
-            Order order = (Order) object;
-            Customer newCustomer = order.getCustomer();
-            List<NewCustomer> newCustomerList = readFromXml(NewCustomer.class);
-            newCustomerInOrder = newCustomerList
-                    .stream()
-                    .filter(x -> x.getId() == newCustomer.getId())
-                    .findAny()
-                    .orElse(null);
-            return newCustomerInOrder;
-        }catch (NullPointerException e){
-            log.error(e);
-            return null;
-        }
-    }
-
     private long getNextServiceId() throws Exception {
         List<Service> objectList = readFromXml(Service.class);
         long maxId = -1;
@@ -816,9 +798,9 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public boolean createOrder(String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) throws Exception {
+    public boolean createOrder(String created, List<OrderItem> item, String status, long customerId, String lastUpdated, String completed) throws Exception {
         try{
-            if (created == null || item == null || status == null || customer == null){
+            if (created == null || item == null || status == null){
                 log.info(Constants.NULL_VALUE);
                 return false;
             }else {
@@ -827,7 +809,7 @@ public class DataProviderXml implements DataProvider{
                 order.setId(getNextOrderId());
                 order.setItem(item);
                 order.setStatus(status);
-                order.setCustomer(customer);
+                order.setCustomerId(customerId);
                 order.setLastUpdated(lastUpdated);
                 order.setCompleted(completed);
                 log.info(Constants.ORDER_CREATED);
@@ -842,7 +824,7 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public boolean editOrder(long id, String created, List<OrderItem> item, String status, Customer customer, String lastUpdated, String completed) throws Exception {
+    public boolean editOrder(long id, String created, List<OrderItem> item, String status, long customerId, String lastUpdated, String completed) throws Exception {
         List<Order> orderList = readFromXml(Order.class);
         try {
             if (getOrderById(id) == null){
@@ -855,7 +837,7 @@ public class DataProviderXml implements DataProvider{
             order.setItem(item);
             order.setCost(calculateOrderValue(id));
             order.setStatus(status);
-            order.setCustomer(customer);
+            order.setCustomerId(customerId);
             order.setLastUpdated(lastUpdated);
             order.setCompleted(completed);
             orderList.removeIf(ord -> ord.getId() == id);
@@ -896,7 +878,6 @@ public class DataProviderXml implements DataProvider{
                     .orElse(null);
 
             order.setItem(getOrderItemList(Order.class, order));
-            order.setCustomer(getNewCustomerInOrder(Order.class, order));
             log.info(Constants.ORDER_RECEIVED);
             log.debug(order);
             return order;
@@ -913,12 +894,12 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public List<Order> viewOrderHistory(Order order) {
+    public List<Order> viewOrderHistory(long customerId) {
         return null;
     }
 
     @Override
-    public List<Order> getListOfCurrentOrders(Order order, String status) {
+    public List<Order> getListOfCurrentOrders(long customerId, String status) {
         return null;
     }
 
@@ -938,7 +919,7 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public boolean assignService(long serviceId, long masterId) {
+    public boolean assignService(List<Service> service, long masterId) {
         return false;
     }
 
