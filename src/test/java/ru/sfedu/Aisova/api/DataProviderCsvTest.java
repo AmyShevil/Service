@@ -546,6 +546,7 @@ public class DataProviderCsvTest {
     }
 
     @Test
+    @org.junit.jupiter.api.Order(29)
     void assignServiceSuccess() throws Exception {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(0));
@@ -555,6 +556,7 @@ public class DataProviderCsvTest {
     }
 
     @Test
+    @org.junit.jupiter.api.Order(29)
     void assignServiceFail() throws Exception {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(0));
@@ -564,22 +566,18 @@ public class DataProviderCsvTest {
     }
 
     @Test
-    @org.junit.jupiter.api.Order(28)
+    @org.junit.jupiter.api.Order(30)
     void viewOrderHistory() throws Exception {
-        List<Order> orderList = new ArrayList<>();
-        orderList.add(dataProvider.getOrderById(0));
-        orderList.add(dataProvider.getOrderById(1));
-        orderList.add(dataProvider.getOrderById(2));
-        Order order = orderList.stream().findAny().orElse(null);
-        //Order order2 = orderList.stream().filter(el->el.getId()==1).findFirst().get();
-        //Order order3 = orderList.stream().filter(el->el.getId()==2).findFirst().get();
 
-        //log.debug(dataProvider.viewOrderHistory(order));
+        log.debug(dataProvider.viewOrderHistory(1));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(31)
+    void getListOfCurrentOrders() {
+        log.debug(dataProvider.getListOfCurrentOrders(1, "PROCESSING"));
     }
 /*
-    @Test
-    void getListOfCurrentOrders() {
-    }
 
     @Test
     void createCustomerReport() {

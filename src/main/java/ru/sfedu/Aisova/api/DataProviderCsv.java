@@ -880,12 +880,15 @@ public class DataProviderCsv implements DataProvider{
     public List<Order> viewOrderHistory(long customerId) {
         try{
             List<Order> orderList = readFromCsv(Order.class);
-            
+            orderList = orderList.stream()
+                    .filter(user -> user.getCustomerId() == customerId)
+                    .collect(Collectors.toList());
 
-            log.info("Список заказов: " );
+
+            log.info("Order list customer " + customerId + ":");
             log.debug(orderList);
             return orderList;
-        }catch (NullPointerException  | NoSuchElementException e){
+        }catch (NullPointerException | NoSuchElementException e){
             log.error(e);
             return null;
         }
@@ -896,8 +899,12 @@ public class DataProviderCsv implements DataProvider{
         try{
             if(status.equals("PROCESSING")){
                 List<Order> orderList = readFromCsv(Order.class);
+                orderList = orderList.stream()
+                        .filter(user -> user.getCustomerId() == customerId)
+                        .collect(Collectors.toList());
 
-                log.info("Список текущих заказов: " );
+
+                log.info("Current orders list customer " + customerId + ":");
                 log.debug(orderList);
                 return orderList;
             }else {
