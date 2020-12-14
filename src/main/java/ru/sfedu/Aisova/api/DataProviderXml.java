@@ -13,10 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -397,7 +394,7 @@ public class DataProviderXml implements DataProvider{
     public boolean editNewCustomer(long id, String firstName, String lastName, String phone, String email, Integer discount) throws Exception {
         List<NewCustomer> newCustomerList = readFromXml(NewCustomer.class);
         try {
-            if (getNewCustomerById(id) == null){
+            if (!getNewCustomerById(id).isPresent()){
                 log.info(Constants.NEW_CUSTOMER_ID + id + Constants.NOT_FOUND);
                 return false;
             }
@@ -438,7 +435,7 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public NewCustomer getNewCustomerById(long id) throws Exception {
+    public Optional<NewCustomer> getNewCustomerById(long id) throws Exception {
         List<NewCustomer> listNewCustomer = readFromXml(NewCustomer.class);
         try {
             NewCustomer newCustomer = listNewCustomer.stream()
@@ -447,11 +444,11 @@ public class DataProviderXml implements DataProvider{
                     .findFirst().get();
             log.info(Constants.NEW_CUSTOMER_RECEIVED);
             log.debug(newCustomer);
-            return newCustomer;
+            return Optional.of(newCustomer);
         }catch (NullPointerException | NoSuchElementException e){
             log.info(Constants.NEW_CUSTOMER_NOT_RECEIVED);
             log.error(e);
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -484,7 +481,7 @@ public class DataProviderXml implements DataProvider{
     public boolean editRegularCustomer(long id, String firstName, String lastName, String phone, String email, Integer countOfOrder) throws Exception {
         List<RegularCustomer> regularCustomerList = readFromXml(RegularCustomer.class);
         try {
-            if (getRegularCustomerById(id) == null){
+            if (!getRegularCustomerById(id).isPresent()){
                 log.info(Constants.REGULAR_CUSTOMER_ID + id + Constants.NOT_FOUND);
                 return false;
             }
@@ -524,7 +521,7 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public RegularCustomer getRegularCustomerById(long id) throws Exception {
+    public Optional<RegularCustomer> getRegularCustomerById(long id) throws Exception {
         List<RegularCustomer> listRegularCustomer = readFromXml(RegularCustomer.class);
         try {
             RegularCustomer regularCustomer = listRegularCustomer.stream()
@@ -533,11 +530,11 @@ public class DataProviderXml implements DataProvider{
                     .findFirst().get();
             log.info(Constants.REGULAR_CUSTOMER_RECEIVED);
             log.debug(regularCustomer);
-            return regularCustomer;
+            return Optional.of(regularCustomer);
         }catch (NullPointerException | NoSuchElementException e){
             log.info(Constants.REGULAR_CUSTOMER_NOT_RECEIVED);
             log.error(e);
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -1025,9 +1022,9 @@ public class DataProviderXml implements DataProvider{
 
     @Override
     public StringBuffer createMasterReport(long masterId) throws Exception {
-        try{
-            if (getMasterById(masterId) == null){
-                log.info( Constants.MASTER_ID + masterId + Constants.NOT_FOUND);
+        try {
+            if (getMasterById(masterId) == null) {
+                log.info(Constants.MASTER_ID + masterId + Constants.NOT_FOUND);
                 return null;
             }
             List<Master> masterList = readFromXml(Master.class);
@@ -1044,7 +1041,7 @@ public class DataProviderXml implements DataProvider{
                     .append(master.getListService());
 
             return report;
-        }catch (NullPointerException | NoSuchElementException | IOException e){
+        } catch (NullPointerException | NoSuchElementException | IOException e) {
             log.error(e);
             return null;
         }

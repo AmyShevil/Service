@@ -95,7 +95,7 @@ public interface DataProvider {
      * @return the new customer
      * @throws NullPointerException when input variables are null
      */
-    NewCustomer getNewCustomerById(long id) throws Exception;
+    Optional<NewCustomer> getNewCustomerById(long id) throws Exception;
 
     /**
      * Create regular customer.
@@ -140,7 +140,7 @@ public interface DataProvider {
      * @return the regular customer
      * @throws NullPointerException when input variables are null
      */
-    RegularCustomer getRegularCustomerById(long id) throws Exception;
+    Optional<RegularCustomer> getRegularCustomerById(long id) throws Exception;
 
     /**
      * Create master.

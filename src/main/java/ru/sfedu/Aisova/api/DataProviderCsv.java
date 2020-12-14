@@ -368,7 +368,7 @@ public class DataProviderCsv implements DataProvider{
     public boolean editNewCustomer(long id, String firstName, String lastName, String phone, String email, Integer discount) {
         List<NewCustomer> newCustomerList = readFromCsv(NewCustomer.class);
         try {
-            if (getNewCustomerById(id) == null){
+            if (!getNewCustomerById(id).isPresent()){
                 log.info(Constants.NEW_CUSTOMER_ID + id + Constants.NOT_FOUND);
                 return false;
             }
@@ -409,7 +409,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public NewCustomer getNewCustomerById(long id) {
+    public Optional<NewCustomer> getNewCustomerById(long id) {
         List<NewCustomer> listNewCustomer = readFromCsv(NewCustomer.class);
         try {
             NewCustomer newCustomer = listNewCustomer.stream()
@@ -417,11 +417,11 @@ public class DataProviderCsv implements DataProvider{
                     .findFirst().get();
             log.info(Constants.NEW_CUSTOMER_RECEIVED);
             log.debug(newCustomer);
-            return newCustomer;
+            return Optional.of(newCustomer);
         }catch (NullPointerException | NoSuchElementException e){
             log.info(Constants.NEW_CUSTOMER_NOT_RECEIVED);
             log.error(e);
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -454,7 +454,7 @@ public class DataProviderCsv implements DataProvider{
     public boolean editRegularCustomer(long id, String firstName, String lastName, String phone, String email, Integer countOfOrder) {
         List<RegularCustomer> regularCustomerList = readFromCsv(RegularCustomer.class);
         try {
-            if (getRegularCustomerById(id) == null){
+            if (!getRegularCustomerById(id).isPresent()){
                 log.info(Constants.REGULAR_CUSTOMER_ID + id + Constants.NOT_FOUND);
                 return false;
             }
@@ -494,7 +494,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public RegularCustomer getRegularCustomerById(long id) {
+    public Optional<RegularCustomer> getRegularCustomerById(long id) {
         List<RegularCustomer> listRegularCustomer = readFromCsv(RegularCustomer.class);
         try {
             RegularCustomer regularCustomer = listRegularCustomer.stream()
@@ -502,11 +502,11 @@ public class DataProviderCsv implements DataProvider{
                     .findFirst().get();
             log.info(Constants.REGULAR_CUSTOMER_RECEIVED);
             log.debug(regularCustomer);
-            return regularCustomer;
+            return Optional.of(regularCustomer);
         }catch (NullPointerException | NoSuchElementException e){
             log.info(Constants.REGULAR_CUSTOMER_NOT_RECEIVED);
             log.error(e);
-            return null;
+            return Optional.empty();
         }
     }
 
