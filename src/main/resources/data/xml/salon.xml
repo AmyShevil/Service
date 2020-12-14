@@ -35,7 +35,7 @@
                </service>
                <service id="2">
                   <name>rewriteName</name>
-                  <price>5.0</price>
+                  <price>500.0</price>
                   <description>rewriteDescription</description>
                </service>
             </listService>
@@ -54,7 +54,7 @@
                </service>
                <service id="2">
                   <name>rewriteName</name>
-                  <price>5.0</price>
+                  <price>500.0</price>
                   <description>rewriteDescription</description>
                </service>
             </listService>
@@ -78,7 +78,7 @@
                </service>
                <service id="2">
                   <name>rewriteName</name>
-                  <price>5.0</price>
+                  <price>500.0</price>
                   <description>rewriteDescription</description>
                </service>
             </listService>
@@ -97,7 +97,7 @@
                </service>
                <service id="2">
                   <name>rewriteName</name>
-                  <price>5.0</price>
+                  <price>500.0</price>
                   <description>rewriteDescription</description>
                </service>
             </listService>

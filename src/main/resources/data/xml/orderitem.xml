@@ -5,7 +5,7 @@
          <price>1000.0</price>
          <description>description1</description>
       </service>
-      <cost>1111.0</cost>
+      <cost>1000.0</cost>
       <quantity>1</quantity>
    </object>
    <object class="ru.sfedu.Aisova.model.OrderItem" id="1">
@@ -14,13 +14,13 @@
          <price>2000.0</price>
          <description>description2</description>
       </service>
-      <cost>2222.0</cost>
+      <cost>2000.0</cost>
       <quantity>2</quantity>
    </object>
    <object class="ru.sfedu.Aisova.model.OrderItem" id="2">
       <service id="2">
          <name>rewriteName</name>
-         <price>5.0</price>
+         <price>500.0</price>
          <description>rewriteDescription</description>
       </service>
       <cost>500.0</cost>

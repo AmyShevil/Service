@@ -11,7 +11,7 @@
    </object>
    <object class="ru.sfedu.Aisova.model.Service" id="2">
       <name>rewriteName</name>
-      <price>5.0</price>
+      <price>500.0</price>
       <description>rewriteDescription</description>
    </object>
 </main>

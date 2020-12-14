@@ -798,9 +798,9 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public boolean createOrder(String created, List<OrderItem> item, String status, long customerId, String lastUpdated, String completed) throws Exception {
+    public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) throws Exception {
         try{
-            if (created == null || item == null || status == null){
+            if (created == null || item == null || cost == null || status == null){
                 log.info(Constants.NULL_VALUE);
                 return false;
             }else {
@@ -808,6 +808,7 @@ public class DataProviderXml implements DataProvider{
                 order.setCreated(created);
                 order.setId(getNextOrderId());
                 order.setItem(item);
+                order.setCost(cost);
                 order.setStatus(status);
                 order.setCustomerId(customerId);
                 order.setLastUpdated(lastUpdated);
@@ -824,7 +825,7 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public boolean editOrder(long id, String created, List<OrderItem> item, String status, long customerId, String lastUpdated, String completed) throws Exception {
+    public boolean editOrder(long id, String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) throws Exception {
         List<Order> orderList = readFromXml(Order.class);
         try {
             if (getOrderById(id) == null){
@@ -889,42 +890,163 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public Double calculateOrderValue(long orderId) {
-        return null;
+    public Double calculateOrderValue(long orderId) throws Exception {
+        try{
+            Order order = getOrderById(orderId);
+            List<OrderItem> orderItemList = getOrderItemList(Order.class, order);
+            List<Double> price = orderItemList.stream()
+                    .map(value -> value.getCost()*value.getQuantity())
+                    .collect(Collectors.toList());
+            Double cost = price.stream().map(value -> value.doubleValue())
+                    .filter(a -> a != null).mapToDouble(a -> a).sum();
+            log.info(Constants.ORDER_COST + orderId + Constants.EQL + cost);
+            return cost;
+        } catch (NoSuchElementException | NullPointerException | IOException e) {
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
-    public List<Order> viewOrderHistory(long customerId) {
-        return null;
+    public List<Order> viewOrderHistory(long customerId) throws Exception {
+        try{
+            if (getOrderById(customerId) == null){
+                log.info( Constants.CUSTOMER_ID+ customerId + Constants.NOT_FOUND);
+                return null;
+            }
+            List<Order> orderList = readFromXml(Order.class);
+            orderList = orderList.stream()
+                    .filter(user -> user.getCustomerId() == customerId)
+                    .collect(Collectors.toList());
+            log.debug(orderList);
+            Order order = orderList.stream()
+                    .findAny().orElse(null);
+            order.setItem(getOrderItemList(Order.class, order));
+            log.info(Constants.LIST_CUSTOMER + customerId + Constants.COLON);
+            log.debug(orderList);
+            return orderList;
+        }catch (NullPointerException | NoSuchElementException | IOException e){
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
-    public List<Order> getListOfCurrentOrders(long customerId, String status) {
-        return null;
+    public List<Order> getListOfCurrentOrders(long customerId, String status) throws Exception {
+        try{
+            if(status.equals(Constants.PROCESSING) && getOrderById(customerId) != null){
+                List<Order> orderList = readFromXml(Order.class);
+                orderList = orderList.stream()
+                        .filter(user -> user.getCustomerId() == customerId && user.getStatus().equals(status))
+                        .collect(Collectors.toList());
+                Order order = orderList.stream()
+                        .findAny().orElse(null);
+                order.setItem(getOrderItemList(Order.class, order));
+                log.info(Constants.CURRENT_ORDER + customerId + Constants.COLON);
+                log.debug(orderList);
+                return orderList;
+            }else{
+                log.info( Constants.CUSTOMER_ID+ customerId + Constants.NOT_FOUND);
+                log.info(Constants.NOT_CURRENT_ORDER);
+                return null;
+            }
+
+        }catch (NullPointerException | NoSuchElementException | IOException e){
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
-    public StringBuffer createCustomerReport() {
-        return null;
+    public StringBuffer createCustomerReport(long customerId) throws Exception {
+        try{
+            if (getOrderById(customerId) == null){
+                log.info( Constants.CUSTOMER_ID + customerId + Constants.NOT_FOUND);
+                return null;
+            }
+            List<Order> orderList = readFromXml(Order.class);
+            orderList = orderList.stream()
+                    .filter(user -> user.getCustomerId() == customerId)
+                    .collect(Collectors.toList());
+            int count = 0;
+            for(int i=0;i<orderList.size();i++){
+                count++;
+            }
+            log.debug(count);
+            StringBuffer report = new StringBuffer();
+            report.append(Constants.NUM_CUSTOMER)
+                    .append(customerId)
+                    .append(Constants.ORDER_EQL)
+                    .append(count);
+            return report;
+        }catch (NullPointerException | NoSuchElementException e){
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
-    public List<Master> changeTheLisOfMaster() {
-        return null;
+    public List<Master> changeTheLisOfMaster(long salonId) throws Exception {
+        try{
+            if (getOrderById(salonId) == null){
+                log.info( Constants.SALON_ID + salonId + Constants.NOT_FOUND);
+                return null;
+            }
+            Salon salon = getSalonById(salonId);
+            List<Master> masterList = getMasterList(Salon.class, salon);
+
+            log.info(Constants.LIST_MASTER + salonId + Constants.COLON);
+            log.debug(masterList);
+            return masterList;
+        }catch (NullPointerException | NoSuchElementException | IOException e){
+            log.error(e);
+            return null;
+        }
     }
 
     @Override
-    public Double calculateSalaryOfTheMaster() {
-        return null;
+    public boolean assignService(List<Service> service, long masterId) throws Exception {
+        try{
+            List<Master> masterList = readFromXml(Master.class);
+            Master master = getMasterById(masterId);
+            master.setListService(service);
+            masterList.removeIf(user -> user.getId() == masterId);
+            writeToXml(Master.class, masterList, true);
+            writeToXml(master);
+            log.info(Constants.ASSIGN_SUCCESS);
+            log.debug(master);
+            return true;
+        } catch (NoSuchElementException | NullPointerException | IndexOutOfBoundsException e) {
+            log.info(Constants.ASSIGN_FAIL);
+            log.error(e);
+            return false;
+        }
     }
 
     @Override
-    public boolean assignService(List<Service> service, long masterId) {
-        return false;
-    }
+    public StringBuffer createMasterReport(long masterId) throws Exception {
+        try{
+            if (getMasterById(masterId) == null){
+                log.info( Constants.MASTER_ID + masterId + Constants.NOT_FOUND);
+                return null;
+            }
+            List<Master> masterList = readFromXml(Master.class);
+            Master master = masterList.stream()
+                    .filter(task -> task.getId() == masterId)
+                    .findAny()
+                    .orElse(null);
+            master.setListService(getServiceListInMaster(Master.class, master));
 
-    @Override
-    public StringBuffer createMasterProgressReport() {
-        return null;
+            StringBuffer report = new StringBuffer();
+            report.append(Constants.MASTER)
+                    .append(masterId)
+                    .append(Constants.PROVIDE_SERVICE)
+                    .append(master.getListService());
+
+            return report;
+        }catch (NullPointerException | NoSuchElementException | IOException e){
+            log.error(e);
+            return null;
+        }
     }
 }

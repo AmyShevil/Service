@@ -8,21 +8,15 @@
                <price>2000.0</price>
                <description>description2</description>
             </service>
-            <cost>2222.0</cost>
+            <cost>2000.0</cost>
             <quantity>2</quantity>
          </orderItem>
       </item>
-      <cost>10000.0</cost>
+      <cost>4000.0</cost>
       <status>CREATED</status>
-      <customer class="ru.sfedu.Aisova.model.NewCustomer" id="0">
-         <firstName>firstName1</firstName>
-         <lastName>lastName1</lastName>
-         <phone>phone1</phone>
-         <email>email1</email>
-         <discount>10</discount>
-      </customer>
-      <lastUpdated>05.12.2020</lastUpdated>
-      <completed>09.12.2020</completed>
+      <customerId>0</customerId>
+      <lastUpdated>04.12.2020</lastUpdated>
+      <completed>07.12.2020</completed>
    </object>
    <object class="ru.sfedu.Aisova.model.Order" id="1">
       <created>02.12.2020</created>
@@ -33,7 +27,7 @@
                <price>1000.0</price>
                <description>description1</description>
             </service>
-            <cost>1111.0</cost>
+            <cost>1000.0</cost>
             <quantity>1</quantity>
          </orderItem>
          <orderItem id="1">
@@ -42,54 +36,51 @@
                <price>2000.0</price>
                <description>description2</description>
             </service>
-            <cost>2222.0</cost>
+            <cost>2000.0</cost>
             <quantity>2</quantity>
          </orderItem>
       </item>
-      <cost>20000.0</cost>
+      <cost>5000.0</cost>
       <status>PROCESSING</status>
-      <customer class="ru.sfedu.Aisova.model.NewCustomer" id="1">
-         <firstName>firstName2</firstName>
-         <lastName>lastName2</lastName>
-         <phone>phone2</phone>
-         <email>email2</email>
-         <discount>20</discount>
-      </customer>
-      <lastUpdated>06.12.2020</lastUpdated>
-      <completed>10.12.2020</completed>
+      <customerId>1</customerId>
+      <lastUpdated>05.12.2020</lastUpdated>
+      <completed>08.12.2020</completed>
    </object>
    <object class="ru.sfedu.Aisova.model.Order" id="2">
-      <created>01.12.2020</created>
+      <created>03.12.2020</created>
       <item class="java.util.ArrayList">
+         <orderItem id="0">
+            <service id="0">
+               <name>service1</name>
+               <price>1000.0</price>
+               <description>description1</description>
+            </service>
+            <cost>1000.0</cost>
+            <quantity>1</quantity>
+         </orderItem>
          <orderItem id="1">
             <service id="1">
                <name>service2</name>
                <price>2000.0</price>
                <description>description2</description>
             </service>
-            <cost>2222.0</cost>
+            <cost>2000.0</cost>
             <quantity>2</quantity>
          </orderItem>
          <orderItem id="2">
             <service id="2">
                <name>rewriteName</name>
-               <price>5.0</price>
+               <price>500.0</price>
                <description>rewriteDescription</description>
             </service>
             <cost>500.0</cost>
             <quantity>5</quantity>
          </orderItem>
       </item>
-      <cost>50000.0</cost>
+      <cost>7500.0</cost>
       <status>COMPLETED</status>
-      <customer class="ru.sfedu.Aisova.model.NewCustomer" id="1">
-         <firstName>firstName2</firstName>
-         <lastName>lastName2</lastName>
-         <phone>phone2</phone>
-         <email>email2</email>
-         <discount>20</discount>
-      </customer>
-      <lastUpdated>05.12.2020</lastUpdated>
-      <completed>10.12.2020</completed>
+      <customerId>1</customerId>
+      <lastUpdated>06.12.2020</lastUpdated>
+      <completed>09.12.2020</completed>
    </object>
 </main>

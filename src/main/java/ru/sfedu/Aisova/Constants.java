@@ -12,6 +12,11 @@ public class Constants {
     public static final String FILE_EXTENSION_CSV = "csv";
     public static final String PATH_XML = "xml_path";
     public static final String FILE_EXTENSION_XML = "xml";
+    public static final String WRITE_SUCCESS = "Write success";
+    public static final String WRITE_ERROR = "Write error";
+    public static final String STH_NULL = "Something is null";
+    public static final String READ_SUCCESS = "Read success";
+    public static final String READ_ERROR = "Read error";
     public static final String NULL_VALUE = "Null value. No entry added";
     public static final String NOT_FOUND = " not found";
     public static final String SERVICE_CREATED = "Service created";
@@ -77,6 +82,21 @@ public class Constants {
     public static final String ORDER_NOT_DELETED = "Order not deleted";
     public static final String ORDER_RECEIVED = "Order received";
     public static final String ORDER_NOT_RECEIVED = "Order not received";
+    public static final String ORDER_COST = "Order cost ";
+    public static final String EQL = " = ";
+    public static final String CUSTOMER_ID = "Customer with id = ";
+    public static final String LIST_CUSTOMER = "Order list customer ";
+    public static final String COLON = ":";
+    public static final String PROCESSING ="PROCESSING";
+    public static final String CURRENT_ORDER = "Current orders list customer ";
+    public static final String NOT_CURRENT_ORDER ="The order is not current";
+    public static final String NUM_CUSTOMER ="Number of customer ";
+    public static final String ORDER_EQL = " orders = ";
+    public static final String LIST_MASTER = "Master list in salon ";
+    public static final String ASSIGN_SUCCESS ="Service assign success";
+    public static final String ASSIGN_FAIL ="Service assign fail";
+    public static final String MASTER ="Master ";
+    public static final String PROVIDE_SERVICE =" provides the following service: ";
 
 
 }

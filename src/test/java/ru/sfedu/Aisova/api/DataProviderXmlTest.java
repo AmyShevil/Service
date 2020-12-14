@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,13 +69,13 @@ public class DataProviderXmlTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(1)
     void editServiceSuccess() throws Exception {
-        Assertions.assertTrue(dataProvider.editService(2, "rewriteName", 5.0, "rewriteDescription"));
+        Assertions.assertTrue(dataProvider.editService(2, "rewriteName", 500.0, "rewriteDescription"));
     }
 
     @Test
     @org.junit.jupiter.api.Order(1)
     void editServiceFail() throws Exception {
-        Assertions.assertFalse(dataProvider.editService(10, "rewriteName", 5.0, "rewriteDescription"));
+        Assertions.assertFalse(dataProvider.editService(10, "rewriteName", 500.0, "rewriteDescription"));
     }
 
     @Test
@@ -441,6 +442,72 @@ public class DataProviderXmlTest extends TestBase {
         log.debug(dataProvider.getOrderItemById(10));
     }
 
+    @Test
+    @org.junit.jupiter.api.Order(24)
+    void createOrderSuccess() throws Exception {
+        List<OrderItem> orderItemList1 = new ArrayList<>();
+        orderItemList1.add(dataProvider.getOrderItemById(1));
+        List<OrderItem> orderItemList2 = new ArrayList<>();
+        orderItemList2.add(dataProvider.getOrderItemById(0));
+        orderItemList2.add(dataProvider.getOrderItemById(1));
+        List<OrderItem> orderItemList3 = new ArrayList<>();
+        orderItemList3.add(dataProvider.getOrderItemById(0));
+        orderItemList3.add(dataProvider.getOrderItemById(1));
+        orderItemList3.add(dataProvider.getOrderItemById(2));
+        List<OrderItem> orderItemList4 = new ArrayList<>();
+        orderItemList4.add(dataProvider.getOrderItemById(0));
+        orderItemList4.add(dataProvider.getOrderItemById(2));
+
+        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, 10000.0,"CREATED", 0, "04.12.2020", "08.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, 10000.0,"PROCESSING", 1, "05.12.2020", "09.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, 10000.0,"COMPLETED", 2, "06.12.2020", "10.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, 10000.0,"CANCELED", 3, "07.12.2020", "11.12.2020"));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(24)
+    void createOrderFail() throws Exception {
+        List<OrderItem> orderItemList1 = new ArrayList<>();
+        orderItemList1.add(dataProvider.getOrderItemById(1));
+        List<OrderItem> orderItemList4 = new ArrayList<>();
+        orderItemList4.add(dataProvider.getOrderItemById(0));
+        orderItemList4.add(dataProvider.getOrderItemById(2));
+
+        Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, 10000.0,"CREATED", 0, null, null));
+        Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, 10000.0,"PROCESSING", 1, "04.12.2020", null));
+        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, 10000.0,null, 2, null, "05.12.2020"));
+        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, null,"PROCESSING", 2, null, "05.12.2020"));
+
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(25)
+    void editOrderSuccess() throws Exception {
+        List<OrderItem> orderItemList1 = new ArrayList<>();
+        orderItemList1.add(dataProvider.getOrderItemById(1));
+        List<OrderItem> orderItemList2 = new ArrayList<>();
+        orderItemList2.add(dataProvider.getOrderItemById(0));
+        orderItemList2.add(dataProvider.getOrderItemById(1));
+        List<OrderItem> orderItemList3 = new ArrayList<>();
+        orderItemList3.add(dataProvider.getOrderItemById(0));
+        orderItemList3.add(dataProvider.getOrderItemById(1));
+        orderItemList3.add(dataProvider.getOrderItemById(2));
+
+        Assertions.assertTrue(dataProvider.editOrder(0,"01.12.2020", orderItemList1, 10000.0,"CREATED", 0, "04.12.2020", "07.12.2020"));
+        Assertions.assertTrue(dataProvider.editOrder(1,"02.12.2020", orderItemList2, 10000.0,"PROCESSING", 1, "05.12.2020", "08.12.2020"));
+        Assertions.assertTrue(dataProvider.editOrder(2,"03.12.2020", orderItemList3, 10000.0,"COMPLETED", 1, "06.12.2020", "09.12.2020"));
+
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(25)
+    void editOrderFail() throws Exception {
+        List<OrderItem> orderItemList = new ArrayList<>();
+        orderItemList.add(dataProvider.getOrderItemById(1));
+        orderItemList.add(dataProvider.getOrderItemById(2));
+
+        Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList,  10000.0,"COMPLETED", 0, "05.12.2020", "10.12.2020"));
+    }
 
     @Test
     @org.junit.jupiter.api.Order(26)
@@ -464,6 +531,118 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(27)
     void getOrderByIdFail() throws Exception {
         log.debug(dataProvider.getOrderById(10));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(28)
+    void calculateOrderValueSuccess() throws Exception {
+        Order order = dataProvider.getOrderById(1);
+        Assertions.assertEquals(order.getCost(), dataProvider.calculateOrderValue(1));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(28)
+    void calculateOrderValueFail() throws Exception {
+        List<Order> orderList = new ArrayList<>();
+        orderList.add(dataProvider.getOrderById(10));
+        Assertions.assertFalse(orderList.isEmpty());
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(29)
+    void assignServiceSuccess() throws Exception {
+        List<Service> listService = new ArrayList<>();
+        listService.add(dataProvider.getServiceById(0));
+        listService.add(dataProvider.getServiceById(1));
+        listService.add(dataProvider.getServiceById(2));
+        Assertions.assertTrue(dataProvider.assignService(listService, 1));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(29)
+    void assignServiceFail() throws Exception {
+        List<Service> listService = new ArrayList<>();
+        listService.add(dataProvider.getServiceById(0));
+        listService.add(dataProvider.getServiceById(1));
+        listService.add(dataProvider.getServiceById(2));
+        Assertions.assertFalse(dataProvider.assignService(listService, 10));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(30)
+    void viewOrderHistorySuccess() throws Exception {
+        List<Order> orderList = new ArrayList<>();
+        orderList.add(dataProvider.getOrderById(0));
+        orderList.add(dataProvider.getOrderById(1));
+        orderList.add(dataProvider.getOrderById(2));
+        orderList = orderList.stream()
+                .filter(user -> user.getCustomerId() == 1)
+                .collect(Collectors.toList());
+        log.debug( dataProvider.viewOrderHistory(1));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(30)
+    void viewOrderHistoryFail() throws Exception {
+        log.debug(dataProvider.viewOrderHistory(10));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(31)
+    void getListOfCurrentOrdersSuccess() throws Exception {
+        List<Order> orderList = new ArrayList<>();
+        orderList.add(dataProvider.getOrderById(0));
+        orderList.add(dataProvider.getOrderById(1));
+        orderList.add(dataProvider.getOrderById(2));
+        orderList = orderList.stream()
+                .filter(user -> user.getCustomerId() == 1 && user.getStatus().equals("PROCESSING"))
+                .collect(Collectors.toList());
+        log.debug(dataProvider.getListOfCurrentOrders(1, "PROCESSING"));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(31)
+    void getListOfCurrentOrdersFail() throws Exception {
+        log.debug(dataProvider.getListOfCurrentOrders(1, "CREATED"));
+        log.debug(dataProvider.getListOfCurrentOrders(10, "PROCESSING"));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(32)
+    void changeTheLisOfMasterSuccess() throws Exception {
+        Salon salon = dataProvider.getSalonById(1);
+        List<Master> masterList = salon.getListMaster();
+        Assertions.assertEquals(masterList, dataProvider.changeTheLisOfMaster(1));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(32)
+    void changeTheLisOfMasterFail() throws Exception {
+        log.debug(dataProvider.changeTheLisOfMaster(10));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(33)
+    void createCustomerReportSuccess() throws Exception {
+        log.debug(dataProvider.createCustomerReport(1));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(33)
+    void createCustomerReportFail() throws Exception {
+        log.debug(dataProvider.createCustomerReport(10));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(34)
+    void createMasterReportSuccess() throws Exception {
+        log.debug(dataProvider.createMasterReport(1));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(34)
+    void createMasterReportFail() throws Exception {
+        log.debug(dataProvider.createMasterReport(10));
     }
 
 }
