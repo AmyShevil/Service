@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +23,7 @@ public class DataProviderXmlTest extends TestBase {
 
     private static final Logger log = LogManager.getLogger(DataProviderXmlTest.class);
     private static final DataProvider dataProvider = new DataProviderXml();
+    private Object NullPointerException;
 
     private static <T> void deleteFile(Class<T> tClass) {
         try {
@@ -82,12 +84,14 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(2)
     void deleteServiceSuccess() throws Exception {
         Assertions.assertTrue(dataProvider.deleteService(3));
+        Assertions.assertNull(dataProvider.getServiceById(3));
     }
 
     @Test
     @org.junit.jupiter.api.Order(2)
     void deleteServiceFail() throws Exception {
         Assertions.assertTrue(dataProvider.deleteService(10));
+        Assertions.assertEquals(dataProvider.getServiceById(10), NullPointerException);
     }
 
     @Test
@@ -100,6 +104,7 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(3)
     void getServiceByIdFail() throws Exception {
         log.debug(dataProvider.getServiceById(10));
+        Assertions.assertEquals(dataProvider.getServiceById(10), NullPointerException);
     }
 
     @Test
@@ -143,18 +148,21 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(6)
     void deleteNewCustomerFail() throws Exception {
         Assertions.assertTrue(dataProvider.deleteNewCustomer(10));
+        Assertions.assertEquals(dataProvider.getNewCustomerById(10), Optional.empty());
     }
 
     @Test
     @org.junit.jupiter.api.Order(7)
-    void testGetNewCustomerByIdSuccess() throws Exception {
+    void getNewCustomerByIdSuccess() throws Exception {
         log.debug(dataProvider.getNewCustomerById(1));
     }
 
     @Test
     @org.junit.jupiter.api.Order(7)
-    void testGetNewCustomerByIdFail() throws Exception {
+    void getNewCustomerByIdFail() throws Exception {
         log.debug(dataProvider.getNewCustomerById(10));
+        Assertions.assertEquals(dataProvider.getNewCustomerById(10), Optional.empty());
+
     }
 
     @Test
@@ -198,6 +206,7 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(10)
     void deleteRegularCustomerFail() throws Exception {
         Assertions.assertTrue(dataProvider.deleteRegularCustomer(10));
+        Assertions.assertEquals(dataProvider.getRegularCustomerById(10), Optional.empty());
     }
 
     @Test
@@ -210,6 +219,7 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(11)
     void getRegularCustomerByIdFail() throws Exception {
         log.debug(dataProvider.getRegularCustomerById(10));
+        Assertions.assertEquals(dataProvider.getRegularCustomerById(10), Optional.empty());
     }
 
     @Test
@@ -276,12 +286,14 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(14)
     void deleteMasterSuccess() throws Exception {
         Assertions.assertTrue(dataProvider.deleteMaster(3));
+        Assertions.assertNull(dataProvider.getMasterById(3));
     }
 
     @Test
     @org.junit.jupiter.api.Order(14)
     void deleteMasterFail() throws Exception {
         Assertions.assertTrue(dataProvider.deleteMaster(10));
+        Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
     }
 
     @Test
@@ -294,6 +306,8 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(15)
     void getMasterByIdFail() throws Exception {
         log.debug(dataProvider.getMasterById(10));
+        Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
+
     }
 
     @Test
@@ -351,12 +365,14 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(18)
     void deleteSalonSuccess() throws Exception {
         Assertions.assertTrue(dataProvider.deleteSalon(2));
+        Assertions.assertNull(dataProvider.getSalonById(3));
     }
 
     @Test
     @org.junit.jupiter.api.Order(18)
     void deleteSalonFail() throws Exception {
         Assertions.assertTrue(dataProvider.deleteSalon(10));
+        Assertions.assertEquals(dataProvider.getSalonById(10), NullPointerException);
     }
 
     @Test
@@ -369,6 +385,8 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(19)
     void getSalonByIdFail() throws Exception {
         log.debug(dataProvider.getSalonById(10));
+        Assertions.assertEquals(dataProvider.getSalonById(10), NullPointerException);
+
     }
 
     @Test
@@ -406,7 +424,7 @@ public class DataProviderXmlTest extends TestBase {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(2));
         Service service = listService.stream().filter(el->el.getId()==2).findFirst().get();
-        Assertions.assertTrue(dataProvider.editOrderItem(2, service, 500.0, 5));
+        Assertions.assertTrue(dataProvider.editOrderItem(2, service, service.getPrice(), 5));
     }
 
     @Test
@@ -415,19 +433,21 @@ public class DataProviderXmlTest extends TestBase {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(2));
         Service service = listService.stream().filter(el->el.getId()==2).findFirst().get();
-        Assertions.assertFalse(dataProvider.editOrderItem(10, service, 500.0, 5));
+        Assertions.assertFalse(dataProvider.editOrderItem(10, service, service.getPrice(), 5));
     }
 
     @Test
     @org.junit.jupiter.api.Order(22)
     void deleteOrderItemSuccess() throws Exception {
         Assertions.assertTrue(dataProvider.deleteOrderItem(3));
+        Assertions.assertNull(dataProvider.getOrderItemById(3));
     }
 
     @Test
     @org.junit.jupiter.api.Order(22)
     void deleteOrderItemFail() throws Exception {
         Assertions.assertTrue(dataProvider.deleteOrderItem(10));
+        Assertions.assertEquals(dataProvider.getOrderItemById(10), NullPointerException);
     }
 
     @Test
@@ -440,6 +460,8 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(23)
     void getOrderItemByIdFail() throws Exception {
         log.debug(dataProvider.getOrderItemById(10));
+        Assertions.assertEquals(dataProvider.getOrderItemById(10), NullPointerException);
+
     }
 
     @Test
@@ -458,10 +480,10 @@ public class DataProviderXmlTest extends TestBase {
         orderItemList4.add(dataProvider.getOrderItemById(0));
         orderItemList4.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, 10000.0,"CREATED", 0, "04.12.2020", "08.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, 10000.0,"PROCESSING", 1, "05.12.2020", "09.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, 10000.0,"COMPLETED", 2, "06.12.2020", "10.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, 10000.0,"CANCELED", 3, "07.12.2020", "11.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, 10000.0,"CREATED", 0, "04.12.2020", "04.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, 10000.0,"PROCESSING", 1, "04.12.2020", "04.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, 10000.0,"COMPLETED", 2, "05.12.2020", "10.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, 10000.0,"CANCELED", 3, "04.12.2020", "05.12.2020"));
     }
 
     @Test
@@ -477,7 +499,6 @@ public class DataProviderXmlTest extends TestBase {
         Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, 10000.0,"PROCESSING", 1, "04.12.2020", null));
         Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, 10000.0,null, 2, null, "05.12.2020"));
         Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, null,"PROCESSING", 2, null, "05.12.2020"));
-
     }
 
     @Test
@@ -513,12 +534,14 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(26)
     void deleteOrderSuccess() throws Exception {
         Assertions.assertTrue(dataProvider.deleteOrder(3));
+        Assertions.assertNull(dataProvider.getOrderById(3));
     }
 
     @Test
     @org.junit.jupiter.api.Order(26)
     void deleteOrderFail() throws Exception {
         Assertions.assertTrue(dataProvider.deleteOrder(10));
+        Assertions.assertEquals(dataProvider.getOrderById(10), NullPointerException);
     }
 
     @Test
@@ -531,6 +554,8 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(27)
     void getOrderByIdFail() throws Exception {
         log.debug(dataProvider.getOrderById(10));
+        Assertions.assertEquals(dataProvider.getOrderById(10), NullPointerException);
+
     }
 
     @Test
@@ -619,6 +644,8 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(32)
     void changeTheLisOfMasterFail() throws Exception {
         log.debug(dataProvider.changeTheLisOfMaster(10));
+        Assertions.assertEquals(dataProvider.getSalonById(10), NullPointerException);
+
     }
 
     @Test
@@ -631,6 +658,8 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(33)
     void createCustomerReportFail() throws Exception {
         log.debug(dataProvider.createCustomerReport(10));
+        Assertions.assertEquals(dataProvider.getOrderById(10), NullPointerException);
+
     }
 
     @Test
@@ -643,6 +672,8 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(34)
     void createMasterReportFail() throws Exception {
         log.debug(dataProvider.createMasterReport(10));
+        Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
+
     }
 
 }
