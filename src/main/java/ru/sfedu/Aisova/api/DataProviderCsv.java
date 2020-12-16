@@ -28,25 +28,23 @@ public class DataProviderCsv implements DataProvider{
 
     private static final Logger log = LogManager.getLogger(DataProviderCsv.class);
 
-    private <T> boolean writeToCsv (Class<?> tClass, List<T> object, boolean overwrite) {
-        List<T> fileObjectList;
-        if (!overwrite) {
-            fileObjectList = (List<T>) readFromCsv(tClass);
-            fileObjectList.addAll(object);
-        }
-        else {
-            fileObjectList = new ArrayList<>(object);
-        }
-        CSVWriter csvWriter;
+    private <T> boolean writeToCsv (Class<?> tClass, List<T> object, boolean rewrite) {
         try {
+            List<T> objectList;
+            if (!rewrite) {
+                objectList = (List<T>) readFromCsv(tClass);
+                objectList.addAll(object);
+            }
+            else {
+                objectList = new ArrayList<>(object);
+            }
+            CSVWriter csvWriter;
             FileWriter writer = new FileWriter(ConfigurationUtil.getConfigurationEntry(Constants.PATH_CSV)
                     + tClass.getSimpleName().toLowerCase()
                     + ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION_CSV));
             csvWriter = new CSVWriter(writer);
-            StatefulBeanToCsv<T> beanToCsv = new StatefulBeanToCsvBuilder<T>(csvWriter)
-                    .withApplyQuotesToAll(false)
-                    .build();
-            beanToCsv.write(fileObjectList);
+            StatefulBeanToCsv<T> beanToCsv = new StatefulBeanToCsvBuilder<T>(csvWriter).withApplyQuotesToAll(false).build();
+            beanToCsv.write(objectList);
             log.info(Constants.WRITE_SUCCESS);
             csvWriter.close();
             return true;
@@ -58,11 +56,16 @@ public class DataProviderCsv implements DataProvider{
     }
 
     private <T> boolean writeToCsv (T object) {
-        if (object == null) {
-            log.info(Constants.STH_NULL);
+        try {
+            if (object == null) {
+                log.info(Constants.STH_NULL);
+                return false;
+            }
+            return writeToCsv(object.getClass(), Collections.singletonList(object), false);
+        }catch (NullPointerException e){
+            log.error(e);
             return false;
         }
-        return writeToCsv(object.getClass(), Collections.singletonList(object), false);
     }
 
     private <T> List<T> readFromCsv (Class<T> tClass) {
@@ -176,14 +179,19 @@ public class DataProviderCsv implements DataProvider{
     }
 
     private long getNextServiceId(){
-        List<Service> objectList = readFromCsv(Service.class);
-        long maxId = -1;
-        for(Service service : objectList){
-            if(maxId < service.getId()){
-                maxId = service.getId();
+        try {
+            List<Service> objectList = readFromCsv(Service.class);
+            long maxId = -1;
+            for (Service service : objectList) {
+                if (maxId < service.getId()) {
+                    maxId = service.getId();
+                }
             }
+            return maxId + 1;
+        }catch (NullPointerException e){
+            log.error(e);
+            return Long.parseLong(null);
         }
-        return maxId+1;
     }
 
     private long getNextOrderItemId(){

@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * Class Service
  */
-@Root
+@Root(name = "Service")
 public class Service {
 
   //

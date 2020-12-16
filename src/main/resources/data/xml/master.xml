@@ -6,16 +6,16 @@
       <phone>Phone1</phone>
       <salary>10000.0</salary>
       <listService class="java.util.ArrayList">
-         <service id="0">
+         <Service id="0">
             <name>service1</name>
             <price>1000.0</price>
             <description>description1</description>
-         </service>
-         <service id="1">
+         </Service>
+         <Service id="1">
             <name>service2</name>
             <price>2000.0</price>
             <description>description2</description>
-         </service>
+         </Service>
       </listService>
    </object>
    <object class="ru.sfedu.Aisova.model.Master" id="2">
@@ -25,16 +25,16 @@
       <phone>rewritePhone</phone>
       <salary>50000.0</salary>
       <listService class="java.util.ArrayList">
-         <service id="2">
+         <Service id="2">
             <name>rewriteName</name>
             <price>500.0</price>
             <description>rewriteDescription</description>
-         </service>
-         <service id="1">
+         </Service>
+         <Service id="1">
             <name>service2</name>
             <price>2000.0</price>
             <description>description2</description>
-         </service>
+         </Service>
       </listService>
    </object>
    <object class="ru.sfedu.Aisova.model.Master" id="1">
@@ -44,21 +44,21 @@
       <phone>Phone2</phone>
       <salary>20000.0</salary>
       <listService class="java.util.ArrayList">
-         <service id="0">
+         <Service id="0">
             <name>service1</name>
             <price>1000.0</price>
             <description>description1</description>
-         </service>
-         <service id="1">
+         </Service>
+         <Service id="1">
             <name>service2</name>
             <price>2000.0</price>
             <description>description2</description>
-         </service>
-         <service id="2">
+         </Service>
+         <Service id="2">
             <name>rewriteName</name>
             <price>500.0</price>
             <description>rewriteDescription</description>
-         </service>
+         </Service>
       </listService>
    </object>
 </main>

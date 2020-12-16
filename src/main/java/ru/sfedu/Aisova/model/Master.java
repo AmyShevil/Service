@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 import ru.sfedu.Aisova.converters.ServiceListConverter;
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.Objects;
 /**
  * Class Master
  */
+@Root(name = "Master")
 public class Master implements Serializable {
   private static Logger log = LogManager.getLogger(Master.class);
 

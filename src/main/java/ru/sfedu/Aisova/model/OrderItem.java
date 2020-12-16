@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvCustomBindByPosition;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 import ru.sfedu.Aisova.converters.ServiceConverter;
 
 import java.util.Objects;
@@ -11,6 +12,7 @@ import java.util.Objects;
 /**
  * Class OrderItem
  */
+@Root(name = "OrderItem")
 public class OrderItem {
 
   //

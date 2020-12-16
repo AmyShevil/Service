@@ -19,11 +19,11 @@ public class Constants {
     public static final String DB_USER = "db_user";
     public static final String DB_PASS = "db_pass";
 
-    public static final String SERVICE_FIELDS ="name";
-    public static final String ID ="id";
+    public static final String USER_FIELDS ="name";
     public static final String NAME ="name";
-    public static final String PRICE ="price";
-    public static final String DESCRIPTION ="description";
+
+    public static final String INSERT_SERVICE = "INSERT INTO service VALUES (%d, '%s', '%s', '%s');";
+    public static final String SELECT_SERVICE = "SELECT * FROM service WHERE id=%d";
 
     public static final String WRITE_SUCCESS = "Write success";
     public static final String WRITE_ERROR = "Write error";

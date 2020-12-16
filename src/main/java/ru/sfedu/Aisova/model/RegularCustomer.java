@@ -3,12 +3,14 @@ package ru.sfedu.Aisova.model;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 import java.util.Objects;
 
 /**
  * Class RegularCustomer
  */
+@Root(name = "RegularCustomer")
 public class RegularCustomer extends Customer {
 
   //

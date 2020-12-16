@@ -23,75 +23,62 @@ public class DataProviderXml implements DataProvider{
 
     private static Logger log = LogManager.getLogger(DataProviderXml.class);
 
-    public <T> boolean writeToXml(Class<?> tClass, List<T> object, boolean overwrite) throws Exception{
-        List<T> fileObjectList;
-        if (!overwrite) {
-            fileObjectList = (List<T>) readFromXml(tClass);
-            fileObjectList.addAll(object);
-        }
-        else {
-            fileObjectList = new ArrayList<>(object);
-        }
+    public <T> boolean writeToXml(Class<?> tClass, List<T> object, boolean rewrite) throws Exception{
         try{
-            //Проверяем, создан ли файл? Если нет, то создаём.
-            //createNewFile возвращает истину, если путь к абстрактному файлу не существует и создается новый файл.
-            // Он возвращает false, если имя файла уже существует.
+            List<T> objectList;
+            if (!rewrite) {
+                objectList = (List<T>) readFromXml(tClass);
+                objectList.addAll(object);
+            }
+            else {
+                objectList = new ArrayList<>(object);
+            }
+
             (new File(this.getFilePath(tClass))).createNewFile();
-            //Подключаемся к потоку записи файла
             FileWriter writer = new FileWriter(this.getFilePath(tClass), false);
-            //Определяем сериалайзер
             Serializer serializer = new Persister();
-
-            //Определяем контейнер, в котором будут находиться все объекты
             WrapperXML xml = new WrapperXML();
-            //Записываем список объектов в котнейнер
-            xml.setList(fileObjectList);
-
-            //Записываем в файл
+            xml.setList(objectList);
             serializer.write(xml, writer);
+            log.info(Constants.WRITE_SUCCESS);
             return true;
         }catch(IndexOutOfBoundsException e){
+            log.info(Constants.WRITE_ERROR);
             log.error(e);
             return false;
         }
     }
 
     private <T> boolean writeToXml (T object) throws Exception {
-        if (object == null) {
-            log.info("Something is null");
+        try {
+            if (object == null) {
+                log.info(Constants.STH_NULL);
+                return false;
+            }
+            return writeToXml(object.getClass(), Collections.singletonList(object), false);
+        }catch (NullPointerException e){
+            log.error(e);
             return false;
         }
-        return writeToXml(object.getClass(), Collections.singletonList(object), false);
     }
 
     public <T> List<T> readFromXml(Class cl) throws IOException, Exception{
         try {
-            //Подключаемся к считывающему потоку из файла
             FileReader fileReader = new FileReader(this.getFilePath(cl));
-            //Определяем сериалайзер
             Serializer serializer = new Persister();
-            //Определяем контейнер и записываем в него объекты
             WrapperXML xml = serializer.read(WrapperXML.class, fileReader);
-            //Если список null, то делаем его пустым списком
             if (xml.getList() == null) xml.setList(new ArrayList<T>());
-            //Возвращаем список объектов
-            log.info("Read success");
+            log.info(Constants.READ_SUCCESS);
             return xml.getList();
         } catch (IOException e) {
-            log.info("Read error");
+            log.info(Constants.READ_ERROR);
             log.error(e);
             return new ArrayList<>();
         }
     }
 
-    /**
-     * Получаем путь к файлу
-     * @param cl
-     * @return
-     * @throws IOException
-     */
     private String getFilePath(Class cl) throws IOException{
-        return ConfigurationUtil.getConfigurationEntry(Constants.PATH_XML)+cl.getSimpleName().toString().toLowerCase()+ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION_XML);
+        return ConfigurationUtil.getConfigurationEntry(Constants.PATH_XML)+ cl.getSimpleName().toLowerCase()+ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION_XML);
     }
 
     private <T> List<Service> getServiceListInMaster(Class<T> tClass, T object) throws Exception {
@@ -102,16 +89,11 @@ public class DataProviderXml implements DataProvider{
             List<Service> serviceList = readFromXml(Service.class);
             List<Long> idServiceInMaster;
 
-            idServiceInMaster = objectServiceList.stream()
-                    .map(value -> value.getId())
-                    .collect(Collectors.toList());
+            idServiceInMaster = objectServiceList.stream().map(value -> value.getId()).collect(Collectors.toList());
 
             List<Service>serviceListInMaster;
-            serviceListInMaster =serviceList.stream()
-                    .filter(service -> idServiceInMaster
-                            .stream()
-                            .anyMatch(serviceInMaster -> serviceInMaster.longValue() ==  service.getId()))
-                    .collect(Collectors.toList());
+            serviceListInMaster =serviceList.stream().filter(service -> idServiceInMaster.stream()
+                    .anyMatch(serviceInMaster -> serviceInMaster.longValue() ==  service.getId())).collect(Collectors.toList());
 
             return serviceListInMaster;
 

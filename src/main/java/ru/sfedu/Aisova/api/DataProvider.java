@@ -316,12 +316,55 @@ public interface DataProvider {
      */
     Order getOrderById(long id) throws Exception;
 
+    /**
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
     Double calculateOrderValue(long orderId) throws Exception;
+
+    /**
+     * @param customerId
+     * @return
+     * @throws Exception
+     */
     List<Order> viewOrderHistory(long customerId) throws Exception;
+
+    /**
+     * @param customerId
+     * @param status
+     * @return
+     * @throws Exception
+     */
     List<Order> getListOfCurrentOrders(long customerId, String status) throws Exception;
+
+    /**
+     * @param customerId
+     * @return
+     * @throws Exception
+     */
     StringBuffer createCustomerReport(long customerId) throws Exception;
+
+    /**
+     * @param salonId
+     * @return
+     * @throws Exception
+     */
     List<Master> changeTheLisOfMaster(long salonId) throws Exception;
+
+    /**
+     * @param service
+     * @param masterId
+     * @return
+     * @throws Exception
+     */
     boolean assignService(List<Service> service, long masterId) throws Exception;
+
+    /**
+     * @param masterId
+     * @return
+     * @throws Exception
+     */
     StringBuffer createMasterReport(long masterId) throws Exception;
 
 }
