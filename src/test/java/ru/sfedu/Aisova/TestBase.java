@@ -46,13 +46,12 @@ public class TestBase {
     }
 
 
-    public static Master createMaster(long id, String firstName, String lastName, String position, List<Service> listService, String phone, Double salary){
+    public static Master createMaster(long id, String firstName, String lastName, String position, String phone, Double salary){
         Master master = new Master();
         master.setId(id);
         master.setFirstName(firstName);
         master.setLastName(lastName);
         master.setPosition(position);
-        master.setListService(listService);
         master.setPhone(phone);
         master.setSalary(salary);
         return master;

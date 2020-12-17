@@ -191,7 +191,7 @@ public class Master implements Serializable {
             firstName.equals(master.firstName) &&
             lastName.equals(master.lastName) &&
             Objects.equals(position, master.position) &&
-            listService.equals(master.listService) &&
+            Objects.equals(listService, master.listService) &&
             phone.equals(master.phone) &&
             Objects.equals(salary, master.salary);
   }

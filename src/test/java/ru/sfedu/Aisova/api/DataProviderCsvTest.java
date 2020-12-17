@@ -568,6 +568,8 @@ public class DataProviderCsvTest {
         List<Order> orderList = new ArrayList<>();
         orderList.add(dataProvider.getOrderById(10));
         Assertions.assertFalse(orderList.isEmpty());
+        Assertions.assertEquals(dataProvider.calculateOrderValue(10), NullPointerException);
+
     }
 
     @Test
