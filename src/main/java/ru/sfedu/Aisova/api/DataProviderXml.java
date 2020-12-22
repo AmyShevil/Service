@@ -940,7 +940,7 @@ public class DataProviderXml implements DataProvider{
     @Override
     public List<Order> viewOrderHistory(long customerId) {
         try{
-            if (getOrderById(customerId) == null){
+            if (getNewCustomerById(customerId).isPresent()){
                 log.info( CUSTOMER_ID+ customerId + NOT_FOUND);
                 return null;
             }
@@ -955,7 +955,7 @@ public class DataProviderXml implements DataProvider{
             log.info(LIST_CUSTOMER + customerId + COLON);
             log.debug(orderList);
             return orderList;
-        }catch (NullPointerException | NoSuchElementException e){
+        }catch (Exception e){
             log.error(e);
             return null;
         }
@@ -964,7 +964,7 @@ public class DataProviderXml implements DataProvider{
     @Override
     public List<Order> getListOfCurrentOrders(long customerId, String status) {
         try{
-            if(status.equals(PROCESSING) && getOrderById(customerId) != null){
+            if(status.equals(PROCESSING) && getNewCustomerById(customerId).isPresent()){
                 List<Order> orderList = readFromXml(Order.class);
                 orderList = orderList.stream()
                         .filter(user -> user.getCustomerId() == customerId && user.getStatus().equals(status))
@@ -981,7 +981,7 @@ public class DataProviderXml implements DataProvider{
                 return null;
             }
 
-        }catch (NullPointerException | NoSuchElementException e){
+        }catch (Exception e){
             log.error(e);
             return null;
         }
@@ -990,7 +990,7 @@ public class DataProviderXml implements DataProvider{
     @Override
     public StringBuffer createCustomerReport(long customerId) throws Exception {
         try{
-            if (getOrderById(customerId) == null){
+            if (!getNewCustomerById(customerId).isPresent()){
                 log.info( CUSTOMER_ID + customerId + NOT_FOUND);
                 return null;
             }
@@ -1018,7 +1018,7 @@ public class DataProviderXml implements DataProvider{
     @Override
     public List<Master> changeTheLisOfMaster(long salonId) {
         try{
-            if (getOrderById(salonId) == null){
+            if (getSalonById(salonId) == null){
                 log.info( SALON_ID + salonId + NOT_FOUND);
                 return null;
             }

@@ -5,8 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ru.sfedu.Aisova.model.*;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +47,7 @@ public class DataProviderJdbc implements DataProvider {
 
     public void execute(String sql) {
         try {
-            log.info(sql);
+            log.debug(sql);
             PreparedStatement statement = getConnection().prepareStatement(sql);
             statement.executeUpdate();
             getConnection().close();
@@ -60,7 +58,7 @@ public class DataProviderJdbc implements DataProvider {
 
     public ResultSet getResultSet(String sql) {
         try {
-            log.info(sql);
+            log.debug(sql);
             PreparedStatement statement = getConnection().prepareStatement(sql);
             ResultSet set = statement.executeQuery();
             getConnection().close();
@@ -363,8 +361,15 @@ public class DataProviderJdbc implements DataProvider {
     }
 
     public void createListService(long idMaster, long idService) {
-        this.execute(String.format(DB_INSERT, MASTER_LIST_SERVICE, LIST_SERVICE_FIELDS,
-                String.format(LIST_FORMAT,idMaster,idService)));
+        try{
+            if(getMasterById(idMaster) != null && getServiceById(idService) != null) {
+                log.info(LIST_ADD);
+                this.execute(String.format(DB_INSERT, MASTER_LIST_SERVICE, LIST_SERVICE_FIELDS,
+                        String.format(LIST_FORMAT, idMaster, idService)));
+            }
+        }catch (NullPointerException e){
+            log.error(e);
+        }
     }
 
     @Override
@@ -395,12 +400,13 @@ public class DataProviderJdbc implements DataProvider {
 
     public boolean editListService(long idMaster, long idService) {
         try {
-            if (getMasterById(idMaster) == null) {
+            if (getMasterById(idMaster) != null && getServiceById(idService) != null) {
+                execute(String.format(DB_UPDATE_LIST_SERVICE, idService, idMaster));
+                return true;
+            }else {
                 log.info(MASTER_ID + idMaster + NOT_FOUND);
                 return false;
             }
-            execute(String.format(DB_UPDATE_LIST_SERVICE, idService, idMaster));
-            return true;
         }catch (NullPointerException e){
             log.error(e);
             return false;
@@ -464,7 +470,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.error(ERROR_GET_ID);
                 return null;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             log.error(e);
             return null;
         }
@@ -484,7 +490,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.error(ERROR_GET_ID);
                 return null;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             log.error(e);
             return null;
         }
@@ -514,8 +520,15 @@ public class DataProviderJdbc implements DataProvider {
     }
 
     public void createListMaster(long idSalon, long idMaster) {
-        this.execute(String.format(DB_INSERT, SALON_LIST_MASTER, LIST_MASTER_FIELDS,
-                String.format(LIST_FORMAT,idSalon,idMaster)));
+        try{
+            if(getMasterById(idMaster) != null && getServiceById(idSalon) != null) {
+                log.info(LIST_ADD);
+                this.execute(String.format(DB_INSERT, SALON_LIST_MASTER, LIST_MASTER_FIELDS,
+                        String.format(LIST_FORMAT,idSalon,idMaster)));
+            }
+        }catch (NullPointerException e){
+            log.error(e);
+        }
     }
 
     @Override
@@ -542,12 +555,13 @@ public class DataProviderJdbc implements DataProvider {
 
     public boolean editListMaster(long idSalon, long idMaster) {
         try {
-            if (getMasterById(idSalon) == null) {
+            if (getMasterById(idSalon) != null && getMasterById(idMaster) != null) {
+                execute(String.format(DB_UPDATE_LIST_MASTER, idMaster, idSalon));
+                return true;
+            }else {
                 log.info(SALON_ID + idSalon + NOT_FOUND);
                 return false;
             }
-            execute(String.format(DB_UPDATE_LIST_MASTER, idMaster, idSalon));
-            return true;
         }catch (NullPointerException e){
             log.error(e);
             return false;
@@ -628,7 +642,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.error(ERROR_GET_ID);
                 return null;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             log.error(e);
             return null;
         }
@@ -755,8 +769,15 @@ public class DataProviderJdbc implements DataProvider {
     }
 
     public void createListItem(long idOrder, long idItem) {
-        this.execute(String.format(DB_INSERT, ORDER_ITEM, LIST_ORDER_ITEM_FIELDS,
-                String.format(LIST_FORMAT,idOrder,idItem)));
+        try{
+            if(getOrderById(idOrder) != null && getOrderById(idItem) != null) {
+                log.info(LIST_ADD);
+                this.execute(String.format(DB_INSERT, ORDER_ITEM, LIST_ORDER_ITEM_FIELDS,
+                        String.format(LIST_FORMAT,idOrder,idItem)));
+            }
+        }catch (NullPointerException e){
+            log.error(e);
+        }
     }
 
     @Override
@@ -788,12 +809,13 @@ public class DataProviderJdbc implements DataProvider {
 
     public boolean editListItem(long idOrder, long idItem) {
         try {
-            if (getMasterById(idOrder) == null) {
+            if (getOrderById(idOrder) != null && getOrderItemById(idItem) != null) {
+                execute(String.format(DB_UPDATE_LIST_ORDER_ITEM, idItem, idOrder));
+                return true;
+            }else {
                 log.info(ORDER_ID + idOrder + NOT_FOUND);
                 return false;
             }
-            execute(String.format(DB_UPDATE_LIST_ORDER_ITEM, idItem, idOrder));
-            return true;
         }catch (NullPointerException e){
             log.error(e);
             return false;
@@ -818,7 +840,7 @@ public class DataProviderJdbc implements DataProvider {
 
     public boolean deleteListItem(long idOrder) {
         try{
-            if (getListServiceById(idOrder) == null){
+            if (getListItemById(idOrder) == null){
                 log.info(ORDER_ITEM_LIST + idOrder + NOT_FOUND);
                 return false;
             }
@@ -874,7 +896,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.error(ERROR_GET_ID);
                 return null;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             log.error(e);
             return null;
         }

@@ -11,6 +11,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static ru.sfedu.Aisova.Constants.*;
+
 import ru.sfedu.Aisova.model.*;
 import static ru.sfedu.Aisova.utils.ConfigurationUtil.getConfigurationEntry;
 
@@ -932,6 +933,10 @@ public class DataProviderCsv implements DataProvider{
     @Override
     public List<Order> viewOrderHistory(long customerId) {
         try{
+            if (getNewCustomerById(customerId).isPresent()){
+                log.info( CUSTOMER_ID+ customerId + NOT_FOUND);
+                return null;
+            }
             List<Order> orderList = readFromCsv(Order.class);
             orderList = orderList.stream()
                     .filter(user -> user.getCustomerId() == customerId)
@@ -952,7 +957,7 @@ public class DataProviderCsv implements DataProvider{
     @Override
     public List<Order> getListOfCurrentOrders(long customerId, String status) {
         try{
-            if(status.equals(PROCESSING)){
+            if(status.equals(PROCESSING) && getNewCustomerById(customerId).isPresent()){
                 List<Order> orderList = readFromCsv(Order.class);
                 orderList = orderList.stream()
                         .filter(user -> user.getCustomerId() == customerId && user.getStatus().equals(status))
@@ -977,6 +982,10 @@ public class DataProviderCsv implements DataProvider{
     @Override
     public StringBuffer createCustomerReport(long customerId) {
         try{
+            if (!getNewCustomerById(customerId).isPresent()){
+                log.info( CUSTOMER_ID + customerId + NOT_FOUND);
+                return null;
+            }
             List<Order> orderList = readFromCsv(Order.class);
             orderList = orderList.stream()
                     .filter(user -> user.getCustomerId() == customerId)

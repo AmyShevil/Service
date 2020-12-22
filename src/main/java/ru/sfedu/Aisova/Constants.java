@@ -86,7 +86,7 @@ public class Constants {
             ")";
     public static final String CREATE_ORDER_ITEM ="create table OrderItem(\n" +
             "id serial Primary key,\n" +
-            "service INTEGER REFERENCES Service (id),\n" +
+            "service integer,\n" +
             "cost double precision,\n" +
             "quantity integer\n" +
             ")";
@@ -99,29 +99,29 @@ public class Constants {
             "salary double precision\n" +
             ")";
     public static final String CREATE_LIST_SERVICE ="create table listService(\n" +
-            "id_master INTEGER REFERENCES Master (id),\n" +
-            "id_service INTEGER REFERENCES Service (id)\n" +
+            "id_master integer,\n" +
+            "id_service integer\n" +
             ") ";
     public static final String CREATE_SALON ="create table Salon(\n" +
             "id serial Primary key,\n" +
             "address varchar(255)\n" +
             ")";
     public static final String CREATE_LIST_MASTER ="create table listMaster(\n" +
-            "id_salon INTEGER REFERENCES Salon (id),\n" +
-            "id_master INTEGER REFERENCES Master (id)\n" +
+            "id_salon integer,\n" +
+            "id_master integer\n" +
             ") ";
     public static final String CREATE_ORDER = "create table \"order\"(\n" +
             "id serial Primary key,\n" +
             "created varchar(255),\n" +
             "cost double precision,\n" +
             "status varchar(255),\n" +
-            "id_customer INTEGER REFERENCES NewCustomer (id),\n" +
+            "id_customer integer,\n" +
             "lastUpdated varchar(255),\n" +
             "completed varchar(255)\n" +
             ")";
     public static final String CREATE_LIST_ITEM ="create table listItem(\n" +
-            "id_order INTEGER REFERENCES \"order\" (id),\n" +
-            "id_item INTEGER REFERENCES OrderItem (id)\n" +
+            "id_order integer,\n" +
+            "id_item integer\n" +
             ")";
 
     public static final String ID ="id";
@@ -290,6 +290,6 @@ public class Constants {
     public static final String HEROKU ="Heroku";
     public static final String POSTGRESQL ="PostgreSql";
     public static final String NOT_SELECTED ="You have not selected any database";
-
+    public static final String LIST_ADD ="List add";
 
 }

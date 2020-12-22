@@ -7,8 +7,6 @@ import ru.sfedu.Aisova.TestBase;
 import ru.sfedu.Aisova.model.*;
 import ru.sfedu.Aisova.model.Order;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -164,7 +162,7 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(7)
     void getNewCustomerByIdSuccess() {
         log.debug(dataProvider.getNewCustomerById(1));
-        
+        Assertions.assertNotNull(dataProvider.getNewCustomerById(1));
     }
 
     @Test
@@ -229,7 +227,8 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(11)
     void getRegularCustomerByIdSuccess() {
         log.debug(dataProvider.getRegularCustomerById(1));
-        
+        Assertions.assertNotNull(dataProvider.getRegularCustomerById(1));
+
     }
 
     @Test
@@ -244,20 +243,11 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(12)
     void createMasterSuccess() {
         List<Service> listService1 = new ArrayList<>();
-        listService1.add(dataProvider.getServiceById(0));
-        listService1.add(dataProvider.getServiceById(1));
-        List<Service> listService2 = new ArrayList<>();
-        listService2.add(dataProvider.getServiceById(1));
-        listService2.add(dataProvider.getServiceById(2));
-        List<Service> listService3 = new ArrayList<>();
-        listService3.add(dataProvider.getServiceById(0));
-        listService3.add(dataProvider.getServiceById(1));
-        listService3.add(dataProvider.getServiceById(2));
 
         Assertions.assertTrue(dataProvider.createMaster("FirstName1", "LastName1", "Position1", "Phone1", 10000.0, listService1, true));
-        Assertions.assertTrue(dataProvider.createMaster("FirstName2", "LastName2", "Position2", "Phone2", 20000.0, listService2, true));
-        Assertions.assertTrue(dataProvider.createMaster("FirstName3", "LastName3", "Position3", "Phone3", 30000.0, listService3, true));
-        Assertions.assertTrue(dataProvider.createMaster("FirstName4", "LastName4", "Position4", "Phone4", 40000.0, listService3, true));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName2", "LastName2", "Position2", "Phone2", 20000.0, listService1, true));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName3", "LastName3", "Position3", "Phone3", 30000.0, listService1, true));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName4", "LastName4", "Position4", "Phone4", 40000.0, listService1, true));
 
         dataProvider.createListService(1,1);
         dataProvider.createListService(1,2);
@@ -291,31 +281,26 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(12)
     void createMasterFail() {
         List<Service> listService1 = new ArrayList<>();
-        listService1.add(dataProvider.getServiceById(0));
-        listService1.add(dataProvider.getServiceById(1));
-        List<Service> listService2 = new ArrayList<>();
-        listService2.add(dataProvider.getServiceById(1));
-        listService2.add(dataProvider.getServiceById(2));
-        List<Service> listService3 = new ArrayList<>();
-        listService3.add(dataProvider.getServiceById(0));
-        listService3.add(dataProvider.getServiceById(1));
-        listService3.add(dataProvider.getServiceById(2));
 
         Assertions.assertFalse(dataProvider.createMaster(null, "LastName1", "Position1", "Phone1", 10000.0, listService1, true));
-        Assertions.assertFalse(dataProvider.createMaster("FirstName2", null, "Position2", "Phone2", 20000.0, listService2, false));
-        Assertions.assertFalse(dataProvider.createMaster("FirstName3", "LastName3", null, "Phone3", 30000.0, listService3, true));
+        Assertions.assertFalse(dataProvider.createMaster("FirstName2", null, "Position2", "Phone2", 20000.0, listService1, false));
+        Assertions.assertFalse(dataProvider.createMaster("FirstName3", "LastName3", null, "Phone3", 30000.0, listService1, true));
         Assertions.assertFalse(dataProvider.createMaster("FirstName4", "LastName4", "Position4", null, 10000.0, listService1, false));
-        Assertions.assertFalse(dataProvider.createMaster("FirstName5", "LastName5", "Position5", "Phone5", null, listService3, true));
+        Assertions.assertFalse(dataProvider.createMaster("FirstName5", "LastName5", "Position5", "Phone5", null, listService1, true));
         Assertions.assertFalse(dataProvider.createMaster("FirstName6", "LastName6", "Position6", "Phone6", 60000.0, null, false));
-        
+
+        dataProvider.createListService(1,10);
+        dataProvider.createListService(10,2);
+        List<Long> list = new ArrayList<>();
+        Assertions.assertEquals(list, dataProvider.getListServiceById(10));
+        Assertions.assertEquals(NullPointerException, dataProvider.getServiceById(10));
+
     }
 
     @Test
     @org.junit.jupiter.api.Order(13)
     void editMasterSuccess() {
         List<Service> listService = new ArrayList<>();
-        listService.add(dataProvider.getServiceById(2));
-        listService.add(dataProvider.getServiceById(1));
         Assertions.assertTrue(dataProvider.editMaster(3,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService, true));
         Assertions.assertTrue(dataProvider.editListService(3,1));
         List<Long> list = new ArrayList<>();
@@ -328,10 +313,13 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(13)
     void editMasterFail() {
         List<Service> listService = new ArrayList<>();
-        listService.add(dataProvider.getServiceById(2));
-        listService.add(dataProvider.getServiceById(1));
+
         Assertions.assertFalse(dataProvider.editMaster(10,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService, false));
-        
+        dataProvider.editListService(1,10);
+        dataProvider.editListService(10,2);
+        List<Long> list = new ArrayList<>();
+        Assertions.assertEquals(list, dataProvider.getListServiceById(10));
+        Assertions.assertEquals(NullPointerException, dataProvider.getServiceById(10));
     }
 
     @Test
@@ -370,14 +358,15 @@ class DataProviderJdbcTest extends TestBase {
     void getMasterByIdFail() {
         log.debug(dataProvider.getMasterById(10));
         Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
-        
+        List<Long> list = new ArrayList<>();
+        Assertions.assertEquals(list, dataProvider.getListServiceById(10));
+
     }
 
     @Test
     @org.junit.jupiter.api.Order(16)
     void createSalonSuccess() {
         List<Master> listMaster1 = new ArrayList<>();
-        listMaster1.add(dataProvider.getMasterById(1));
 
         Assertions.assertTrue(dataProvider.createSalon("Address1", listMaster1));
         Assertions.assertTrue(dataProvider.createSalon("Address2", listMaster1));
@@ -409,18 +398,21 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(16)
     void createSalonFail() {
         List<Master> listMaster1 = new ArrayList<>();
-        listMaster1.add(dataProvider.getMasterById(1));
 
         Assertions.assertFalse(dataProvider.createSalon(null, listMaster1));
         Assertions.assertFalse(dataProvider.createSalon("Address2", null));
-        
+
+        dataProvider.createListMaster(1,10);
+        dataProvider.createListMaster(10,2);
+        List<Long> list = new ArrayList<>();
+        Assertions.assertEquals(list, dataProvider.getListMasterById(10));
+        Assertions.assertEquals(NullPointerException, dataProvider.getMasterById(10));
     }
 
     @Test
     @org.junit.jupiter.api.Order(17)
     void editSalonSuccess() {
         List<Master> listMaster = new ArrayList<>();
-        listMaster.add(dataProvider.getMasterById(2));
 
         Assertions.assertTrue(dataProvider.editSalon(2,"rewriteAddress", listMaster));
         Assertions.assertTrue(dataProvider.editListMaster(2,1));
@@ -434,9 +426,14 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(17)
     void editSalonFail() {
         List<Master> listMaster = new ArrayList<>();
-        listMaster.add(dataProvider.getMasterById(2));
 
         Assertions.assertFalse(dataProvider.editSalon(10,"rewriteAddress", listMaster));
+
+        dataProvider.editListMaster(1,10);
+        dataProvider.editListMaster(10,2);
+        List<Long> list = new ArrayList<>();
+        Assertions.assertEquals(list, dataProvider.getListMasterById(10));
+        Assertions.assertEquals(NullPointerException, dataProvider.getMasterById(10));
         
     }
 
@@ -476,7 +473,9 @@ class DataProviderJdbcTest extends TestBase {
     void getSalonByIdFail() {
         log.debug(dataProvider.getSalonById(10));
         Assertions.assertEquals(dataProvider.getSalonById(10), NullPointerException);
-        
+
+        List<Long> list = new ArrayList<>();
+        Assertions.assertEquals(list, dataProvider.getListMasterById(10));
     }
 
     @Test
@@ -547,7 +546,8 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(23)
     void getOrderItemByIdSuccess() {
         log.debug(dataProvider.getOrderItemById(1));
-        
+        Assertions.assertNotNull(dataProvider.getOrderItemById(1));
+
     }
 
     @Test
@@ -562,22 +562,11 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(24)
     void createOrderSuccess() {
         List<OrderItem> orderItemList1 = new ArrayList<>();
-        orderItemList1.add(dataProvider.getOrderItemById(1));
-        List<OrderItem> orderItemList2 = new ArrayList<>();
-        orderItemList2.add(dataProvider.getOrderItemById(1));
-        orderItemList2.add(dataProvider.getOrderItemById(2));
-        List<OrderItem> orderItemList3 = new ArrayList<>();
-        orderItemList3.add(dataProvider.getOrderItemById(1));
-        orderItemList3.add(dataProvider.getOrderItemById(2));
-        orderItemList3.add(dataProvider.getOrderItemById(3));
-        List<OrderItem> orderItemList4 = new ArrayList<>();
-        orderItemList4.add(dataProvider.getOrderItemById(1));
-        orderItemList4.add(dataProvider.getOrderItemById(3));
 
         Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, 10000.0,"CREATED", 1, null, null));
-        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, 20000.0,"COMPLETED", 3, "04.12.2020", null));
-        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, 30000.0,"PROCESSING", 2, "05.12.2020", "10.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, 40000.0,"CANCELED", 2, null, "05.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList1, 20000.0,"COMPLETED", 3, "04.12.2020", null));
+        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList1, 30000.0,"PROCESSING", 2, "05.12.2020", "10.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList1, 40000.0,"CANCELED", 2, null, "05.12.2020"));
 
         dataProvider.createListItem(1,1);
         dataProvider.createListItem(1,2);
@@ -610,23 +599,23 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(24)
     void createOrderFail() {
         List<OrderItem> orderItemList1 = new ArrayList<>();
-        orderItemList1.add(dataProvider.getOrderItemById(1));
-        List<OrderItem> orderItemList4 = new ArrayList<>();
-        orderItemList4.add(dataProvider.getOrderItemById(0));
-        orderItemList4.add(dataProvider.getOrderItemById(2));
 
         Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, 10000.0,"CREATED", 1, null, null));
         Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, 10000.0,"PROCESSING", 3, "04.12.2020", null));
-        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, 10000.0,null, 2, null, "05.12.2020"));
-        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, null,"PROCESSING", 2, null, "05.12.2020"));
+        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList1, 10000.0,null, 2, null, "05.12.2020"));
+        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList1, null,"PROCESSING", 2, null, "05.12.2020"));
+
+        dataProvider.createListItem(1,10);
+        dataProvider.createListItem(10,2);
+        List<Long> list = new ArrayList<>();
+        Assertions.assertEquals(list, dataProvider.getListItemById(10));
+        Assertions.assertEquals(NullPointerException, dataProvider.getOrderItemById(10));
     }
 
     @Test
     @org.junit.jupiter.api.Order(25)
     void editOrderSuccess() {
         List<OrderItem> orderItemList3 = new ArrayList<>();
-        orderItemList3.add(dataProvider.getOrderItemById(1));
-
         Assertions.assertTrue(dataProvider.editOrder(3,"03.12.2020", orderItemList3, 3000.0,"PROCESSING", 1, "11.12.2020", "12.12.2020"));
 
         Assertions.assertTrue(dataProvider.editListItem(3,1));
@@ -642,6 +631,11 @@ class DataProviderJdbcTest extends TestBase {
         orderItemList.add(dataProvider.getOrderItemById(1));
         orderItemList.add(dataProvider.getOrderItemById(2));
         Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList,  10000.0,"COMPLETED", 3, "05.12.2020", "10.12.2020"));
+        dataProvider.editListItem(1,10);
+        dataProvider.editListItem(10,2);
+        List<Long> list = new ArrayList<>();
+        Assertions.assertEquals(list, dataProvider.getListItemById(10));
+        Assertions.assertEquals(NullPointerException, dataProvider.getOrderItemById(10));
     }
 
     @Test
@@ -678,6 +672,8 @@ class DataProviderJdbcTest extends TestBase {
         log.debug(dataProvider.getOrderById(10));
         Assertions.assertEquals(dataProvider.getOrderById(10), NullPointerException);
 
+        List<Long> list = new ArrayList<>();
+        Assertions.assertEquals(list, dataProvider.getListItemById(10));
     }
 
     @Test

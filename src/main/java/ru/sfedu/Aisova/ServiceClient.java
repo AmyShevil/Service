@@ -19,6 +19,7 @@ public class ServiceClient {
     public static void main(String[] args) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         new ServiceClient();
         logBasicSystemInfo();
+
     }
 
     public static void logBasicSystemInfo() {
