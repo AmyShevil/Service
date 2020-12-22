@@ -6,13 +6,6 @@ import java.util.List;
 
 public class TestBase {
 
-    public User createUser(long id, String name){
-        User user = new User();
-        user.setId(id);
-        user.setName(name);
-        return user;
-    }
-
     public Customer createCustomer(long id, String firstName, String lastName, String phone, String email){
         Customer customer = new Customer();
         customer.setId(id);

@@ -34,12 +34,6 @@ public class ServiceClient {
         log.info("User Home Directory: " + System.getProperty("user.home"));
         log.info("User Working Directory: " + System.getProperty("user.dir"));
         log.info("Test INFO logging.");
-        log.error("");
-        log.warn("");
-        log.fatal("");
-        log.debug("");
-        log.trace("");
-
 
     }
 }

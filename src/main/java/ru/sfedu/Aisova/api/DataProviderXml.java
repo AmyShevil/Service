@@ -4,9 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import ru.sfedu.Aisova.Constants;
+import static ru.sfedu.Aisova.Constants.*;
 import ru.sfedu.Aisova.model.*;
-import ru.sfedu.Aisova.utils.ConfigurationUtil;
+import static ru.sfedu.Aisova.utils.ConfigurationUtil.getConfigurationEntry;
 import ru.sfedu.Aisova.utils.WrapperXML;
 
 import java.io.File;
@@ -23,6 +23,16 @@ public class DataProviderXml implements DataProvider{
 
     private static Logger log = LogManager.getLogger(DataProviderXml.class);
 
+    /**
+     * Запись в файл xml
+     *
+     * @param tClass
+     * @param object
+     * @param rewrite
+     * @param <T>
+     * @return true или false
+     * @throws Exception
+     */
     public <T> boolean writeToXml(Class<?> tClass, List<T> object, boolean rewrite) throws Exception{
         try{
             List<T> objectList;
@@ -40,19 +50,41 @@ public class DataProviderXml implements DataProvider{
             WrapperXML xml = new WrapperXML();
             xml.setList(objectList);
             serializer.write(xml, writer);
-            log.info(Constants.WRITE_SUCCESS);
+            log.info(WRITE_SUCCESS);
             return true;
         }catch(IndexOutOfBoundsException e){
-            log.info(Constants.WRITE_ERROR);
+            log.info(WRITE_ERROR);
             log.error(e);
             return false;
+        }
+    }
+
+    /**
+     * Чтение из файла xml
+     *
+     * @param cl
+     * @param <T>
+     * @return список
+     */
+    public <T> List<T> readFromXml(Class cl) {
+        try {
+            FileReader fileReader = new FileReader(this.getFilePath(cl));
+            Serializer serializer = new Persister();
+            WrapperXML xml = serializer.read(WrapperXML.class, fileReader);
+            if (xml.getList() == null) xml.setList(new ArrayList<T>());
+            log.info(READ_SUCCESS);
+            return xml.getList();
+        } catch (Exception e) {
+            log.info(READ_ERROR);
+            log.error(e);
+            return new ArrayList<>();
         }
     }
 
     private <T> boolean writeToXml (T object) throws Exception {
         try {
             if (object == null) {
-                log.info(Constants.STH_NULL);
+                log.info(STH_NULL);
                 return false;
             }
             return writeToXml(object.getClass(), Collections.singletonList(object), false);
@@ -62,26 +94,11 @@ public class DataProviderXml implements DataProvider{
         }
     }
 
-    public <T> List<T> readFromXml(Class cl) throws IOException, Exception{
-        try {
-            FileReader fileReader = new FileReader(this.getFilePath(cl));
-            Serializer serializer = new Persister();
-            WrapperXML xml = serializer.read(WrapperXML.class, fileReader);
-            if (xml.getList() == null) xml.setList(new ArrayList<T>());
-            log.info(Constants.READ_SUCCESS);
-            return xml.getList();
-        } catch (IOException e) {
-            log.info(Constants.READ_ERROR);
-            log.error(e);
-            return new ArrayList<>();
-        }
+    private String getFilePath(Class cl) throws IOException {
+        return getConfigurationEntry(PATH_XML)+ cl.getSimpleName().toLowerCase()+getConfigurationEntry(FILE_EXTENSION_XML);
     }
 
-    private String getFilePath(Class cl) throws IOException{
-        return ConfigurationUtil.getConfigurationEntry(Constants.PATH_XML)+ cl.getSimpleName().toLowerCase()+ConfigurationUtil.getConfigurationEntry(Constants.FILE_EXTENSION_XML);
-    }
-
-    private <T> List<Service> getServiceListInMaster(Class<T> tClass, T object) throws Exception {
+    private <T> List<Service> getServiceListInMaster(Class<T> tClass, T object) {
         try {
             List<Service> objectServiceList;
             Master master = (Master) object;
@@ -103,7 +120,7 @@ public class DataProviderXml implements DataProvider{
         }
     }
 
-    private <T> List<OrderItem> getOrderItemList(Class<T> tClass, T object) throws Exception {
+    private <T> List<OrderItem> getOrderItemList(Class<T> tClass, T object) {
         try {
             List<OrderItem> objectOrderItemList;
             Order order = (Order) object;
@@ -128,13 +145,13 @@ public class DataProviderXml implements DataProvider{
 
             return orderItemWithService;
 
-        }catch(NullPointerException e){
+        }catch(Exception e){
             log.error(e);
             return new ArrayList<>();
         }
     }
 
-    private <T> List<Master> getMasterList(Class<T> tClass, T object) throws Exception {
+    private <T> List<Master> getMasterList(Class<T> tClass, T object) {
         try {
             List<Master> objectMasterList;
             Salon salon = (Salon) object;
@@ -158,13 +175,13 @@ public class DataProviderXml implements DataProvider{
             masterWithService = list;
             return masterWithService;
 
-        }catch(NullPointerException e){
+        }catch(Exception e){
             log.error(e);
             return new ArrayList<>();
         }
     }
 
-    private <T> Service getServiceInOrderItem(Class<T> tClass, T object) throws Exception {
+    private <T> Service getServiceInOrderItem(Class<T> tClass, T object) {
         try {
             Service serviceInOrderItem;
             OrderItem orderItem = (OrderItem) object;
@@ -182,29 +199,39 @@ public class DataProviderXml implements DataProvider{
         }
     }
 
-    private long getNextServiceId() throws Exception {
-        List<Service> objectList = readFromXml(Service.class);
-        long maxId = -1;
-        for(Service service : objectList){
-            if(maxId < service.getId()){
-                maxId = service.getId();
+    private long getNextServiceId(){
+        try {
+            List<Service> objectList = readFromXml(Service.class);
+            long maxId = -1;
+            for (Service service : objectList) {
+                if (maxId < service.getId()) {
+                    maxId = service.getId();
+                }
             }
+            return maxId + 1;
+        }catch (NullPointerException e){
+            log.error(e);
+            return Long.parseLong(null);
         }
-        return maxId+1;
     }
 
-    private long getNextOrderItemId() throws Exception {
-        List<OrderItem> objectList = readFromXml(OrderItem.class);
-        long maxId = -1;
-        for(OrderItem orderItem : objectList){
-            if(maxId < orderItem.getId()){
-                maxId = orderItem.getId();
+    private long getNextOrderItemId(){
+        try{
+            List<OrderItem> objectList = readFromXml(OrderItem.class);
+            long maxId = -1;
+            for(OrderItem orderItem : objectList){
+                if(maxId < orderItem.getId()){
+                    maxId = orderItem.getId();
+                }
             }
+            return maxId+1;
+        }catch (NullPointerException e){
+            log.error(e);
+            return Long.parseLong(null);
         }
-        return maxId+1;
     }
 
-    private long getNextNewCustomerId() throws Exception {
+    private long getNextNewCustomerId(){
         try {
             List<NewCustomer> objectList = readFromXml(NewCustomer.class);
             long maxId = -1;
@@ -220,55 +247,75 @@ public class DataProviderXml implements DataProvider{
         }
     }
 
-    private long getNextMasterId() throws Exception {
-        List<Master> objectList = readFromXml(Master.class);
-        long maxId = -1;
-        for(Master master : objectList){
-            if(maxId < master.getId()){
-                maxId = master.getId();
+    private long getNextMasterId(){
+        try{
+            List<Master> objectList = readFromXml(Master.class);
+            long maxId = -1;
+            for(Master master : objectList){
+                if(maxId < master.getId()){
+                    maxId = master.getId();
+                }
             }
+            return maxId+1;
+        }catch (NullPointerException e){
+            log.error(e);
+            return Long.parseLong(null);
         }
-        return maxId+1;
     }
 
-    private long getNextRegularCustomerId() throws Exception {
-        List<RegularCustomer> objectList = readFromXml(RegularCustomer.class);
-        long maxId = -1;
-        for(RegularCustomer regularCustomer : objectList){
-            if(maxId < regularCustomer.getId()){
-                maxId = regularCustomer.getId();
+    private long getNextRegularCustomerId(){
+        try{
+            List<RegularCustomer> objectList = readFromXml(RegularCustomer.class);
+            long maxId = -1;
+            for(RegularCustomer regularCustomer : objectList){
+                if(maxId < regularCustomer.getId()){
+                    maxId = regularCustomer.getId();
+                }
             }
+            return maxId+1;
+        }catch (NullPointerException e){
+            log.error(e);
+            return Long.parseLong(null);
         }
-        return maxId+1;
     }
 
-    private long getNextOrderId() throws Exception {
-        List<Order> objectList = readFromXml(Order.class);
-        long maxId = -1;
-        for(Order order : objectList){
-            if(maxId < order.getId()){
-                maxId = order.getId();
+    private long getNextOrderId(){
+        try{
+            List<Order> objectList = readFromXml(Order.class);
+            long maxId = -1;
+            for(Order order : objectList){
+                if(maxId < order.getId()){
+                    maxId = order.getId();
+                }
             }
+            return maxId+1;
+        }catch (NullPointerException e){
+            log.error(e);
+            return Long.parseLong(null);
         }
-        return maxId+1;
     }
 
-    private long getNextSalonId() throws Exception {
-        List<Salon> objectList = readFromXml(Salon.class);
-        long maxId = -1;
-        for(Salon salon : objectList){
-            if(maxId < salon.getId()){
-                maxId = salon.getId();
+    private long getNextSalonId(){
+        try{
+            List<Salon> objectList = readFromXml(Salon.class);
+            long maxId = -1;
+            for(Salon salon : objectList){
+                if(maxId < salon.getId()){
+                    maxId = salon.getId();
+                }
             }
+            return maxId+1;
+        }catch (NullPointerException e){
+            log.error(e);
+            return Long.parseLong(null);
         }
-        return maxId+1;
     }
 
     @Override
     public boolean createService(String name, Double price, String description) throws Exception {
         try {
             if (name == null || price == null || description == null){
-                log.info(Constants.NULL_VALUE);
+                log.info(NULL_VALUE);
                 return false;
             }else {
                 Service service = new Service();
@@ -276,12 +323,12 @@ public class DataProviderXml implements DataProvider{
                 service.setName(name);
                 service.setPrice(price);
                 service.setDescription(description);
-                log.info(Constants.SERVICE_CREATED);
+                log.info(SERVICE_CREATED);
                 log.debug(service);
                 return writeToXml(service);
             }
         }catch (NullPointerException e){
-            log.info(Constants.SERVICE_NOT_CREATED);
+            log.info(SERVICE_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -292,7 +339,7 @@ public class DataProviderXml implements DataProvider{
         List<Service> listService = readFromXml(Service.class);
         try {
             if (getServiceById(id) == null){
-                log.info(Constants.SERVICE_ID + id + Constants.NOT_FOUND);
+                log.info(SERVICE_ID + id + NOT_FOUND);
                 return false;
             }
             Service newService = new Service();
@@ -302,12 +349,12 @@ public class DataProviderXml implements DataProvider{
             newService.setDescription(description);
             listService.removeIf(service -> service.getId() == id);
             writeToXml(Service.class, listService, true);
-            log.info(Constants.SERVICE_EDITED);
+            log.info(SERVICE_EDITED);
             log.debug(newService);
             writeToXml(newService);
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException | NullPointerException e) {
-            log.info(Constants.SERVICE_NOT_EDITED);
+            log.info(SERVICE_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -320,10 +367,10 @@ public class DataProviderXml implements DataProvider{
             serviceList.removeIf(service -> service.getId() == id);
             log.debug(serviceList);
             writeToXml(Service.class, serviceList, true);
-            log.info(Constants.SERVICE_DELETED);
+            log.info(SERVICE_DELETED);
             return true;
         }catch (NullPointerException e){
-            log.info(Constants.SERVICE_NOT_DELETED);
+            log.info(SERVICE_NOT_DELETED);
             log.error(e);
             return false;
         }
@@ -337,11 +384,11 @@ public class DataProviderXml implements DataProvider{
                     .filter(el->el.getId()==id)
                     .limit(1)
                     .findFirst().get();
-            log.info(Constants.SERVICE_RECEIVED);
+            log.info(SERVICE_RECEIVED);
             log.debug(service);
             return service;
         }catch(NoSuchElementException e){
-            log.info(Constants.SERVICE_NOT_RECEIVED);
+            log.info(SERVICE_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -351,7 +398,7 @@ public class DataProviderXml implements DataProvider{
     public boolean createNewCustomer(String firstName, String lastName, String phone, String email, Integer discount) throws Exception {
         try {
             if (firstName == null || lastName == null || phone == null || email == null || discount == null){
-                log.info(Constants.NULL_VALUE);
+                log.info(NULL_VALUE);
                 return false;
             }else {
                 NewCustomer customer = new NewCustomer();
@@ -361,12 +408,12 @@ public class DataProviderXml implements DataProvider{
                 customer.setPhone(phone);
                 customer.setEmail(email);
                 customer.setDiscount(discount);
-                log.info(Constants.NEW_CUSTOMER_CREATED);
+                log.info(NEW_CUSTOMER_CREATED);
                 log.debug(customer);
                 return writeToXml(customer);
             }
         }catch (NullPointerException e) {
-            log.info(Constants.NEW_CUSTOMER_NOT_CREATED);
+            log.info(NEW_CUSTOMER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -377,7 +424,7 @@ public class DataProviderXml implements DataProvider{
         List<NewCustomer> newCustomerList = readFromXml(NewCustomer.class);
         try {
             if (!getNewCustomerById(id).isPresent()){
-                log.info(Constants.NEW_CUSTOMER_ID + id + Constants.NOT_FOUND);
+                log.info(NEW_CUSTOMER_ID + id + NOT_FOUND);
                 return false;
             }
             NewCustomer customer = new NewCustomer();
@@ -390,11 +437,11 @@ public class DataProviderXml implements DataProvider{
             newCustomerList.removeIf(user -> user.getId() == id);
             writeToXml(NewCustomer.class, newCustomerList, true);
             writeToXml(customer);
-            log.info(Constants.NEW_CUSTOMER_EDITED);
+            log.info(NEW_CUSTOMER_EDITED);
             log.debug(customer);
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(Constants.NEW_CUSTOMER_NOT_EDITED);
+            log.info(NEW_CUSTOMER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -407,10 +454,10 @@ public class DataProviderXml implements DataProvider{
             newCustomerList.removeIf(customer -> customer.getId() == id);
             log.debug(newCustomerList);
             writeToXml(NewCustomer.class, newCustomerList, true);
-            log.info(Constants.NEW_CUSTOMER_DELETED);
+            log.info(NEW_CUSTOMER_DELETED);
             return true;
         }catch (NullPointerException e){
-            log.info(Constants.NEW_CUSTOMER_NOT_DELETED);
+            log.info(NEW_CUSTOMER_NOT_DELETED);
             log.error(e);
             return false;
         }
@@ -424,11 +471,11 @@ public class DataProviderXml implements DataProvider{
                     .filter(el->el.getId()==id)
                     .limit(1)
                     .findFirst().get();
-            log.info(Constants.NEW_CUSTOMER_RECEIVED);
+            log.info(NEW_CUSTOMER_RECEIVED);
             log.debug(newCustomer);
             return Optional.of(newCustomer);
         }catch (NullPointerException | NoSuchElementException e){
-            log.info(Constants.NEW_CUSTOMER_NOT_RECEIVED);
+            log.info(NEW_CUSTOMER_NOT_RECEIVED);
             log.error(e);
             return Optional.empty();
         }
@@ -438,7 +485,7 @@ public class DataProviderXml implements DataProvider{
     public boolean createRegularCustomer(String firstName, String lastName, String phone, String email, Integer countOfOrder) throws Exception {
         try{
             if (firstName == null || lastName == null || phone == null || email == null || countOfOrder == null){
-                log.info(Constants.NULL_VALUE);
+                log.info(NULL_VALUE);
                 return false;
             }else {
                 RegularCustomer customer = new RegularCustomer();
@@ -448,12 +495,12 @@ public class DataProviderXml implements DataProvider{
                 customer.setPhone(phone);
                 customer.setEmail(email);
                 customer.setNumberOfOrders(countOfOrder);
-                log.info(Constants.REGULAR_CUSTOMER_CREATED);
+                log.info(REGULAR_CUSTOMER_CREATED);
                 log.debug(customer);
                 return writeToXml(customer);
             }
         }catch (NullPointerException e) {
-            log.info(Constants.REGULAR_CUSTOMER_NOT_CREATED);
+            log.info(REGULAR_CUSTOMER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -464,7 +511,7 @@ public class DataProviderXml implements DataProvider{
         List<RegularCustomer> regularCustomerList = readFromXml(RegularCustomer.class);
         try {
             if (!getRegularCustomerById(id).isPresent()){
-                log.info(Constants.REGULAR_CUSTOMER_ID + id + Constants.NOT_FOUND);
+                log.info(REGULAR_CUSTOMER_ID + id + NOT_FOUND);
                 return false;
             }
             RegularCustomer customer = new RegularCustomer();
@@ -477,10 +524,10 @@ public class DataProviderXml implements DataProvider{
             regularCustomerList.removeIf(user -> user.getId() == id);
             writeToXml(RegularCustomer.class, regularCustomerList, true);
             writeToXml(customer);
-            log.info(Constants.REGULAR_CUSTOMER_EDITED);
+            log.info(REGULAR_CUSTOMER_EDITED);
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(Constants.REGULAR_CUSTOMER_NOT_EDITED);
+            log.info(REGULAR_CUSTOMER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -493,10 +540,10 @@ public class DataProviderXml implements DataProvider{
             regularCustomerList.removeIf(customer -> customer.getId() == id);
             log.debug(regularCustomerList);
             writeToXml(RegularCustomer.class, regularCustomerList, true);
-            log.info(Constants.REGULAR_CUSTOMER_DELETED);
+            log.info(REGULAR_CUSTOMER_DELETED);
             return true;
         }catch (NullPointerException e){
-            log.info(Constants.REGULAR_CUSTOMER_NOT_DELETED);
+            log.info(REGULAR_CUSTOMER_NOT_DELETED);
             log.error(e);
             return false;
         }
@@ -510,21 +557,21 @@ public class DataProviderXml implements DataProvider{
                     .filter(el->el.getId()==id)
                     .limit(1)
                     .findFirst().get();
-            log.info(Constants.REGULAR_CUSTOMER_RECEIVED);
+            log.info(REGULAR_CUSTOMER_RECEIVED);
             log.debug(regularCustomer);
             return Optional.of(regularCustomer);
         }catch (NullPointerException | NoSuchElementException e){
-            log.info(Constants.REGULAR_CUSTOMER_NOT_RECEIVED);
+            log.info(REGULAR_CUSTOMER_NOT_RECEIVED);
             log.error(e);
             return Optional.empty();
         }
     }
 
     @Override
-    public boolean createMaster(String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) throws Exception {
+    public boolean createMaster(String firstName, String lastName, String position, String phone, Double salary, List<Service> listService, boolean needCreateMaster) throws Exception {
         try{
-            if (firstName == null || lastName == null || position == null || phone == null || salary == null || listService == null){
-                log.info(Constants.NULL_VALUE);
+            if (firstName == null || lastName == null || position == null || phone == null || salary == null || listService == null || !needCreateMaster){
+                log.info(NULL_VALUE);
                 return false;
             }else {
                 Master master = new Master();
@@ -535,23 +582,23 @@ public class DataProviderXml implements DataProvider{
                 master.setListService(listService);
                 master.setPhone(phone);
                 master.setSalary(salary);
-                log.info(Constants.MASTER_CREATED);
+                log.info(MASTER_CREATED);
                 log.debug(master);
                 return writeToXml(master);
             }
         }catch (NullPointerException e) {
-            log.info(Constants.MASTER_NOT_CREATED);
+            log.info(MASTER_NOT_CREATED);
             log.error(e);
             return false;
         }
     }
 
     @Override
-    public boolean editMaster(long id, String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) throws Exception {
+    public boolean editMaster(long id, String firstName, String lastName, String position, String phone, Double salary, List<Service> listService, boolean needEditMaster) throws Exception {
         List<Master> masterList = readFromXml(Master.class);
         try {
-            if (getMasterById(id) == null){
-                log.info(Constants.MASTER_ID + id + Constants.NOT_FOUND);
+            if (getMasterById(id) == null || !needEditMaster){
+                log.info(MASTER_ID + id + NOT_FOUND);
                 return false;
             }
             Master master = new Master();
@@ -565,34 +612,38 @@ public class DataProviderXml implements DataProvider{
             masterList.removeIf(user -> user.getId() == id);
             writeToXml(Master.class, masterList, true);
             writeToXml(master);
-            log.info(Constants.MASTER_EDITED);
+            log.info(MASTER_EDITED);
             log.debug(master);
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(Constants.MASTER_NOT_EDITED);
+            log.info(MASTER_NOT_EDITED);
             log.error(e);
             return false;
         }
     }
 
     @Override
-    public boolean deleteMaster(long id) throws Exception {
+    public boolean deleteMaster(long id, boolean needDeleteMaster) throws Exception {
         try{
+            if (getMasterById(id) == null || !needDeleteMaster){
+                log.info(MASTER_ID + id + NOT_FOUND);
+                return false;
+            }
             List<Master> masterList = readFromXml(Master.class);
             masterList.removeIf(master -> master.getId() == id);
             log.debug(masterList);
             writeToXml(Master.class, masterList, true);
-            log.info(Constants.MASTER_DELETED);
+            log.info(MASTER_DELETED);
             return true;
         }catch (NullPointerException e){
-            log.info(Constants.MASTER_NOT_DELETED);
+            log.info(MASTER_NOT_DELETED);
             log.error(e);
             return false;
         }
     }
 
     @Override
-    public Master getMasterById(long id) throws Exception {
+    public Master getMasterById(long id) {
         try {
             List<Master> masterList = readFromXml(Master.class);
             Master master = masterList.stream()
@@ -600,11 +651,11 @@ public class DataProviderXml implements DataProvider{
                     .limit(1)
                     .findFirst().get();
             master.setListService(getServiceListInMaster(Master.class, master));
-            log.info(Constants.MASTER_RECEIVED);
+            log.info(MASTER_RECEIVED);
             log.debug(master);
             return master;
-        } catch (IOException | NoSuchElementException | NullPointerException e) {
-            log.info(Constants.MASTER_NOT_RECEIVED);
+        } catch (NoSuchElementException | NullPointerException e) {
+            log.info(MASTER_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -614,19 +665,19 @@ public class DataProviderXml implements DataProvider{
     public boolean createSalon(String address, List<Master> listMaster) throws Exception {
         try{
             if (address == null || listMaster == null){
-                log.info(Constants.NULL_VALUE);
+                log.info(NULL_VALUE);
                 return false;
             }else {
                 Salon salon = new Salon();
                 salon.setId(getNextSalonId());
                 salon.setAddress(address);
                 salon.setListMaster(listMaster);
-                log.info(Constants.SALON_CREATED);
+                log.info(SALON_CREATED);
                 log.debug(salon);
                 return writeToXml(salon);
             }
         }catch (NullPointerException e) {
-            log.info(Constants.SALON_NOT_CREATED);
+            log.info(SALON_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -637,7 +688,7 @@ public class DataProviderXml implements DataProvider{
         List<Salon> salonList = readFromXml(Salon.class);
         try {
             if (getSalonById(id) == null){
-                log.info(Constants.SALON_ID + id + Constants.NOT_FOUND);
+                log.info(SALON_ID + id + NOT_FOUND);
                 return false;
             }
             Salon salon = new Salon();
@@ -647,11 +698,11 @@ public class DataProviderXml implements DataProvider{
             salonList.removeIf(sal -> sal.getId() == id);
             writeToXml(Salon.class, salonList, true);
             writeToXml(salon);
-            log.info(Constants.SALON_EDITED);
+            log.info(SALON_EDITED);
             log.debug(salon);
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(Constants.SALON_NOT_EDITED);
+            log.info(SALON_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -663,17 +714,17 @@ public class DataProviderXml implements DataProvider{
             List<Salon> salonList = readFromXml(Salon.class);
             salonList.removeIf(salon -> salon.getId() == id);
             writeToXml(Salon.class, salonList, true);
-            log.info(Constants.SALON_DELETED);
+            log.info(SALON_DELETED);
             return true;
         }catch (NullPointerException e){
-            log.info(Constants.SALON_NOT_DELETED);
+            log.info(SALON_NOT_DELETED);
             log.error(e);
             return false;
         }
     }
 
     @Override
-    public Salon getSalonById(long id) throws Exception {
+    public Salon getSalonById(long id) {
         try {
             List<Salon> listSalon = readFromXml(Salon.class);
             Salon salon = listSalon.stream()
@@ -682,11 +733,11 @@ public class DataProviderXml implements DataProvider{
                     .orElse(null);
 
             salon.setListMaster(getMasterList(Salon.class, salon));
-            log.info(Constants.SALON_RECEIVED);
+            log.info(SALON_RECEIVED);
             log.debug(salon);
             return salon;
-        } catch (IOException | NoSuchElementException | NullPointerException e) {
-            log.info(Constants.SALON_NOT_RECEIVED);
+        } catch (NoSuchElementException | NullPointerException e) {
+            log.info(SALON_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -696,7 +747,7 @@ public class DataProviderXml implements DataProvider{
     public boolean createOrderItem(Service service, Integer quantity) throws Exception {
         try{
             if (service == null || quantity == null){
-                log.info(Constants.NULL_VALUE);
+                log.info(NULL_VALUE);
                 return false;
             }else {
                 OrderItem orderItem = new OrderItem();
@@ -704,12 +755,12 @@ public class DataProviderXml implements DataProvider{
                 orderItem.setService(service);
                 orderItem.setCost(service.getPrice());
                 orderItem.setQuantity(quantity);
-                log.info(Constants.ORDER_ITEM_CREATED);
+                log.info(ORDER_ITEM_CREATED);
                 log.debug(orderItem);
                 return writeToXml(orderItem);
             }
         }catch (NullPointerException e) {
-            log.info(Constants.ORDER_ITEM_NOT_CREATED);
+            log.info(ORDER_ITEM_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -720,7 +771,7 @@ public class DataProviderXml implements DataProvider{
         List<OrderItem> orderItemList = readFromXml(OrderItem.class);
         try {
             if (getOrderItemById(id) == null){
-                log.info(Constants.ORDER_ITEM_ID + id + Constants.NOT_FOUND);
+                log.info(ORDER_ITEM_ID + id + NOT_FOUND);
                 return false;
             }
             OrderItem orderItem = new OrderItem();
@@ -731,11 +782,11 @@ public class DataProviderXml implements DataProvider{
             orderItemList.removeIf(item -> item.getId() == id);
             writeToXml(OrderItem.class, orderItemList, true);
             writeToXml(orderItem);
-            log.info(Constants.ORDER_ITEM_EDITED);
+            log.info(ORDER_ITEM_EDITED);
             log.debug(orderItem);
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException | NullPointerException e) {
-            log.info(Constants.ORDER_ITEM_NOT_EDITED);
+            log.info(ORDER_ITEM_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -747,17 +798,17 @@ public class DataProviderXml implements DataProvider{
             List<OrderItem> orderItemList = readFromXml(OrderItem.class);
             orderItemList.removeIf(item -> item.getId() == id);
             writeToXml(OrderItem.class, orderItemList, true);
-            log.info(Constants.ORDER_ITEM_DELETED);
+            log.info(ORDER_ITEM_DELETED);
             return true;
         }catch (NullPointerException e){
-            log.info(Constants.ORDER_ITEM_NOT_DELETED);
+            log.info(ORDER_ITEM_NOT_DELETED);
             log.error(e);
             return false;
         }
     }
 
     @Override
-    public OrderItem getOrderItemById(long id) throws Exception {
+    public OrderItem getOrderItemById(long id) {
         try {
             List<OrderItem> orderItemList = readFromXml(OrderItem.class);
             OrderItem orderItem = orderItemList.stream()
@@ -766,11 +817,11 @@ public class DataProviderXml implements DataProvider{
                     .orElse(null);
 
             orderItem.setService(getServiceInOrderItem(OrderItem.class, orderItem));
-            log.info(Constants.ORDER_ITEM_RECEIVED);
+            log.info(ORDER_ITEM_RECEIVED);
             log.debug(orderItem);
             return orderItem;
-        } catch (IOException | NoSuchElementException | NullPointerException e) {
-            log.info(Constants.ORDER_ITEM_NOT_RECEIVED);
+        } catch (NoSuchElementException | NullPointerException e) {
+            log.info(ORDER_ITEM_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -780,7 +831,7 @@ public class DataProviderXml implements DataProvider{
     public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) throws Exception {
         try{
             if (created == null || item == null || cost == null || status == null){
-                log.info(Constants.NULL_VALUE);
+                log.info(NULL_VALUE);
                 return false;
             }else {
                 Order order = new Order();
@@ -792,12 +843,12 @@ public class DataProviderXml implements DataProvider{
                 order.setCustomerId(customerId);
                 order.setLastUpdated(lastUpdated);
                 order.setCompleted(completed);
-                log.info(Constants.ORDER_CREATED);
+                log.info(ORDER_CREATE);
                 log.debug(order);
                 return writeToXml(order);
             }
         }catch (NullPointerException e) {
-            log.info(Constants.ORDER_NOT_CREATED);
+            log.info(ORDER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -808,7 +859,7 @@ public class DataProviderXml implements DataProvider{
         List<Order> orderList = readFromXml(Order.class);
         try {
             if (getOrderById(id) == null){
-                log.info(Constants.ORDER_ID + id + Constants.NOT_FOUND);
+                log.info(ORDER_ID + id + NOT_FOUND);
                 return false;
             }
             Order order = new Order();
@@ -823,11 +874,11 @@ public class DataProviderXml implements DataProvider{
             orderList.removeIf(ord -> ord.getId() == id);
             writeToXml(Order.class, orderList, true);
             writeToXml(order);
-            log.info(Constants.ORDER_EDITED);
+            log.info(ORDER_EDITED);
             log.debug(order);
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(Constants.ORDER_NOT_EDITED);
+            log.info(ORDER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -839,17 +890,17 @@ public class DataProviderXml implements DataProvider{
             List<Order> orderList = readFromXml(Order.class);
             orderList.removeIf(ord -> ord.getId() == id);
             writeToXml(Order.class, orderList, true);
-            log.info(Constants.ORDER_DELETED);
+            log.info(ORDER_DELETED);
             return true;
         }catch (NullPointerException e){
-            log.info(Constants.ORDER_NOT_DELETED);
+            log.info(ORDER_NOT_DELETED);
             log.error(e);
             return false;
         }
     }
 
     @Override
-    public Order getOrderById(long id) throws Exception {
+    public Order getOrderById(long id) {
         try{
             List<Order> orderList = readFromXml(Order.class);
             Order order = orderList.stream()
@@ -858,18 +909,18 @@ public class DataProviderXml implements DataProvider{
                     .orElse(null);
 
             order.setItem(getOrderItemList(Order.class, order));
-            log.info(Constants.ORDER_RECEIVED);
+            log.info(ORDER_RECEIVED);
             log.debug(order);
             return order;
-        } catch (IOException | NoSuchElementException | NullPointerException e) {
-            log.info(Constants.ORDER_NOT_RECEIVED);
+        } catch (NoSuchElementException | NullPointerException e) {
+            log.info(ORDER_NOT_RECEIVED);
             log.error(e);
             return null;
         }
     }
 
     @Override
-    public Double calculateOrderValue(long orderId) throws Exception {
+    public Double calculateOrderValue(long orderId) {
         try{
             Order order = getOrderById(orderId);
             List<OrderItem> orderItemList = getOrderItemList(Order.class, order);
@@ -878,19 +929,19 @@ public class DataProviderXml implements DataProvider{
                     .collect(Collectors.toList());
             Double cost = price.stream().map(value -> value.doubleValue())
                     .filter(a -> a != null).mapToDouble(a -> a).sum();
-            log.info(Constants.ORDER_COST + orderId + Constants.EQL + cost);
+            log.info(COST + orderId + EQL + cost);
             return cost;
-        } catch (NoSuchElementException | NullPointerException | IOException e) {
+        } catch (NoSuchElementException | NullPointerException e) {
             log.error(e);
             return null;
         }
     }
 
     @Override
-    public List<Order> viewOrderHistory(long customerId) throws Exception {
+    public List<Order> viewOrderHistory(long customerId) {
         try{
             if (getOrderById(customerId) == null){
-                log.info( Constants.CUSTOMER_ID+ customerId + Constants.NOT_FOUND);
+                log.info( CUSTOMER_ID+ customerId + NOT_FOUND);
                 return null;
             }
             List<Order> orderList = readFromXml(Order.class);
@@ -901,19 +952,19 @@ public class DataProviderXml implements DataProvider{
             Order order = orderList.stream()
                     .findAny().orElse(null);
             order.setItem(getOrderItemList(Order.class, order));
-            log.info(Constants.LIST_CUSTOMER + customerId + Constants.COLON);
+            log.info(LIST_CUSTOMER + customerId + COLON);
             log.debug(orderList);
             return orderList;
-        }catch (NullPointerException | NoSuchElementException | IOException e){
+        }catch (NullPointerException | NoSuchElementException e){
             log.error(e);
             return null;
         }
     }
 
     @Override
-    public List<Order> getListOfCurrentOrders(long customerId, String status) throws Exception {
+    public List<Order> getListOfCurrentOrders(long customerId, String status) {
         try{
-            if(status.equals(Constants.PROCESSING) && getOrderById(customerId) != null){
+            if(status.equals(PROCESSING) && getOrderById(customerId) != null){
                 List<Order> orderList = readFromXml(Order.class);
                 orderList = orderList.stream()
                         .filter(user -> user.getCustomerId() == customerId && user.getStatus().equals(status))
@@ -921,16 +972,16 @@ public class DataProviderXml implements DataProvider{
                 Order order = orderList.stream()
                         .findAny().orElse(null);
                 order.setItem(getOrderItemList(Order.class, order));
-                log.info(Constants.CURRENT_ORDER + customerId + Constants.COLON);
+                log.info(CURRENT_ORDER + customerId + COLON);
                 log.debug(orderList);
                 return orderList;
             }else{
-                log.info( Constants.CUSTOMER_ID+ customerId + Constants.NOT_FOUND);
-                log.info(Constants.NOT_CURRENT_ORDER);
+                log.info( CUSTOMER_ID+ customerId + NOT_FOUND);
+                log.info(NOT_CURRENT_ORDER);
                 return null;
             }
 
-        }catch (NullPointerException | NoSuchElementException | IOException e){
+        }catch (NullPointerException | NoSuchElementException e){
             log.error(e);
             return null;
         }
@@ -940,7 +991,7 @@ public class DataProviderXml implements DataProvider{
     public StringBuffer createCustomerReport(long customerId) throws Exception {
         try{
             if (getOrderById(customerId) == null){
-                log.info( Constants.CUSTOMER_ID + customerId + Constants.NOT_FOUND);
+                log.info( CUSTOMER_ID + customerId + NOT_FOUND);
                 return null;
             }
             List<Order> orderList = readFromXml(Order.class);
@@ -953,9 +1004,9 @@ public class DataProviderXml implements DataProvider{
             }
             log.debug(count);
             StringBuffer report = new StringBuffer();
-            report.append(Constants.NUM_CUSTOMER)
+            report.append(NUM_CUSTOMER)
                     .append(customerId)
-                    .append(Constants.ORDER_EQL)
+                    .append(ORDER_EQL)
                     .append(count);
             return report;
         }catch (NullPointerException | NoSuchElementException e){
@@ -965,19 +1016,19 @@ public class DataProviderXml implements DataProvider{
     }
 
     @Override
-    public List<Master> changeTheLisOfMaster(long salonId) throws Exception {
+    public List<Master> changeTheLisOfMaster(long salonId) {
         try{
             if (getOrderById(salonId) == null){
-                log.info( Constants.SALON_ID + salonId + Constants.NOT_FOUND);
+                log.info( SALON_ID + salonId + NOT_FOUND);
                 return null;
             }
             Salon salon = getSalonById(salonId);
             List<Master> masterList = getMasterList(Salon.class, salon);
 
-            log.info(Constants.LIST_MASTER + salonId + Constants.COLON);
+            log.info(LIST_MASTER + salonId + COLON);
             log.debug(masterList);
             return masterList;
-        }catch (NullPointerException | NoSuchElementException | IOException e){
+        }catch (NullPointerException | NoSuchElementException e){
             log.error(e);
             return null;
         }
@@ -992,21 +1043,21 @@ public class DataProviderXml implements DataProvider{
             masterList.removeIf(user -> user.getId() == masterId);
             writeToXml(Master.class, masterList, true);
             writeToXml(master);
-            log.info(Constants.ASSIGN_SUCCESS);
+            log.info(ASSIGN_SUCCESS);
             log.debug(master);
             return true;
         } catch (NoSuchElementException | NullPointerException | IndexOutOfBoundsException e) {
-            log.info(Constants.ASSIGN_FAIL);
+            log.info(ASSIGN_FAIL);
             log.error(e);
             return false;
         }
     }
 
     @Override
-    public StringBuffer createMasterReport(long masterId) throws Exception {
-        try {
-            if (getMasterById(masterId) == null) {
-                log.info(Constants.MASTER_ID + masterId + Constants.NOT_FOUND);
+    public StringBuffer createMasterReport(long masterId , boolean needMasterReport) {
+        try{
+            if (getMasterById(masterId) == null || !needMasterReport){
+                log.info( MASTER_ID + masterId + NOT_FOUND);
                 return null;
             }
             List<Master> masterList = readFromXml(Master.class);
@@ -1017,13 +1068,13 @@ public class DataProviderXml implements DataProvider{
             master.setListService(getServiceListInMaster(Master.class, master));
 
             StringBuffer report = new StringBuffer();
-            report.append(Constants.MASTER)
+            report.append(MASTER)
                     .append(masterId)
-                    .append(Constants.PROVIDE_SERVICE)
+                    .append(PROVIDE_SERVICE)
                     .append(master.getListService());
 
             return report;
-        } catch (NullPointerException | NoSuchElementException | IOException e) {
+        } catch (NullPointerException | NoSuchElementException e) {
             log.error(e);
             return null;
         }

@@ -5,7 +5,6 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
-import ru.sfedu.Aisova.converters.CustomerConverter;
 import ru.sfedu.Aisova.converters.OrderItemConverter;
 
 import java.util.List;

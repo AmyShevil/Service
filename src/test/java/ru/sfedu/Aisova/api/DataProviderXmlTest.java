@@ -98,6 +98,8 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(3)
     void getServiceByIdSuccess() throws Exception {
         log.debug(dataProvider.getServiceById(1));
+        Assertions.assertNotNull(dataProvider.getServiceById(1));
+
     }
 
     @Test
@@ -155,6 +157,7 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(7)
     void getNewCustomerByIdSuccess() throws Exception {
         log.debug(dataProvider.getNewCustomerById(1));
+        Assertions.assertNotNull(dataProvider.getNewCustomerById(1));
     }
 
     @Test
@@ -162,7 +165,6 @@ public class DataProviderXmlTest extends TestBase {
     void getNewCustomerByIdFail() throws Exception {
         log.debug(dataProvider.getNewCustomerById(10));
         Assertions.assertEquals(dataProvider.getNewCustomerById(10), Optional.empty());
-
     }
 
     @Test
@@ -213,8 +215,9 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(11)
     void getRegularCustomerByIdSuccess() throws Exception {
         log.debug(dataProvider.getRegularCustomerById(1));
-
+        Assertions.assertNotNull(dataProvider.getRegularCustomerById(1));
     }
+
     @Test
     @org.junit.jupiter.api.Order(11)
     void getRegularCustomerByIdFail() throws Exception {
@@ -236,10 +239,10 @@ public class DataProviderXmlTest extends TestBase {
         listService3.add(dataProvider.getServiceById(1));
         listService3.add(dataProvider.getServiceById(2));
 
-        Assertions.assertTrue(dataProvider.createMaster("FirstName1", "LastName1", "Position1", "Phone1", 10000.0, listService1));
-        Assertions.assertTrue(dataProvider.createMaster("FirstName2", "LastName2", "Position2", "Phone2", 20000.0, listService2));
-        Assertions.assertTrue(dataProvider.createMaster("FirstName3", "LastName3", "Position3", "Phone3", 30000.0, listService3));
-        Assertions.assertTrue(dataProvider.createMaster("FirstName4", "LastName4", "Position4", "Phone4", 40000.0, listService3));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName1", "LastName1", "Position1", "Phone1", 10000.0, listService1, true));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName2", "LastName2", "Position2", "Phone2", 20000.0, listService2, true));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName3", "LastName3", "Position3", "Phone3", 30000.0, listService3, true));
+        Assertions.assertTrue(dataProvider.createMaster("FirstName4", "LastName4", "Position4", "Phone4", 40000.0, listService3, true));
     }
 
     @Test
@@ -256,12 +259,12 @@ public class DataProviderXmlTest extends TestBase {
         listService3.add(dataProvider.getServiceById(1));
         listService3.add(dataProvider.getServiceById(2));
 
-        Assertions.assertFalse(dataProvider.createMaster(null, "LastName1", "Position1", "Phone1", 10000.0, listService1));
-        Assertions.assertFalse(dataProvider.createMaster("FirstName2", null, "Position2", "Phone2", 20000.0, listService2));
-        Assertions.assertFalse(dataProvider.createMaster("FirstName3", "LastName3", null, "Phone3", 30000.0, listService3));
-        Assertions.assertFalse(dataProvider.createMaster("FirstName4", "LastName4", "Position4", null, 10000.0, listService1));
-        Assertions.assertFalse(dataProvider.createMaster("FirstName5", "LastName5", "Position5", "Phone5", null, listService3));
-        Assertions.assertFalse(dataProvider.createMaster("FirstName6", "LastName6", "Position6", "Phone6", 60000.0, null));
+        Assertions.assertFalse(dataProvider.createMaster(null, "LastName1", "Position1", "Phone1", 10000.0, listService1, true));
+        Assertions.assertFalse(dataProvider.createMaster("FirstName2", null, "Position2", "Phone2", 20000.0, listService2, false));
+        Assertions.assertFalse(dataProvider.createMaster("FirstName3", "LastName3", null, "Phone3", 30000.0, listService3, true));
+        Assertions.assertFalse(dataProvider.createMaster("FirstName4", "LastName4", "Position4", null, 10000.0, listService1, false));
+        Assertions.assertFalse(dataProvider.createMaster("FirstName5", "LastName5", "Position5", "Phone5", null, listService3, true));
+        Assertions.assertFalse(dataProvider.createMaster("FirstName6", "LastName6", "Position6", "Phone6", 60000.0, null, false));
     }
 
     @Test
@@ -270,7 +273,7 @@ public class DataProviderXmlTest extends TestBase {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(2));
         listService.add(dataProvider.getServiceById(1));
-        Assertions.assertTrue(dataProvider.editMaster(2,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService));
+        Assertions.assertTrue(dataProvider.editMaster(2,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService, true));
     }
 
     @Test
@@ -279,20 +282,20 @@ public class DataProviderXmlTest extends TestBase {
         List<Service> listService = new ArrayList<>();
         listService.add(dataProvider.getServiceById(2));
         listService.add(dataProvider.getServiceById(1));
-        Assertions.assertFalse(dataProvider.editMaster(10,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService));
+        Assertions.assertFalse(dataProvider.editMaster(10,"rewriteFirstName", "rewriteLastName", "rewritePosition", "rewritePhone", 50000.0, listService, false));
     }
 
     @Test
     @org.junit.jupiter.api.Order(14)
     void deleteMasterSuccess() throws Exception {
-        Assertions.assertTrue(dataProvider.deleteMaster(3));
+        Assertions.assertTrue(dataProvider.deleteMaster(3, true));
         Assertions.assertNull(dataProvider.getMasterById(3));
     }
 
     @Test
     @org.junit.jupiter.api.Order(14)
     void deleteMasterFail() throws Exception {
-        Assertions.assertTrue(dataProvider.deleteMaster(10));
+        Assertions.assertFalse(dataProvider.deleteMaster(10, true));
         Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
     }
 
@@ -300,6 +303,7 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(15)
     void getMasterByIdSuccess() throws Exception {
         log.debug(dataProvider.getMasterById(1));
+        Assertions.assertNotNull(dataProvider.getMasterById(1));
     }
 
     @Test
@@ -307,7 +311,6 @@ public class DataProviderXmlTest extends TestBase {
     void getMasterByIdFail() throws Exception {
         log.debug(dataProvider.getMasterById(10));
         Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
-
     }
 
     @Test
@@ -336,7 +339,6 @@ public class DataProviderXmlTest extends TestBase {
         listMaster1.add(dataProvider.getMasterById(0));
         listMaster1.add(dataProvider.getMasterById(1));
         listMaster1.add(dataProvider.getMasterById(2));
-
         Assertions.assertFalse(dataProvider.createSalon(null, listMaster1));
         Assertions.assertFalse(dataProvider.createSalon("Address2", null));
     }
@@ -347,7 +349,6 @@ public class DataProviderXmlTest extends TestBase {
         List<Master> listMaster = new ArrayList<>();
         listMaster.add(dataProvider.getMasterById(2));
         listMaster.add(dataProvider.getMasterById(1));
-
         Assertions.assertTrue(dataProvider.editSalon(1,"rewriteAddress", listMaster));
     }
 
@@ -357,7 +358,6 @@ public class DataProviderXmlTest extends TestBase {
         List<Master> listMaster = new ArrayList<>();
         listMaster.add(dataProvider.getMasterById(2));
         listMaster.add(dataProvider.getMasterById(1));
-
         Assertions.assertFalse(dataProvider.editSalon(10,"rewriteAddress", listMaster));
     }
 
@@ -379,6 +379,7 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(19)
     void getSalonByIdSuccess() throws Exception {
         log.debug(dataProvider.getSalonById(0));
+        Assertions.assertNotNull(dataProvider.getSalonById(0));
     }
 
     @Test
@@ -386,7 +387,6 @@ public class DataProviderXmlTest extends TestBase {
     void getSalonByIdFail() throws Exception {
         log.debug(dataProvider.getSalonById(10));
         Assertions.assertEquals(dataProvider.getSalonById(10), NullPointerException);
-
     }
 
     @Test
@@ -454,6 +454,7 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(23)
     void getOrderItemByIdSuccess() throws Exception {
         log.debug(dataProvider.getOrderItemById(1));
+        Assertions.assertNotNull(dataProvider.getOrderItemById(1));
     }
 
     @Test
@@ -461,7 +462,6 @@ public class DataProviderXmlTest extends TestBase {
     void getOrderItemByIdFail() throws Exception {
         log.debug(dataProvider.getOrderItemById(10));
         Assertions.assertEquals(dataProvider.getOrderItemById(10), NullPointerException);
-
     }
 
     @Test
@@ -495,7 +495,7 @@ public class DataProviderXmlTest extends TestBase {
         orderItemList4.add(dataProvider.getOrderItemById(0));
         orderItemList4.add(dataProvider.getOrderItemById(2));
 
-        Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, 10000.0,"CREATED", 0, null, null));
+        Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, 10000.0,"CREATED", 0, "04.12.2020", "04.12.2020"));
         Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, 10000.0,"PROCESSING", 1, "04.12.2020", null));
         Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, 10000.0,null, 2, null, "05.12.2020"));
         Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, null,"PROCESSING", 2, null, "05.12.2020"));
@@ -517,7 +517,6 @@ public class DataProviderXmlTest extends TestBase {
         Assertions.assertTrue(dataProvider.editOrder(0,"01.12.2020", orderItemList1, 10000.0,"CREATED", 0, "04.12.2020", "07.12.2020"));
         Assertions.assertTrue(dataProvider.editOrder(1,"02.12.2020", orderItemList2, 10000.0,"PROCESSING", 1, "05.12.2020", "08.12.2020"));
         Assertions.assertTrue(dataProvider.editOrder(2,"03.12.2020", orderItemList3, 10000.0,"COMPLETED", 1, "06.12.2020", "09.12.2020"));
-
     }
 
     @Test
@@ -526,7 +525,6 @@ public class DataProviderXmlTest extends TestBase {
         List<OrderItem> orderItemList = new ArrayList<>();
         orderItemList.add(dataProvider.getOrderItemById(1));
         orderItemList.add(dataProvider.getOrderItemById(2));
-
         Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList,  10000.0,"COMPLETED", 0, "05.12.2020", "10.12.2020"));
     }
 
@@ -548,6 +546,7 @@ public class DataProviderXmlTest extends TestBase {
     @org.junit.jupiter.api.Order(27)
     void getOrderByIdSuccess() throws Exception {
         log.debug(dataProvider.getOrderById(1));
+        Assertions.assertNotNull(dataProvider.getOrderById(1));
     }
 
     @Test
@@ -555,7 +554,6 @@ public class DataProviderXmlTest extends TestBase {
     void getOrderByIdFail() throws Exception {
         log.debug(dataProvider.getOrderById(10));
         Assertions.assertEquals(dataProvider.getOrderById(10), NullPointerException);
-
     }
 
     @Test
@@ -604,12 +602,14 @@ public class DataProviderXmlTest extends TestBase {
                 .filter(user -> user.getCustomerId() == 1)
                 .collect(Collectors.toList());
         log.debug( dataProvider.viewOrderHistory(1));
+        Assertions.assertNotNull(dataProvider.viewOrderHistory(1));
     }
 
     @Test
     @org.junit.jupiter.api.Order(30)
     void viewOrderHistoryFail() throws Exception {
         log.debug(dataProvider.viewOrderHistory(10));
+        Assertions.assertNull(dataProvider.viewOrderHistory(10));
     }
 
     @Test
@@ -623,6 +623,7 @@ public class DataProviderXmlTest extends TestBase {
                 .filter(user -> user.getCustomerId() == 1 && user.getStatus().equals("PROCESSING"))
                 .collect(Collectors.toList());
         log.debug(dataProvider.getListOfCurrentOrders(1, "PROCESSING"));
+        Assertions.assertNotNull(dataProvider.getListOfCurrentOrders(1, "PROCESSING"));
     }
 
     @Test
@@ -630,6 +631,8 @@ public class DataProviderXmlTest extends TestBase {
     void getListOfCurrentOrdersFail() throws Exception {
         log.debug(dataProvider.getListOfCurrentOrders(1, "CREATED"));
         log.debug(dataProvider.getListOfCurrentOrders(10, "PROCESSING"));
+        Assertions.assertNull(dataProvider.getListOfCurrentOrders(1, "CREATED"));
+        Assertions.assertNull(dataProvider.getListOfCurrentOrders(10, "PROCESSING"));
     }
 
     @Test
@@ -645,13 +648,13 @@ public class DataProviderXmlTest extends TestBase {
     void changeTheLisOfMasterFail() throws Exception {
         log.debug(dataProvider.changeTheLisOfMaster(10));
         Assertions.assertEquals(dataProvider.getSalonById(10), NullPointerException);
-
     }
 
     @Test
     @org.junit.jupiter.api.Order(33)
     void createCustomerReportSuccess() throws Exception {
         log.debug(dataProvider.createCustomerReport(1));
+        Assertions.assertNotNull(dataProvider.createCustomerReport(1));
     }
 
     @Test
@@ -659,21 +662,20 @@ public class DataProviderXmlTest extends TestBase {
     void createCustomerReportFail() throws Exception {
         log.debug(dataProvider.createCustomerReport(10));
         Assertions.assertEquals(dataProvider.getOrderById(10), NullPointerException);
-
     }
 
     @Test
     @org.junit.jupiter.api.Order(34)
     void createMasterReportSuccess() throws Exception {
-        log.debug(dataProvider.createMasterReport(1));
+        log.debug(dataProvider.createMasterReport(1, true));
+        Assertions.assertNotNull(dataProvider.createMasterReport(1,true));
     }
 
     @Test
     @org.junit.jupiter.api.Order(34)
     void createMasterReportFail() throws Exception {
-        log.debug(dataProvider.createMasterReport(10));
+        log.debug(dataProvider.createMasterReport(10, false));
         Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
-
     }
 
 }

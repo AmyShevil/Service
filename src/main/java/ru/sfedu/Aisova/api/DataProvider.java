@@ -7,364 +7,378 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The interface Data provider.
+ * The interface Data provider
  */
 public interface DataProvider {
 
     /**
-     * Create service.
+     * Создание услуги
      *
-     * @param name the value of name
-     * @param price the value of price
-     * @param description the value of description
-     * @return is created
-     * @throws NullPointerException when input variables are null
+     * @param name значение name
+     * @param price значение price
+     * @param description значение description
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean createService (String name, Double price, String description) throws Exception;
 
     /**
-     * Edit service.
+     * Редактирование услуги
      *
-     * @param id the value of id
-     * @param name the value of name
-     * @param price the value of price
-     * @param description the value of description
-     * @return is edited
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @param name значение name
+     * @param price значение price
+     * @param description значение description
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean editService (long id, String name, Double price, String description) throws Exception;
 
     /**
-     * Delete service.
+     * Удаление услуги
      *
-     * @param id the value of id
-     * @return is deleted
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean deleteService (long id) throws Exception;
 
     /**
-     * Get service by id.
+     * Получение услуги по id
      *
-     * @param id the value of id
-     * @return the service
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return услуга
+     * @throws NullPointerException когда входные переменные равны null
      */
     Service getServiceById(long id) throws Exception;
 
     /**
-     * Create new customer.
+     * Создание нового пользователя
      *
-     * @param firstName the value of first name
-     * @param lastName the value of last name
-     * @param phone the value of phone
-     * @param email the value of email
-     * @param discount the value of discount
-     * @return is created
-     * @throws NullPointerException when input variables are null
+     * @param firstName значение first name
+     * @param lastName значение last name
+     * @param phone значение phone
+     * @param email значение email
+     * @param discount значение discount
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean createNewCustomer(String firstName, String lastName, String phone, String email, Integer discount) throws Exception;
 
     /**
-     * Edit new customer.
+     * Редактирование нового пользователя
      *
-     * @param id the value of id
-     * @param firstName the value of first name
-     * @param lastName the value of last name
-     * @param phone the value of phone
-     * @param email the value of email
-     * @param discount the value of discount
-     * @return is edited
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @param firstName значение first name
+     * @param lastName значение last name
+     * @param phone значение phone
+     * @param email значение email
+     * @param discount значение discount
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean editNewCustomer(long id, String firstName, String lastName, String phone, String email, Integer discount) throws Exception;
 
     /**
-     * Delete new customer.
+     * Удаление нового пользователя
      *
-     * @param id the value of id
-     * @return is deleted
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean deleteNewCustomer(long id) throws Exception;
 
     /**
-     * Get new customer by id.
+     * Получение нового пользователя по id
      *
-     * @param id the value of id
-     * @return the new customer
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return новый пользователь
+     * @throws NullPointerException когда входные переменные равны null
      */
     Optional<NewCustomer> getNewCustomerById(long id) throws Exception;
 
     /**
-     * Create regular customer.
+     * Создание постоянного пользователя
      *
-     * @param firstName the value of first name
-     * @param lastName the value of last name
-     * @param phone the value of phone
-     * @param email the value of email
-     * @param countOfOrder the value of discount
-     * @return is created
-     * @throws NullPointerException when input variables are null
+     * @param firstName значение first name
+     * @param lastName значение last name
+     * @param phone значение phone
+     * @param email значение email
+     * @param countOfOrder значение discount
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean createRegularCustomer(String firstName, String lastName, String phone, String email, Integer countOfOrder) throws Exception;
 
     /**
-     * Edit regular customer.
+     * Редактирование постоянного пользователя
      *
-     * @param id the value of id
-     * @param firstName the value of first name
-     * @param lastName the value of last name
-     * @param phone the value of phone
-     * @param email the value of email
-     * @param countOfOrder the value of discount
-     * @return is edited
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @param firstName значение first name
+     * @param lastName значение last name
+     * @param phone значение phone
+     * @param email значение email
+     * @param countOfOrder значение discount
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean editRegularCustomer(long id, String firstName, String lastName, String phone, String email, Integer countOfOrder) throws Exception;
 
     /**
-     * Delete regular customer.
+     * Удаление постоянного пользователя
      *
-     * @param id the value of id
-     * @return is deleted
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean deleteRegularCustomer(long id) throws Exception;
 
     /**
-     * Get regular customer by id.
+     * Получение постоянного пользователя по id
      *
-     * @param id the value of id
-     * @return the regular customer
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return постоянный пользователь
+     * @throws NullPointerException когда входные переменные равны null
      */
     Optional<RegularCustomer> getRegularCustomerById(long id) throws Exception;
 
     /**
-     * Create master.
+     * Создание мастера
      *
-     * @param firstName the value of first name
-     * @param lastName the value of last name
-     * @param position the value of position
-     * @param phone the value of phone
-     * @param salary the value of salary
-     * @param listService the value of list service
-     * @return is created
-     * @throws NullPointerException when input variables are null
+     * @param firstName значение first name
+     * @param lastName значение last name
+     * @param position значение position
+     * @param phone значение phone
+     * @param salary значение salary
+     * @param listService значение list service
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
-    boolean createMaster (String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) throws Exception;
+    boolean createMaster (String firstName, String lastName, String position, String phone, Double salary, List<Service> listService, boolean needCreateMaster) throws Exception;
 
     /**
-     * Edit master.
+     * Редактирование мастера
      *
-     * @param id the value of id
-     * @param firstName the value of first name
-     * @param lastName the value of last name
-     * @param position the value of position
-     * @param phone the value of phone
-     * @param salary the value of salary
-     * @param listService the value of list service
-     * @return is edited
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @param firstName значение first name
+     * @param lastName значение last name
+     * @param position значение position
+     * @param phone значение phone
+     * @param salary значение salary
+     * @param listService значение list service
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
-    boolean editMaster (long id, String firstName, String lastName, String position, String phone, Double salary, List<Service> listService) throws Exception;
+    boolean editMaster (long id, String firstName, String lastName, String position, String phone, Double salary, List<Service> listService, boolean needEditMaster) throws Exception;
 
     /**
-     * Delete master.
+     * Удаление мастера
      *
-     * @param id the value of id
-     * @return is deleted
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
-    boolean deleteMaster (long id) throws Exception;
+    boolean deleteMaster (long id, boolean needDeleteMaster) throws Exception;
 
     /**
-     * Get master by id.
+     * Получение мастера по id
      *
-     * @param id the value of id
-     * @return the master
+     * @param id значение id
+     * @return мастер
      */
     Master getMasterById(long id) throws Exception;
 
     /**
-     * Create salon.
+     * Создание салона
      *
-     * @param address the value of address
-     * @param listMaster the value of list master
-     * @return is created
-     * @throws NullPointerException when input variables are null
+     * @param address значение address
+     * @param listMaster значение list master
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean createSalon (String address, List<Master> listMaster) throws Exception;
 
     /**
-     * Edit salon.
+     * Редактирование салона
      *
-     * @param id the value of id
-     * @param address the value of address
-     * @param listMaster the value of list master
-     * @return is edited
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @param address значение address
+     * @param listMaster значение list master
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean editSalon (long id, String address, List<Master> listMaster) throws Exception;
 
     /**
-     * Delete salon.
+     * Удаление салона
      *
-     * @param id the value of id
-     * @return is deleted
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean deleteSalon (long id) throws Exception;
 
     /**
-     * Get salon by id.
+     * Получение салона по id
      *
-     * @param id the value of id
-     * @return the salon
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return салон
+     * @throws NullPointerException когда входные переменные равны null
      */
     Salon getSalonById(long id) throws Exception;
 
     /**
-     * Create order item.
+     * Создание строки заказа
      *
-     * @param service the value of service
-     * @param quantity the value of quantity
-     * @return is created
-     * @throws NullPointerException when input variables are null
+     * @param service значение service
+     * @param quantity значение quantity
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean createOrderItem (Service service, Integer quantity) throws Exception;
 
     /**
-     * Edit order item.
+     * Редактирование строки заказа
      *
-     * @param id the value of id
-     * @param service the value of service
-     * @param cost the value of cost
-     * @param quantity the value of quantity
-     * @return is edited
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @param service значение service
+     * @param cost значение cost
+     * @param quantity значение quantity
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean editOrderItem (long id, Service service, Double cost, Integer quantity) throws Exception;
 
     /**
-     * Delete order item.
+     * Удаление строки заказа
      *
-     * @param id the value of id
-     * @return is deleted
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean deleteOrderItem (long id) throws Exception;
 
     /**
-     * Get order item by id.
+     * Получение строки заказа по id
      *
-     * @param id the value of id
-     * @return the order item
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return строка заказа
+     * @throws NullPointerException когда входные переменные равны null
      */
     OrderItem getOrderItemById(long id) throws Exception;
 
     /**
-     * Create order.
+     * Создание заказа
      *
-     * @param created the value of created
-     * @param item the value of item
-     * @param cost the value of cost
-     * @param status the value of status
-     * @param customerId the value of customer id
-     * @param lastUpdated the value of last updated
-     * @param completed the value of completed
-     * @return is created
-     * @throws NullPointerException when input variables are null
+     * @param created значение created
+     * @param item значение item
+     * @param cost значение cost
+     * @param status значение status
+     * @param customerId значение customer id
+     * @param lastUpdated значение last updated
+     * @param completed значение completed
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean createOrder (String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) throws Exception;
 
     /**
-     * Edit order.
+     * Редактирование заказа
      *
-     * @param id the value of id
-     * @param created the value of created
-     * @param item the value of item
-     * @param cost the value of cost
-     * @param status the value of status
-     * @param customerId the value of customer id
-     * @param lastUpdated the value of last updated
-     * @param completed the value of completed
-     * @return is edited
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @param created значение created
+     * @param item значение item
+     * @param cost значение cost
+     * @param status значение status
+     * @param customerId значение customer id
+     * @param lastUpdated значение last updated
+     * @param completed значение completed
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean editOrder (long id, String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) throws Exception;
 
     /**
-     * Delete order.
+     * Удаление заказа
      *
-     * @param id the value of id
-     * @return is deleted
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean deleteOrder (long id) throws Exception;
 
     /**
-     * Get order by id.
+     * Получение заказа по id
      *
-     * @param id the value of id
-     * @return the order
-     * @throws NullPointerException when input variables are null
+     * @param id значение id
+     * @return заказ
+     * @throws NullPointerException когда входные переменные равны null
      */
     Order getOrderById(long id) throws Exception;
 
     /**
-     * @param orderId
-     * @return
-     * @throws Exception
+     * Рассчитать стоимость заказа
+     * 
+     * @param orderId значение orderId
+     * @return стоимость заказа
+     * @throws NullPointerException когда входные переменные равны null
      */
     Double calculateOrderValue(long orderId) throws Exception;
 
     /**
-     * @param customerId
-     * @return
-     * @throws Exception
+     * Посмотреть историю заказов клиента
+     *
+     * @param customerId значение customerId
+     * @return список заказов
+     * @throws NullPointerException когда входные переменные равны null
      */
     List<Order> viewOrderHistory(long customerId) throws Exception;
 
     /**
-     * @param customerId
-     * @param status
-     * @return
-     * @throws Exception
+     * Получить список текущих заказов
+     *
+     * @param customerId значение customerId
+     * @param status статус заказа
+     * @return список текущих заказов
+     * @throws NullPointerException когда входные переменные равны null
      */
     List<Order> getListOfCurrentOrders(long customerId, String status) throws Exception;
 
     /**
-     * @param customerId
-     * @return
-     * @throws Exception
+     * Создать отчет по клиентам
+     *
+     * @param customerId значение customerId
+     * @return количество заказов клиента
+     * @throws NullPointerException когда входные переменные равны null
      */
     StringBuffer createCustomerReport(long customerId) throws Exception;
 
     /**
-     * @param salonId
-     * @return
-     * @throws Exception
+     * Изменить список мастеров выбранного салона
+     *
+     * @param salonId значение salonId
+     * @return список мастеров
+     * @throws NullPointerException когда входные переменные равны null
      */
     List<Master> changeTheLisOfMaster(long salonId) throws Exception;
 
     /**
-     * @param service
-     * @param masterId
-     * @return
-     * @throws Exception
+     * Назначить услугу мастеру
+     * 
+     * @param service значение service
+     * @param masterId значение masterId
+     * @return true или false
+     * @throws NullPointerException когда входные переменные равны null
      */
     boolean assignService(List<Service> service, long masterId) throws Exception;
 
     /**
-     * @param masterId
-     * @return
-     * @throws Exception
+     * Создать отчет по мастерам
+     * 
+     * @param masterId значение masterId
+     * @return какие услуги предоставляет мастер
+     * @throws NullPointerException когда входные переменные равны null
      */
-    StringBuffer createMasterReport(long masterId) throws Exception;
+    StringBuffer createMasterReport(long masterId, boolean needMasterReport) throws Exception;
 
 }
