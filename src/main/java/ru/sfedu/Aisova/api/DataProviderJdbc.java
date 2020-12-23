@@ -23,7 +23,15 @@ public class DataProviderJdbc implements DataProvider {
     private static final Logger log = LogManager.getLogger(DataProviderJdbc.class);
     private Connection connection;
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
+    public DataProviderJdbc() {
+        try {
+            getConnection();
+        } catch (ClassNotFoundException | SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getConnection() throws ClassNotFoundException, SQLException, IOException {
         try {
             if (getConfigurationEntry(DB_Heroku_USED).equals(TRUE)) {
                 Class.forName(getConfigurationEntry(DB_Heroku_DRIVER));
@@ -42,30 +50,49 @@ public class DataProviderJdbc implements DataProvider {
             log.fatal(e);
             System.exit(1);
         }
-        return connection;
+
+    }
+    private Statement createStatement() throws SQLException {
+        if (!connection.isClosed()) {
+            return connection.createStatement();
+        } else {
+            throw new SQLException();
+        }
     }
 
     public void execute(String sql) {
         try {
             log.debug(sql);
-            PreparedStatement statement = getConnection().prepareStatement(sql);
-            statement.executeUpdate();
-            getConnection().close();
-        } catch (SQLException | IOException | ClassNotFoundException e) {
+            Statement statement = createStatement();
+            statement.executeUpdate(sql);
+            statement.close();
+        } catch (SQLException e) {
             log.error(e);
         }
     }
 
-    public ResultSet getResultSet(String sql) {
+    public void deleteAll() {
         try {
-            log.debug(sql);
-            PreparedStatement statement = getConnection().prepareStatement(sql);
-            ResultSet set = statement.executeQuery();
-            getConnection().close();
-            return set;
-        } catch (SQLException | IOException | ClassNotFoundException e) {
+            execute(DROP_TABLES);
+        }catch (NullPointerException e) {
             log.error(e);
-            return null;
+        }
+    }
+
+    public void createTable() {
+        try {
+            execute(CREATE_SERVICE);
+            execute(CREATE_NEW_CUSTOMER);
+            execute(CREATE_REGULAR_CUSTOMER);
+            execute(CREATE_ORDER_ITEM);
+            execute(CREATE_MASTER);
+            execute(CREATE_LIST_SERVICE);
+            execute(CREATE_SALON);
+            execute(CREATE_LIST_MASTER);
+            execute(CREATE_ORDER);
+            execute(CREATE_LIST_ITEM);
+        }catch (NullPointerException e) {
+            log.error(e);
         }
     }
 
@@ -74,6 +101,8 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (name == null || price == null || description == null){
                 log.info(NULL_VALUE);
+                log.info(SERVICE_NOT_CREATED);
+
                 return false;
             }else {
                 Service service = new Service();
@@ -82,12 +111,11 @@ public class DataProviderJdbc implements DataProvider {
                 service.setDescription(description);
                 log.info(SERVICE_CREATED);
                 log.debug(service);
-                this.execute(String.format(DB_INSERT, service.getClass().getSimpleName().toLowerCase(), SERVICE_FIELDS,
+                execute(String.format(DB_INSERT, service.getClass().getSimpleName().toLowerCase(), SERVICE_FIELDS,
                         String.format(SERVICE_INSERT_FORMAT,service.getName(), service.getPrice(), service.getDescription())));
                 return true;
             }
         }catch (NullPointerException e){
-            log.info(SERVICE_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -99,6 +127,7 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (getServiceById(id) == null){
                 log.info(SERVICE_ID + id + NOT_FOUND);
+                log.info(SERVICE_NOT_EDITED);
                 return false;
             }
             Service service = new Service();
@@ -108,10 +137,9 @@ public class DataProviderJdbc implements DataProvider {
             service.setDescription(description);
             log.info(SERVICE_EDITED);
             log.debug(service);
-            this.execute(String.format(DB_UPDATE_SERVICE, service.getName(), service.getPrice(), service.getDescription(), id));
+            execute(String.format(DB_UPDATE_SERVICE, service.getName(), service.getPrice(), service.getDescription(), id));
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException | NullPointerException e) {
-            log.info(SERVICE_NOT_EDITED);
             log.error(e);
             return false;
         }    }
@@ -119,14 +147,15 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public boolean deleteService(long id)  {
         try {
-            ResultSet set = getResultSet(String.format(DB_DELETE, Service.class.getSimpleName().toLowerCase(), id));
-            if (set != null) {
-                set.next();
+            if(getServiceById(id) == null){
+                log.info(SERVICE_ID + id + NOT_FOUND);
+                log.info(SERVICE_NOT_DELETED);
+                return false;
             }
+            execute(String.format(DB_DELETE, Service.class.getSimpleName().toLowerCase(), id));
             log.info(SERVICE_DELETED);
             return true;
-        }catch (NullPointerException | SQLException e){
-            log.info(SERVICE_NOT_DELETED);
+        }catch (NullPointerException e){
             log.error(e);
             return false;
         }
@@ -135,19 +164,26 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public Service getServiceById(long id) {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT, Service.class.getSimpleName().toLowerCase(), id));
+            log.debug(String.format(DB_SELECT, Service.class.getSimpleName().toLowerCase(), id));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT, Service.class.getSimpleName().toLowerCase(), id));
             if (set != null && set.next()) {
                 Service service = new Service();
                 service.setId(set.getLong(ID));
                 service.setName(set.getString(SERVICE_NAME));
                 service.setPrice(set.getDouble(SERVICE_PRICE));
                 service.setDescription(set.getString(SERVICE_DESCRIPTION));
+                log.info(SERVICE_RECEIVED);
+                log.debug(service);
+                statement.close();
                 return service;
             } else {
                 log.error(ERROR_GET_ID);
+                log.info(SERVICE_NOT_RECEIVED);
+                statement.close();
                 return null;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             log.error(e);
             return null;
         }
@@ -158,6 +194,7 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (firstName == null || lastName == null || phone == null || email == null || discount == null){
                 log.info(NULL_VALUE);
+                log.info(NEW_CUSTOMER_NOT_CREATED);
                 return false;
             }else {
                 NewCustomer customer = new NewCustomer();
@@ -168,12 +205,11 @@ public class DataProviderJdbc implements DataProvider {
                 customer.setDiscount(discount);
                 log.info(NEW_CUSTOMER_CREATED);
                 log.debug(customer);
-                this.execute(String.format(DB_INSERT, customer.getClass().getSimpleName().toLowerCase(), NEW_CUSTOMER_FIELDS,
+                execute(String.format(DB_INSERT, customer.getClass().getSimpleName().toLowerCase(), NEW_CUSTOMER_FIELDS,
                         String.format(CUSTOMER_INSERT_FORMAT,customer.getFirstName(), customer.getLastName(), customer.getPhone(), customer.getEmail(), customer.getDiscount())));
                 return true;
             }
         }catch (NullPointerException e) {
-            log.info(NEW_CUSTOMER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -184,6 +220,7 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (!getNewCustomerById(id).isPresent()){
                 log.info(NEW_CUSTOMER_ID + id + NOT_FOUND);
+                log.info(NEW_CUSTOMER_NOT_EDITED);
                 return false;
             }
             NewCustomer customer = new NewCustomer();
@@ -195,10 +232,9 @@ public class DataProviderJdbc implements DataProvider {
             customer.setDiscount(discount);
             log.info(NEW_CUSTOMER_EDITED);
             log.debug(customer);
-            this.execute(String.format(DB_UPDATE_NEW_CUSTOMER, customer.getFirstName(), customer.getLastName(), customer.getPhone(), customer.getEmail(), customer.getDiscount(), id));
+            execute(String.format(DB_UPDATE_NEW_CUSTOMER, customer.getFirstName(), customer.getLastName(), customer.getPhone(), customer.getEmail(), customer.getDiscount(), id));
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(NEW_CUSTOMER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -207,14 +243,15 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public boolean deleteNewCustomer(long id)  {
         try{
-            ResultSet set = getResultSet(String.format(DB_DELETE, NewCustomer.class.getSimpleName().toLowerCase(), id));
-            if (set != null) {
-                set.next();
+            if(!getNewCustomerById(id).isPresent()){
+                log.info(NEW_CUSTOMER_ID + id + NOT_FOUND);
+                log.info(NEW_CUSTOMER_NOT_DELETED);
+                return false;
             }
+            execute(String.format(DB_DELETE, NewCustomer.class.getSimpleName().toLowerCase(), id));
             log.info(NEW_CUSTOMER_DELETED);
             return true;
-        }catch (NullPointerException | SQLException e){
-            log.info(NEW_CUSTOMER_NOT_DELETED);
+        }catch (NullPointerException e){
             log.error(e);
             return false;
         }
@@ -223,7 +260,9 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public Optional<NewCustomer> getNewCustomerById(long id)  {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT, NewCustomer.class.getSimpleName().toLowerCase(), id));
+            log.debug(String.format(DB_SELECT, NewCustomer.class.getSimpleName().toLowerCase(), id));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT, NewCustomer.class.getSimpleName().toLowerCase(), id));
             if (set != null && set.next()) {
                 NewCustomer customer = new NewCustomer();
                 customer.setId(set.getLong(ID));
@@ -232,9 +271,14 @@ public class DataProviderJdbc implements DataProvider {
                 customer.setPhone(set.getString(CUSTOMER_PHONE));
                 customer.setEmail(set.getString(CUSTOMER_EMAIL));
                 customer.setDiscount(set.getInt(NEW_CUSTOMER_DISCOUNT));
+                log.info(NEW_CUSTOMER_RECEIVED);
+                log.debug(customer);
+                statement.close();
                 return Optional.of(customer);
             } else {
                 log.error(ERROR_GET_ID);
+                log.info(NEW_CUSTOMER_NOT_RECEIVED);
+                statement.close();
                 return Optional.empty();
             }
         } catch (SQLException e) {
@@ -248,6 +292,7 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (firstName == null || lastName == null || phone == null || email == null || countOfOrder == null){
                 log.info(NULL_VALUE);
+                log.info(REGULAR_CUSTOMER_NOT_CREATED);
                 return false;
             }else {
                 RegularCustomer customer = new RegularCustomer();
@@ -263,7 +308,6 @@ public class DataProviderJdbc implements DataProvider {
                 return true;
             }
         }catch (NullPointerException e) {
-            log.info(REGULAR_CUSTOMER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -274,6 +318,7 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (!getRegularCustomerById(id).isPresent()){
                 log.info(REGULAR_CUSTOMER_ID + id + NOT_FOUND);
+                log.info(REGULAR_CUSTOMER_NOT_EDITED);
                 return false;
             }
             RegularCustomer customer = new RegularCustomer();
@@ -288,7 +333,6 @@ public class DataProviderJdbc implements DataProvider {
             execute(String.format(DB_UPDATE_REGULAR_CUSTOMER, customer.getFirstName(), customer.getLastName(), customer.getPhone(), customer.getEmail(), customer.getNumberOfOrders(), id));
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(REGULAR_CUSTOMER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -297,14 +341,15 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public boolean deleteRegularCustomer(long id)  {
         try{
-            ResultSet set = getResultSet(String.format(DB_DELETE, RegularCustomer.class.getSimpleName().toLowerCase(), id));
-            if (set != null) {
-                set.next();
+            if (!getRegularCustomerById(id).isPresent()){
+                log.info(REGULAR_CUSTOMER_ID + id + NOT_FOUND);
+                log.info(REGULAR_CUSTOMER_NOT_DELETED);
+                return false;
             }
+            execute(String.format(DB_DELETE, RegularCustomer.class.getSimpleName().toLowerCase(), id));
             log.info(REGULAR_CUSTOMER_DELETED);
             return true;
-        }catch (NullPointerException | SQLException e){
-            log.info(REGULAR_CUSTOMER_NOT_DELETED);
+        }catch (NullPointerException e){
             log.error(e);
             return false;
         }
@@ -313,7 +358,9 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public Optional<RegularCustomer> getRegularCustomerById(long id)  {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT, RegularCustomer.class.getSimpleName().toLowerCase(), id));
+            log.debug(String.format(DB_SELECT, RegularCustomer.class.getSimpleName().toLowerCase(), id));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT, RegularCustomer.class.getSimpleName().toLowerCase(), id));
             if (set != null && set.next()) {
                 RegularCustomer customer = new RegularCustomer();
                 customer.setId(set.getLong(ID));
@@ -322,9 +369,14 @@ public class DataProviderJdbc implements DataProvider {
                 customer.setPhone(set.getString(CUSTOMER_PHONE));
                 customer.setEmail(set.getString(CUSTOMER_EMAIL));
                 customer.setNumberOfOrders(set.getInt(REGULAR_CUSTOMER_NUMBER));
+                log.info(REGULAR_CUSTOMER_RECEIVED);
+                log.debug(customer);
+                statement.close();
                 return Optional.of(customer);
             } else {
                 log.error(ERROR_GET_ID);
+                log.info(REGULAR_CUSTOMER_NOT_RECEIVED);
+                statement.close();
                 return Optional.empty();
             }
         } catch (SQLException e) {
@@ -338,6 +390,7 @@ public class DataProviderJdbc implements DataProvider {
         try{
             if (firstName == null || lastName == null || position == null || phone == null || salary == null || listService == null || !needCreateMaster){
                 log.info(NULL_VALUE);
+                log.info(MASTER_NOT_CREATED);
                 return false;
             }else {
                 Master master = new Master();
@@ -349,12 +402,11 @@ public class DataProviderJdbc implements DataProvider {
                 master.setSalary(salary);
                 log.info(MASTER_CREATED);
                 log.debug(master);
-                this.execute(String.format(DB_INSERT, master.getClass().getSimpleName().toLowerCase(), MASTER_FIELDS,
+                execute(String.format(DB_INSERT, master.getClass().getSimpleName().toLowerCase(), MASTER_FIELDS,
                         String.format(MASTER_INSERT_FORMAT,master.getFirstName(), master.getLastName(), master.getPosition(), master.getPhone(), master.getSalary().toString())));
                 return true;
             }
         }catch (NullPointerException e) {
-            log.info(MASTER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -363,11 +415,14 @@ public class DataProviderJdbc implements DataProvider {
     public void createListService(long idMaster, long idService) {
         try{
             if(getMasterById(idMaster) != null && getServiceById(idService) != null) {
-                log.info(LIST_ADD);
-                this.execute(String.format(DB_INSERT, MASTER_LIST_SERVICE, LIST_SERVICE_FIELDS,
+                log.info(LIST_ADD + MASTER_LIST_SERVICE);
+                execute(String.format(DB_INSERT, MASTER_LIST_SERVICE, LIST_SERVICE_FIELDS,
                         String.format(LIST_FORMAT, idMaster, idService)));
+            }else{
+                log.info(LIST_NOT_ADD + MASTER_LIST_SERVICE);
             }
         }catch (NullPointerException e){
+            log.info(LIST_NOT_ADD + MASTER_LIST_SERVICE);
             log.error(e);
         }
     }
@@ -377,6 +432,7 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (getMasterById(id) == null || !needEditMaster){
                 log.info(MASTER_ID + id + NOT_FOUND);
+                log.info(MASTER_NOT_EDITED);
                 return false;
             }
             Master master = new Master();
@@ -392,7 +448,6 @@ public class DataProviderJdbc implements DataProvider {
             execute(String.format(DB_UPDATE_MASTER, master.getFirstName(), master.getLastName(), master.getPosition(), master.getPhone(), master.getSalary(), id));
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(MASTER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -402,9 +457,11 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (getMasterById(idMaster) != null && getServiceById(idService) != null) {
                 execute(String.format(DB_UPDATE_LIST_SERVICE, idService, idMaster));
+                log.info(LIST_UPDATE + MASTER_LIST_SERVICE);
                 return true;
             }else {
                 log.info(MASTER_ID + idMaster + NOT_FOUND);
+                log.info(LIST_NOT_UPDATE + MASTER_LIST_SERVICE);
                 return false;
             }
         }catch (NullPointerException e){
@@ -418,16 +475,13 @@ public class DataProviderJdbc implements DataProvider {
         try{
             if (getMasterById(id) == null || !needDeleteMaster){
                 log.info(MASTER_ID + id + NOT_FOUND);
+                log.info(MASTER_NOT_DELETED);
                 return false;
             }
-            ResultSet set = getResultSet(String.format(DB_DELETE, Master.class.getSimpleName().toLowerCase(), id));
-            if (set != null) {
-                set.next();
-            }
+            execute(String.format(DB_DELETE, Master.class.getSimpleName().toLowerCase(), id));
             log.info(MASTER_DELETED);
             return true;
-        }catch (NullPointerException | SQLException e){
-            log.info(MASTER_NOT_DELETED);
+        }catch (NullPointerException e){
             log.error(e);
             return false;
         }
@@ -435,16 +489,15 @@ public class DataProviderJdbc implements DataProvider {
 
     public boolean deleteListService(long idMaster) {
         try{
-            if (getListServiceById(idMaster) == null){
+            if (getListServiceById(idMaster) == null || getMasterById(idMaster) == null){
                 log.info(SERVICE_LIST + idMaster + NOT_FOUND);
+                log.info(LIST_NOT_DELETE + MASTER_LIST_SERVICE);
                 return false;
             }
-            ResultSet set = getResultSet(String.format(DB_DELETE_LIST_SERVICE, MASTER_LIST_SERVICE, idMaster));
-            if (set != null) {
-                set.next();
-            }
+            execute(String.format(DB_DELETE_LIST_SERVICE, MASTER_LIST_SERVICE, idMaster));
+            log.info(LIST_DELETE + MASTER_LIST_SERVICE);
             return true;
-        }catch (NullPointerException | SQLException e){
+        }catch (NullPointerException e){
             log.error(e);
             return false;
         }
@@ -453,7 +506,9 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public Master getMasterById(long id) {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT, Master.class.getSimpleName().toLowerCase(), id));
+            log.debug(String.format(DB_SELECT, Master.class.getSimpleName().toLowerCase(), id));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT, Master.class.getSimpleName().toLowerCase(), id));
             if (set != null && set.next()) {
                 Master master = new Master();
                 master.setId(set.getLong(ID));
@@ -464,10 +519,12 @@ public class DataProviderJdbc implements DataProvider {
                 master.setSalary(set.getDouble(MASTER_SALARY));
                 log.info(MASTER_RECEIVED);
                 log.debug(master);
+                statement.close();
                 return master;
             } else {
                 log.info(MASTER_NOT_RECEIVED);
                 log.error(ERROR_GET_ID);
+                statement.close();
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
@@ -478,16 +535,22 @@ public class DataProviderJdbc implements DataProvider {
 
     public List<Long> getListServiceById(long idMaster) {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT_LIST_SERVICE, MASTER_LIST_SERVICE, idMaster));
+            log.debug(String.format(DB_SELECT_LIST_SERVICE, MASTER_LIST_SERVICE, idMaster));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT_LIST_SERVICE, MASTER_LIST_SERVICE, idMaster));
             if (set != null ) {
                 List<Long> list = new ArrayList<>();
                 while(set.next()) {
                     list.add(set.getLong(ID_SERVICE));
                 }
+                log.info(LIST_GET + MASTER_LIST_SERVICE);
                 log.debug(list);
+                statement.close();
                 return list;
             } else {
                 log.error(ERROR_GET_ID);
+                log.info(LIST_NOT_GET + MASTER_LIST_SERVICE);
+                statement.close();
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
@@ -501,6 +564,7 @@ public class DataProviderJdbc implements DataProvider {
         try{
             if (address == null || listMaster == null){
                 log.info(NULL_VALUE);
+                log.info(SALON_NOT_CREATED);
                 return false;
             }else {
                 Salon salon = new Salon();
@@ -508,12 +572,11 @@ public class DataProviderJdbc implements DataProvider {
                 salon.setListMaster(listMaster);
                 log.info(SALON_CREATED);
                 log.debug(salon);
-                this.execute(String.format(DB_INSERT, salon.getClass().getSimpleName().toLowerCase(), SALON_FIELDS,
+                execute(String.format(DB_INSERT, salon.getClass().getSimpleName().toLowerCase(), SALON_FIELDS,
                         String.format(SALON_INSERT_FORMAT,salon.getAddress())));
                 return true;
             }
         }catch (NullPointerException e) {
-            log.info(SALON_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -522,11 +585,14 @@ public class DataProviderJdbc implements DataProvider {
     public void createListMaster(long idSalon, long idMaster) {
         try{
             if(getMasterById(idMaster) != null && getServiceById(idSalon) != null) {
-                log.info(LIST_ADD);
-                this.execute(String.format(DB_INSERT, SALON_LIST_MASTER, LIST_MASTER_FIELDS,
+                log.info(LIST_ADD + SALON_LIST_MASTER);
+                execute(String.format(DB_INSERT, SALON_LIST_MASTER, LIST_MASTER_FIELDS,
                         String.format(LIST_FORMAT,idSalon,idMaster)));
+            }else{
+                log.info(LIST_NOT_ADD + SALON_LIST_MASTER);
             }
         }catch (NullPointerException e){
+            log.info(LIST_NOT_ADD + SALON_LIST_MASTER);
             log.error(e);
         }
     }
@@ -536,6 +602,7 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (getSalonById(id) == null){
                 log.info(SALON_ID + id + NOT_FOUND);
+                log.info(SALON_NOT_EDITED);
                 return false;
             }
             Salon salon = new Salon();
@@ -547,7 +614,6 @@ public class DataProviderJdbc implements DataProvider {
             execute(String.format(DB_UPDATE_SALON, salon.getAddress(), id));
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(SALON_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -557,9 +623,11 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (getMasterById(idSalon) != null && getMasterById(idMaster) != null) {
                 execute(String.format(DB_UPDATE_LIST_MASTER, idMaster, idSalon));
+                log.info(LIST_UPDATE + SALON_LIST_MASTER);
                 return true;
             }else {
                 log.info(SALON_ID + idSalon + NOT_FOUND);
+                log.info(LIST_NOT_UPDATE + SALON_LIST_MASTER);
                 return false;
             }
         }catch (NullPointerException e){
@@ -573,16 +641,13 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (getSalonById(id) == null){
                 log.info(SALON_ID + id + NOT_FOUND);
+                log.info(SALON_NOT_DELETED);
                 return false;
             }
-            ResultSet set = getResultSet(String.format(DB_DELETE, Salon.class.getSimpleName().toLowerCase(), id));
-            if (set != null) {
-                set.next();
-            }
+            execute(String.format(DB_DELETE, Salon.class.getSimpleName().toLowerCase(), id));
             log.info(SALON_DELETED);
             return true;
-        }catch (NullPointerException | SQLException e){
-            log.info(SALON_NOT_DELETED);
+        }catch (NullPointerException e){
             log.error(e);
             return false;
         }
@@ -590,16 +655,15 @@ public class DataProviderJdbc implements DataProvider {
 
     public boolean deleteListMaster(long idSalon) {
         try{
-            if (getListServiceById(idSalon) == null){
+            if (getListServiceById(idSalon) == null || getSalonById(idSalon) == null){
                 log.info(MASTER_LIST + idSalon + NOT_FOUND);
+                log.info(LIST_NOT_DELETE + SALON_LIST_MASTER);
                 return false;
             }
-            ResultSet set = getResultSet(String.format(DB_DELETE_LIST_MASTER, SALON_LIST_MASTER, idSalon));
-            if (set != null) {
-                set.next();
-            }
+            execute(String.format(DB_DELETE_LIST_MASTER, SALON_LIST_MASTER, idSalon));
+            log.info(LIST_DELETE + SALON_LIST_MASTER);
             return true;
-        }catch (NullPointerException | SQLException e){
+        }catch (NullPointerException  e){
             log.error(e);
             return false;
         }
@@ -608,21 +672,24 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public Salon getSalonById(long id) {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT, Salon.class.getSimpleName().toLowerCase(), id));
+            log.debug(String.format(DB_SELECT, Salon.class.getSimpleName().toLowerCase(), id));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT, Salon.class.getSimpleName().toLowerCase(), id));
             if (set != null && set.next()) {
                 Salon salon = new Salon();
                 salon.setId(set.getLong(ID));
                 salon.setAddress(set.getString(SALON_ADDRESS));
                 log.info(SALON_RECEIVED);
                 log.debug(salon);
+                statement.close();
                 return salon;
             } else {
                 log.info(SALON_NOT_RECEIVED);
                 log.error(ERROR_GET_ID);
+                statement.close();
                 return null;
             }
         } catch (NoSuchElementException | NullPointerException | SQLException e) {
-            log.info(SALON_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -630,16 +697,22 @@ public class DataProviderJdbc implements DataProvider {
 
     public List<Long> getListMasterById(long idSalon) {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT_LIST_MASTER, SALON_LIST_MASTER, idSalon));
+            log.debug(String.format(DB_SELECT_LIST_MASTER, SALON_LIST_MASTER, idSalon));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT_LIST_MASTER, SALON_LIST_MASTER, idSalon));
             if (set != null ) {
                 List<Long> list = new ArrayList<>();
                 while(set.next()) {
                     list.add(set.getLong(ID_MASTER));
                 }
+                log.info(LIST_GET + SALON_LIST_MASTER);
                 log.debug(list);
+                statement.close();
                 return list;
             } else {
                 log.error(ERROR_GET_ID);
+                log.info(LIST_NOT_GET + SALON_LIST_MASTER);
+                statement.close();
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
@@ -653,6 +726,7 @@ public class DataProviderJdbc implements DataProvider {
         try{
             if (service == null || quantity == null){
                 log.info(NULL_VALUE);
+                log.info(ORDER_ITEM_NOT_CREATED);
                 return false;
             }else {
                 OrderItem orderItem = new OrderItem();
@@ -662,12 +736,11 @@ public class DataProviderJdbc implements DataProvider {
                 log.info(ORDER_ITEM_CREATED);
                 log.debug(orderItem);
                 log.debug(orderItem.getService().getId());
-                this.execute(String.format(DB_INSERT, orderItem.getClass().getSimpleName().toLowerCase(), ORDER_ITEM_FIELDS,
+                execute(String.format(DB_INSERT, orderItem.getClass().getSimpleName().toLowerCase(), ORDER_ITEM_FIELDS,
                         String.format(ORDER_ITEM_INSERT_FORMAT,orderItem.getService().getId(), orderItem.getCost(), orderItem.getQuantity())));
                 return true;
             }
         }catch (NullPointerException e) {
-            log.info(ORDER_ITEM_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -678,6 +751,7 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (getOrderItemById(id) == null){
                 log.info(ORDER_ITEM_ID + id + NOT_FOUND);
+                log.info(ORDER_ITEM_NOT_EDITED);
                 return false;
             }
             OrderItem orderItem = new OrderItem();
@@ -687,10 +761,9 @@ public class DataProviderJdbc implements DataProvider {
             orderItem.setQuantity(quantity);
             log.info(ORDER_ITEM_EDITED);
             log.debug(orderItem);
-            this.execute(String.format(DB_UPDATE_ORDER_ITEM, orderItem.getService().getId(), orderItem.getCost(), orderItem.getQuantity(), id));
+            execute(String.format(DB_UPDATE_ORDER_ITEM, orderItem.getService().getId(), orderItem.getCost(), orderItem.getQuantity(), id));
             return true;
         } catch (NoSuchElementException | IndexOutOfBoundsException | NullPointerException e) {
-            log.info(ORDER_ITEM_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -699,14 +772,15 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public boolean deleteOrderItem(long id) {
         try{
-            ResultSet set = getResultSet(String.format(DB_DELETE, OrderItem.class.getSimpleName().toLowerCase(), id));
-            if (set != null) {
-                set.next();
+            if (getOrderItemById(id) == null){
+                log.info(ORDER_ITEM_ID + id + NOT_FOUND);
+                log.info(ORDER_ITEM_NOT_DELETED);
+                return false;
             }
+            execute(String.format(DB_DELETE, OrderItem.class.getSimpleName().toLowerCase(), id));
             log.info(ORDER_ITEM_DELETED);
             return true;
-        }catch (NullPointerException | SQLException e){
-            log.info(ORDER_ITEM_NOT_DELETED);
+        }catch (NullPointerException e){
             log.error(e);
             return false;
         }
@@ -715,7 +789,9 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public OrderItem getOrderItemById(long id) {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT, OrderItem.class.getSimpleName().toLowerCase(), id));
+            log.debug(String.format(DB_SELECT, OrderItem.class.getSimpleName().toLowerCase(), id));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT, OrderItem.class.getSimpleName().toLowerCase(), id));
             if (set != null && set.next()) {
                 long idService = set.getLong(ORDER_ITEM_SERVICE);
                 List<Service> listService = new ArrayList<>();
@@ -728,13 +804,15 @@ public class DataProviderJdbc implements DataProvider {
                 orderItem.setQuantity(set.getInt(ORDER_ITEM_QUANTITY));
                 log.info(ORDER_ITEM_RECEIVED);
                 log.debug(orderItem);
+                statement.close();
                 return orderItem;
             } else {
+                log.info(ORDER_ITEM_NOT_RECEIVED);
                 log.error(ERROR_GET_ID);
+                statement.close();
                 return null;
             }
         } catch (NoSuchElementException | NullPointerException | SQLException e) {
-            log.info(ORDER_ITEM_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -745,6 +823,7 @@ public class DataProviderJdbc implements DataProvider {
         try{
             if (created == null || item == null || cost == null || status == null){
                 log.info(NULL_VALUE);
+                log.info(ORDER_NOT_CREATED);
                 return false;
             }else {
                 Order order = new Order();
@@ -757,12 +836,11 @@ public class DataProviderJdbc implements DataProvider {
                 order.setCompleted(completed);
                 log.info(ORDER_CREATE);
                 log.debug(order);
-                this.execute(String.format(DB_INSERT_ORDER, ORDER_FIELDS,
+                execute(String.format(DB_INSERT_ORDER, ORDER_FIELDS,
                         String.format(ORDER_INSERT_FORMAT,order.getCreated(), order.getCost(), order.getStatus(), order.getCustomerId(), order.getLastUpdated(), order.getCompleted())));
                 return true;
             }
         }catch (NullPointerException e) {
-            log.info(ORDER_NOT_CREATED);
             log.error(e);
             return false;
         }
@@ -771,11 +849,12 @@ public class DataProviderJdbc implements DataProvider {
     public void createListItem(long idOrder, long idItem) {
         try{
             if(getOrderById(idOrder) != null && getOrderById(idItem) != null) {
-                log.info(LIST_ADD);
-                this.execute(String.format(DB_INSERT, ORDER_ITEM, LIST_ORDER_ITEM_FIELDS,
+                log.info(LIST_ADD + ORDER_ITEM);
+                execute(String.format(DB_INSERT, ORDER_ITEM, LIST_ORDER_ITEM_FIELDS,
                         String.format(LIST_FORMAT,idOrder,idItem)));
             }
         }catch (NullPointerException e){
+            log.info(LIST_NOT_ADD + ORDER_ITEM);
             log.error(e);
         }
     }
@@ -785,6 +864,7 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (getOrderById(id) == null){
                 log.info(ORDER_ID + id + NOT_FOUND);
+                log.info(ORDER_NOT_EDITED);
                 return false;
             }
             Order order = new Order();
@@ -798,10 +878,9 @@ public class DataProviderJdbc implements DataProvider {
             order.setCompleted(completed);
             log.info(ORDER_EDITED);
             log.debug(order);
-            this.execute(String.format(DB_UPDATE_ORDER, order.getCreated(), order.getCost(), order.getStatus(), order.getCustomerId(), order.getLastUpdated(), order.getCompleted(), id));
+            execute(String.format(DB_UPDATE_ORDER, order.getCreated(), order.getCost(), order.getStatus(), order.getCustomerId(), order.getLastUpdated(), order.getCompleted(), id));
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
-            log.info(ORDER_NOT_EDITED);
             log.error(e);
             return false;
         }
@@ -811,9 +890,11 @@ public class DataProviderJdbc implements DataProvider {
         try {
             if (getOrderById(idOrder) != null && getOrderItemById(idItem) != null) {
                 execute(String.format(DB_UPDATE_LIST_ORDER_ITEM, idItem, idOrder));
+                log.info(LIST_UPDATE + ORDER_ITEM);
                 return true;
             }else {
                 log.info(ORDER_ID + idOrder + NOT_FOUND);
+                log.info(LIST_NOT_UPDATE + ORDER_ITEM);
                 return false;
             }
         }catch (NullPointerException e){
@@ -825,14 +906,15 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public boolean deleteOrder(long id) {
         try{
-            ResultSet set = getResultSet(String.format(DB_DELETE_ORDER, id));
-            if (set != null) {
-                set.next();
+            if (getOrderById(id) == null){
+                log.info(ORDER_ID + id + NOT_FOUND);
+                log.info(ORDER_NOT_DELETED);
+                return false;
             }
+            execute(String.format(DB_DELETE_ORDER, id));
             log.info(ORDER_DELETED);
             return true;
-        }catch (NullPointerException | SQLException e){
-            log.info(ORDER_NOT_DELETED);
+        }catch (NullPointerException e){
             log.error(e);
             return false;
         }
@@ -840,16 +922,15 @@ public class DataProviderJdbc implements DataProvider {
 
     public boolean deleteListItem(long idOrder) {
         try{
-            if (getListItemById(idOrder) == null){
+            if (getListItemById(idOrder) == null || getOrderById(idOrder) == null){
                 log.info(ORDER_ITEM_LIST + idOrder + NOT_FOUND);
+                log.info(LIST_NOT_DELETE + ORDER_ITEM);
                 return false;
             }
-            ResultSet set = getResultSet(String.format(DB_DELETE_LIST_ORDER_ITEM, ORDER_ITEM, idOrder));
-            if (set != null) {
-                set.next();
-            }
+            execute(String.format(DB_DELETE_LIST_ORDER_ITEM, ORDER_ITEM, idOrder));
+            log.info(LIST_DELETE + ORDER_ITEM);
             return true;
-        }catch (NullPointerException | SQLException e){
+        }catch (NullPointerException e){
             log.error(e);
             return false;
         }
@@ -858,7 +939,9 @@ public class DataProviderJdbc implements DataProvider {
     @Override
     public Order getOrderById(long id) {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT_ORDER, id));
+            log.debug(String.format(DB_SELECT_ORDER, id));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT_ORDER, id));
             if (set != null && set.next()) {
                 Order order = new Order();
                 order.setId(set.getLong(ID));
@@ -870,13 +953,15 @@ public class DataProviderJdbc implements DataProvider {
                 order.setCompleted(set.getString(ORDER_COMPLETED));
                 log.info(ORDER_RECEIVED);
                 log.debug(order);
+                statement.close();
                 return order;
             } else {
+                log.info(ORDER_NOT_RECEIVED);
                 log.error(ERROR_GET_ID);
+                statement.close();
                 return null;
             }
         } catch (NoSuchElementException | NullPointerException | SQLException e) {
-            log.info(ORDER_NOT_RECEIVED);
             log.error(e);
             return null;
         }
@@ -884,16 +969,22 @@ public class DataProviderJdbc implements DataProvider {
 
     public List<Long> getListItemById(long idOrder) {
         try {
-            ResultSet set = getResultSet(String.format(DB_SELECT_LIST_ORDER_ITEM, ORDER_ITEM, idOrder));
+            log.debug(String.format(DB_SELECT_LIST_ORDER_ITEM, ORDER_ITEM, idOrder));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT_LIST_ORDER_ITEM, ORDER_ITEM, idOrder));
             if (set != null ) {
                 List<Long> list = new ArrayList<>();
                 while(set.next()) {
                     list.add(set.getLong(ID_ITEM));
                 }
+                log.info(LIST_GET + ORDER_ITEM);
                 log.debug(list);
+                statement.close();
                 return list;
             } else {
                 log.error(ERROR_GET_ID);
+                log.info(LIST_NOT_GET + SALON_LIST_MASTER);
+                statement.close();
                 return null;
             }
         } catch (SQLException | NullPointerException e) {
@@ -928,7 +1019,9 @@ public class DataProviderJdbc implements DataProvider {
     public List<Order> viewOrderHistory(long customerId) {
         try {
             List<Order> orderList = new ArrayList<>();
-            ResultSet set = getResultSet(String.format(DB_SELECT_ORDER_HISTORY, customerId));
+            log.debug(String.format(DB_SELECT_ORDER_HISTORY, customerId));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT_ORDER_HISTORY, customerId));
             if (set != null) {
                 while(set.next()) {
                     Order order = new Order();
@@ -943,9 +1036,12 @@ public class DataProviderJdbc implements DataProvider {
                 }
                 log.info(ORDER_RECEIVED);
                 log.debug(orderList);
+                statement.close();
                 return orderList;
             } else {
                 log.error(ERROR_GET_ID);
+                log.info(ORDER_NOT_RECEIVED);
+                statement.close();
                 return null;
             }
         }catch (NullPointerException | NoSuchElementException | SQLException e){
@@ -958,7 +1054,9 @@ public class DataProviderJdbc implements DataProvider {
     public List<Order> getListOfCurrentOrders(long customerId, String status) {
         try {
             List<Order> orderList = new ArrayList<>();
-            ResultSet set = getResultSet(String.format(DB_SELECT_ORDER_HISTORY, customerId));
+            log.debug(String.format(DB_SELECT_ORDER_HISTORY, customerId));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT_ORDER_HISTORY, customerId));
             if (set != null && status.equals(PROCESSING)) {
                 while(set.next()) {
                     Order order = new Order();
@@ -973,9 +1071,12 @@ public class DataProviderJdbc implements DataProvider {
                 }
                 log.info(ORDER_RECEIVED);
                 log.debug(orderList);
+                statement.close();
                 return orderList;
             } else {
                 log.info(NOT_CURRENT_ORDER);
+                log.info(ORDER_NOT_RECEIVED);
+                statement.close();
                 return null;
             }
         }catch (NullPointerException | NoSuchElementException | SQLException e){
@@ -988,7 +1089,9 @@ public class DataProviderJdbc implements DataProvider {
     public StringBuffer createCustomerReport(long customerId) {
         try {
             int count = 0;
-            ResultSet set = getResultSet(String.format(DB_SELECT_ORDER_HISTORY, customerId));
+            log.debug(String.format(String.format(DB_SELECT_ORDER_HISTORY, customerId)));
+            Statement statement = createStatement();
+            ResultSet set = statement.executeQuery(String.format(DB_SELECT_ORDER_HISTORY, customerId));
             if (set != null) {
                 while(set.next()) {
                     count++;
@@ -999,9 +1102,11 @@ public class DataProviderJdbc implements DataProvider {
                         .append(customerId)
                         .append(ORDER_EQL)
                         .append(count);
+                statement.close();
                 return report;
             } else {
                 log.error(ERROR_GET_ID);
+                statement.close();
                 return null;
             }
         }catch (NullPointerException | NoSuchElementException | SQLException e){

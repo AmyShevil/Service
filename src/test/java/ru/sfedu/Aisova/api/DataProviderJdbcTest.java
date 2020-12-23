@@ -20,27 +20,11 @@ class DataProviderJdbcTest extends TestBase {
     private static final DataProviderJdbc dataProvider = new DataProviderJdbc();
     private Object NullPointerException;
 
-    private static void deleteAll() {
-        dataProvider.execute(DROP_TABLES);
-    }
-
-    private static void createTable() {
-        dataProvider.execute(CREATE_SERVICE);
-        dataProvider.execute(CREATE_NEW_CUSTOMER);
-        dataProvider.execute(CREATE_REGULAR_CUSTOMER);
-        dataProvider.execute(CREATE_ORDER_ITEM);
-        dataProvider.execute(CREATE_MASTER);
-        dataProvider.execute(CREATE_LIST_SERVICE);
-        dataProvider.execute(CREATE_SALON);
-        dataProvider.execute(CREATE_LIST_MASTER);
-        dataProvider.execute(CREATE_ORDER);
-        dataProvider.execute(CREATE_LIST_ITEM);
-    }
 
     @BeforeAll
     static void init() {
-        deleteAll();
-        createTable();
+        dataProvider.deleteAll();
+        dataProvider.createTable();
     }
 
     @Test
@@ -87,7 +71,7 @@ class DataProviderJdbcTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(2)
     void deleteServiceFail() {
-        Assertions.assertTrue(dataProvider.deleteService(10));
+        Assertions.assertFalse(dataProvider.deleteService(10));
         Assertions.assertEquals(dataProvider.getServiceById(10), NullPointerException);
         
     }
@@ -147,13 +131,14 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(6)
     void deleteNewCustomerSuccess() {
         Assertions.assertTrue(dataProvider.deleteNewCustomer(4));
-        
+        Assertions.assertEquals(dataProvider.getNewCustomerById(4), Optional.empty());
+
     }
 
     @Test
     @org.junit.jupiter.api.Order(6)
     void deleteNewCustomerFail() {
-        Assertions.assertTrue(dataProvider.deleteNewCustomer(10));
+        Assertions.assertFalse(dataProvider.deleteNewCustomer(10));
         Assertions.assertEquals(dataProvider.getNewCustomerById(10), Optional.empty());
         
     }
@@ -212,13 +197,14 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(10)
     void deleteRegularCustomerSuccess() {
         Assertions.assertTrue(dataProvider.deleteRegularCustomer(4));
-        
+        Assertions.assertEquals(dataProvider.getRegularCustomerById(4), Optional.empty());
+
     }
 
     @Test
     @org.junit.jupiter.api.Order(10)
     void deleteRegularCustomerFail() {
-        Assertions.assertTrue(dataProvider.deleteRegularCustomer(10));
+        Assertions.assertFalse(dataProvider.deleteRegularCustomer(10));
         Assertions.assertEquals(dataProvider.getRegularCustomerById(10), Optional.empty());
         
     }
@@ -328,7 +314,6 @@ class DataProviderJdbcTest extends TestBase {
         Assertions.assertTrue(dataProvider.deleteListService(4));
         Assertions.assertTrue(dataProvider.deleteMaster(4, true));
         Assertions.assertNull(dataProvider.getMasterById(4));
-        
     }
 
     @Test
@@ -336,7 +321,7 @@ class DataProviderJdbcTest extends TestBase {
     void deleteMasterFail() {
         Assertions.assertFalse(dataProvider.deleteMaster(10, false));
         Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
-        Assertions.assertTrue(dataProvider.deleteListService(10));
+        Assertions.assertFalse(dataProvider.deleteListService(10));
         
     }
 
@@ -449,10 +434,9 @@ class DataProviderJdbcTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(18)
     void deleteSalonFail() {
-        Assertions.assertTrue(dataProvider.deleteListMaster(10));
         Assertions.assertFalse(dataProvider.deleteSalon(10));
         Assertions.assertEquals(dataProvider.getSalonById(10), NullPointerException);
-        
+        Assertions.assertFalse(dataProvider.deleteListMaster(10));
     }
 
     @Test
@@ -537,7 +521,7 @@ class DataProviderJdbcTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(22)
     void deleteOrderItemFail() {
-        Assertions.assertTrue(dataProvider.deleteOrderItem(10));
+        Assertions.assertFalse(dataProvider.deleteOrderItem(10));
         Assertions.assertEquals(dataProvider.getOrderItemById(10), NullPointerException);
         
     }
@@ -649,9 +633,9 @@ class DataProviderJdbcTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(26)
     void deleteOrderFail() {
-        Assertions.assertTrue(dataProvider.deleteListItem(10));
-        Assertions.assertTrue(dataProvider.deleteOrder(10));
+        Assertions.assertFalse(dataProvider.deleteOrder(10));
         Assertions.assertEquals(dataProvider.getOrderById(10), NullPointerException);
+        Assertions.assertFalse(dataProvider.deleteListItem(10));
     }
 
     @Test
@@ -790,5 +774,6 @@ class DataProviderJdbcTest extends TestBase {
         log.debug(dataProvider.createMasterReport(10, false));
         Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
     }
+
 
 }

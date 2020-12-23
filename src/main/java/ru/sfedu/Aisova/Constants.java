@@ -49,7 +49,7 @@ public class Constants {
     public static final String DB_DELETE_LIST_SERVICE = "DELETE FROM %s WHERE id_master=%d";
     public static final String DB_DELETE_LIST_MASTER = "DELETE FROM %s WHERE id_salon=%d";
     public static final String DB_DELETE_LIST_ORDER_ITEM = "DELETE FROM %s WHERE id_order=%d";
-    public static final String DROP_TABLES ="DROP TABLE Service, NewCustomer, RegularCustomer, listService, listMaster, listItem, OrderItem, Master, Salon, \"order\", listItem";
+    public static final String DROP_TABLES ="DROP TABLE Service, NewCustomer, RegularCustomer, listService, listMaster, listItem, OrderItem, Master, Salon, \"order\"";
 
     public static final String DB_UPDATE_SERVICE = "UPDATE Service SET name='%s', price='%s', description='%s' WHERE id=%d";
     public static final String DB_UPDATE_NEW_CUSTOMER = "UPDATE NewCustomer SET firstname='%s', lastname='%s', phone='%s', email='%s', discount='%s' WHERE id=%d";
@@ -290,6 +290,15 @@ public class Constants {
     public static final String HEROKU ="Heroku";
     public static final String POSTGRESQL ="PostgreSql";
     public static final String NOT_SELECTED ="You have not selected any database";
-    public static final String LIST_ADD ="List add";
+
+    public static final String LIST_ADD ="List added: ";
+    public static final String LIST_NOT_ADD ="List not added: ";
+    public static final String LIST_UPDATE ="List updated: ";
+    public static final String LIST_NOT_UPDATE ="List not updated: ";
+    public static final String LIST_DELETE ="List deleted: ";
+    public static final String LIST_NOT_DELETE ="List not deleted: ";
+    public static final String LIST_GET ="List received: ";
+    public static final String LIST_NOT_GET ="List not received: ";
+
 
 }
