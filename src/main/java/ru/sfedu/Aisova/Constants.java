@@ -300,5 +300,120 @@ public class Constants {
     public static final String LIST_GET ="List received: ";
     public static final String LIST_NOT_GET ="List not received: ";
 
+    public static final String LOAD_DROP ="Loading method delete all tables ...";
+    public static final String LOAD_DROP_COMPLETE ="Method delete all tables was loaded";
 
+    public static final String LOAD_CREATE ="Loading method create all tables ...";
+    public static final String LOAD_CREATE_COMPLETE ="Method create all tables was loaded";
+
+    public static final String LOAD_CREATE_SERVICE ="Loading method create service ...";
+    public static final String LOAD_CREATE_SERVICE_COMPLETE ="Method create service was loaded";
+    public static final String LOAD_EDIT_SERVICE ="Loading method edit service ...";
+    public static final String LOAD_EDIT_SERVICE_COMPLETE ="Method edit service was loaded";
+    public static final String LOAD_DELETE_SERVICE ="Loading method delete service ...";
+    public static final String LOAD_DELETE_SERVICE_COMPLETE ="Method delete service was loaded";
+    public static final String LOAD_GET_SERVICE ="Loading method get service by id ...";
+    public static final String LOAD_GET_SERVICE_COMPLETE ="Method get service by id was loaded";
+
+    public static final String LOAD_CREATE_NEW_CUSTOMER ="Loading method create new customer ...";
+    public static final String LOAD_CREATE_NEW_CUSTOMER_COMPLETE ="Method create new customer was loaded";
+    public static final String LOAD_EDIT_NEW_CUSTOMER ="Loading method edit new customer ...";
+    public static final String LOAD_EDIT_NEW_CUSTOMER_COMPLETE ="Method edit new customer was loaded";
+    public static final String LOAD_DELETE_NEW_CUSTOMER ="Loading method delete new customer ...";
+    public static final String LOAD_DELETE_NEW_CUSTOMER_COMPLETE ="Method delete new customer was loaded";
+    public static final String LOAD_GET_NEW_CUSTOMER ="Loading method get new customer by id ...";
+    public static final String LOAD_GET_NEW_CUSTOMER_COMPLETE ="Method get new customer by id was loaded";
+
+    public static final String LOAD_CREATE_REGULAR_CUSTOMER ="Loading method create regular customer ...";
+    public static final String LOAD_CREATE_REGULAR_CUSTOMER_COMPLETE ="Method create regular customer was loaded";
+    public static final String LOAD_EDIT_REGULAR_CUSTOMER ="Loading method edit regular customer ...";
+    public static final String LOAD_EDIT_REGULAR_CUSTOMER_COMPLETE ="Method edit regular customer was loaded";
+    public static final String LOAD_DELETE_REGULAR_CUSTOMER ="Loading method delete regular customer ...";
+    public static final String LOAD_DELETE_REGULAR_CUSTOMER_COMPLETE ="Method delete regular customer was loaded";
+    public static final String LOAD_GET_REGULAR_CUSTOMER ="Loading method get regular customer by id ...";
+    public static final String LOAD_GET_REGULAR_CUSTOMER_COMPLETE ="Method get regular customer by id was loaded";
+
+    public static final String LOAD_CREATE_MASTER ="Loading method create master ...";
+    public static final String LOAD_CREATE_MASTER_COMPLETE ="Method create master was loaded";
+    public static final String LOAD_EDIT_MASTER ="Loading method edit master ...";
+    public static final String LOAD_EDIT_MASTER_COMPLETE ="Method edit master was loaded";
+    public static final String LOAD_DELETE_MASTER ="Loading method delete master ...";
+    public static final String LOAD_DELETE_MASTER_COMPLETE ="Method delete master was loaded";
+    public static final String LOAD_GET_MASTER ="Loading method get master by id ...";
+    public static final String LOAD_GET_MASTER_COMPLETE ="Method get master by id was loaded";
+
+    public static final String LOAD_CREATE_LIST_SERVICE ="Loading method create list service ...";
+    public static final String LOAD_CREATE_LIST_SERVICE_COMPLETE ="Method create list service was loaded";
+    public static final String LOAD_EDIT_LIST_SERVICE ="Loading method edit list service ...";
+    public static final String LOAD_EDIT_LIST_SERVICE_COMPLETE ="Method edit list service was loaded";
+    public static final String LOAD_DELETE_LIST_SERVICE ="Loading method delete list service ...";
+    public static final String LOAD_DELETE_LIST_SERVICE_COMPLETE ="Method delete list service was loaded";
+    public static final String LOAD_GET_LIST_SERVICE ="Loading method get list service by id ...";
+    public static final String LOAD_GET_LIST_SERVICE_COMPLETE ="Method get list service by id was loaded";
+
+    public static final String LOAD_CREATE_SALON ="Loading method create salon ...";
+    public static final String LOAD_CREATE_SALON_COMPLETE ="Method create salon was loaded";
+    public static final String LOAD_EDIT_SALON ="Loading method edit salon ...";
+    public static final String LOAD_EDIT_SALON_COMPLETE ="Method edit salon was loaded";
+    public static final String LOAD_DELETE_SALON ="Loading method delete salon ...";
+    public static final String LOAD_DELETE_SALON_COMPLETE ="Method delete salon was loaded";
+    public static final String LOAD_GET_SALON ="Loading method get salon by id ...";
+    public static final String LOAD_GET_SALON_COMPLETE ="Method get salon by id was loaded";
+
+    public static final String LOAD_CREATE_LIST_MASTER ="Loading method create list master ...";
+    public static final String LOAD_CREATE_LIST_MASTER_COMPLETE ="Method create list master was loaded";
+    public static final String LOAD_EDIT_LIST_MASTER ="Loading method edit list master ...";
+    public static final String LOAD_EDIT_LIST_MASTER_COMPLETE ="Method edit list master was loaded";
+    public static final String LOAD_DELETE_LIST_MASTER ="Loading method delete list master ...";
+    public static final String LOAD_DELETE_LIST_MASTER_COMPLETE ="Method delete list master was loaded";
+    public static final String LOAD_GET_LIST_MASTER ="Loading method get list master by id ...";
+    public static final String LOAD_GET_LIST_MASTER_COMPLETE ="Method get list master by id was loaded";
+
+    public static final String LOAD_CREATE_ITEM ="Loading method create order item ...";
+    public static final String LOAD_CREATE_ITEM_COMPLETE ="Method create order item was loaded";
+    public static final String LOAD_EDIT_ITEM ="Loading method edit order item ...";
+    public static final String LOAD_EDIT_ITEM_COMPLETE ="Method edit order item was loaded";
+    public static final String LOAD_DELETE_ITEM ="Loading method delete order item ...";
+    public static final String LOAD_DELETE_ITEM_COMPLETE ="Method delete order item was loaded";
+    public static final String LOAD_GET_ITEM ="Loading method get order item by id ...";
+    public static final String LOAD_GET_ITEM_COMPLETE ="Method get order item by id was loaded";
+
+    public static final String LOAD_CREATE_ORDER ="Loading method create order ...";
+    public static final String LOAD_CREATE_ORDER_COMPLETE ="Method create order was loaded";
+    public static final String LOAD_EDIT_ORDER ="Loading method edit order ...";
+    public static final String LOAD_EDIT_ORDER_COMPLETE ="Method edit order was loaded";
+    public static final String LOAD_DELETE_ORDER ="Loading method delete order ...";
+    public static final String LOAD_DELETE_ORDER_COMPLETE ="Method delete order was loaded";
+    public static final String LOAD_GET_ORDER ="Loading method get order by id ...";
+    public static final String LOAD_GET_ORDER_COMPLETE ="Method get order by id was loaded";
+
+    public static final String LOAD_CREATE_LIST_ITEM ="Loading method create list order item ...";
+    public static final String LOAD_CREATE_LIST_ITEM_COMPLETE ="Method create list order item was loaded";
+    public static final String LOAD_EDIT_LIST_ITEM ="Loading method edit list order item ...";
+    public static final String LOAD_EDIT_LIST_ITEM_COMPLETE ="Method edit list order item was loaded";
+    public static final String LOAD_DELETE_LIST_ITEM ="Loading method delete list order item ...";
+    public static final String LOAD_DELETE_LIST_ITEM_COMPLETE ="Method delete list order item was loaded";
+    public static final String LOAD_GET_LIST_ITEM ="Loading method get list order item by id ...";
+    public static final String LOAD_GET_LIST_ITEM_COMPLETE ="Method get list order item by id was loaded";
+
+    public static final String LOAD_CALCULATE ="Loading method calculate order value ...";
+    public static final String LOAD_CALCULATE_COMPLETE ="Method calculate order value was loaded";
+
+    public static final String LOAD_VIEW_ORDER ="Loading method view order history ...";
+    public static final String LOAD_VIEW_ORDER_COMPLETE ="Method view order history was loaded";
+
+    public static final String LOAD_GET_ORDER_LIST ="Loading method get list og current orders ...";
+    public static final String LOAD_GET_ORDER_LIST_COMPLETE ="Method get list og current orders was loaded";
+
+    public static final String LOAD_CUSTOMER_REPORT ="Loading method create customer report ...";
+    public static final String LOAD_CUSTOMER_REPORT_COMPLETE ="Method create customer report was loaded";
+
+    public static final String LOAD_CHANGE_MASTER ="Loading method change the list of master ...";
+    public static final String LOAD_CHANGE_MASTER_COMPLETE ="Method change the list of master was loaded";
+
+    public static final String LOAD_ASSIGN_SERVICE ="Loading method assign service ...";
+    public static final String LOAD_ASSIGN_SERVICE_COMPLETE ="Method assign service was loaded";
+
+    public static final String LOAD_MASTER_REPORT ="Loading method create master report ...";
+    public static final String LOAD_MASTER_REPORT_COMPLETE ="Method create master report was loaded";
 }

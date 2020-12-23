@@ -90,7 +90,7 @@ public class DataProviderXmlTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(2)
     void deleteServiceFail() throws Exception {
-        Assertions.assertTrue(dataProvider.deleteService(10));
+        Assertions.assertFalse(dataProvider.deleteService(10));
         Assertions.assertEquals(dataProvider.getServiceById(10), NullPointerException);
     }
 
@@ -149,7 +149,7 @@ public class DataProviderXmlTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(6)
     void deleteNewCustomerFail() throws Exception {
-        Assertions.assertTrue(dataProvider.deleteNewCustomer(10));
+        Assertions.assertFalse(dataProvider.deleteNewCustomer(10));
         Assertions.assertEquals(dataProvider.getNewCustomerById(10), Optional.empty());
     }
 
@@ -207,7 +207,7 @@ public class DataProviderXmlTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(10)
     void deleteRegularCustomerFail() throws Exception {
-        Assertions.assertTrue(dataProvider.deleteRegularCustomer(10));
+        Assertions.assertFalse(dataProvider.deleteRegularCustomer(10));
         Assertions.assertEquals(dataProvider.getRegularCustomerById(10), Optional.empty());
     }
 
@@ -371,7 +371,7 @@ public class DataProviderXmlTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(18)
     void deleteSalonFail() throws Exception {
-        Assertions.assertTrue(dataProvider.deleteSalon(10));
+        Assertions.assertFalse(dataProvider.deleteSalon(10));
         Assertions.assertEquals(dataProvider.getSalonById(10), NullPointerException);
     }
 
@@ -412,7 +412,6 @@ public class DataProviderXmlTest extends TestBase {
         listService.add(dataProvider.getServiceById(0));
         listService.add(dataProvider.getServiceById(1));
         listService.add(dataProvider.getServiceById(2));
-        Service service2 = listService.stream().filter(el->el.getId()==1).findFirst().get();
         Service service3 = listService.stream().filter(el->el.getId()==2).findFirst().get();
         Assertions.assertFalse(dataProvider.createOrderItem(null,1));
         Assertions.assertFalse(dataProvider.createOrderItem(service3,null));
@@ -446,7 +445,7 @@ public class DataProviderXmlTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(22)
     void deleteOrderItemFail() throws Exception {
-        Assertions.assertTrue(dataProvider.deleteOrderItem(10));
+        Assertions.assertFalse(dataProvider.deleteOrderItem(10));
         Assertions.assertEquals(dataProvider.getOrderItemById(10), NullPointerException);
     }
 
@@ -538,7 +537,7 @@ public class DataProviderXmlTest extends TestBase {
     @Test
     @org.junit.jupiter.api.Order(26)
     void deleteOrderFail() throws Exception {
-        Assertions.assertTrue(dataProvider.deleteOrder(10));
+        Assertions.assertFalse(dataProvider.deleteOrder(10));
         Assertions.assertEquals(dataProvider.getOrderById(10), NullPointerException);
     }
 
