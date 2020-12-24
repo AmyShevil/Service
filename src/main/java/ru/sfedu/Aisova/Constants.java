@@ -1,12 +1,33 @@
 package ru.sfedu.Aisova;
 
 public class Constants {
-    static public final String SPLIT =",";
-    static public final String LIST_START_SYMBOL ="[";
-    static public final String LIST_END_SYMBOL ="]";
-    static public final String PEOPLE_START_SYMBOL ="{";
-    static public final String PEOPLE_END_SYMBOL ="}";
+    public static final String LAUNCH_APP ="Launching the application...";
+    public static final String OPERATING_SYS ="Operating System: ";
+    public static final String OS_NAME = "os.name";
+    public static final String OS_VERSION ="os.version";
+    public static final String JRE ="JRE: ";
+    public static final String JAVA_VERSION ="java.version";
+    public static final String JAVA_LAUNCH ="Java Launched From: ";
+    public static final String JAVA_HOME ="java.home";
+    public static final String CLASS_PATH ="Class Path: ";
+    public static final String JAVA_CLASS ="java.class.path";
+    public static final String LIBRARY_PATH ="Library Path: ";
+    public static final String JAVA_LIBRARY ="java.library.path";
+    public static final String USER_HOME_DIRECTORY ="User Home Directory: ";
+    public static final String USER_HOME ="user.home";
+    public static final String USER_WORKING_DIRECTORY ="User Working Directory: ";
+    public static final String USER_DIR ="user.dir";
+    public static final String TEST_INFO ="Test INFO logging.";
+    public static final String START_APP ="LogClient: starting application.........";
+
+    public static final String PROB = " ";
+    public static final String SPLIT =",";
+    public static final String LIST_START_SYMBOL ="[";
+    public static final String LIST_END_SYMBOL ="]";
+    public static final String PEOPLE_START_SYMBOL ="{";
+    public static final String PEOPLE_END_SYMBOL ="}";
     public static final String CONFIG_PATH = "config.path";
+    public static final String PROPERTIES = "src/main/resources/enviroment.properties";
 
     public static final String PATH_CSV = "csv_path";
     public static final String FILE_EXTENSION_CSV = "csv";
@@ -15,7 +36,6 @@ public class Constants {
     public static final String FILE_EXTENSION_XML = "xml";
 
     public static final String DB_PostgreSQL_USED = "db_PostgreSQL_used";
-    public static final String DB_H2_USED = "db_H2_used";
     public static final String DB_Heroku_USED = "db_Heroku_used";
 
     public static final String DB_PostgreSQL_DRIVER = "db_PostgreSQL_driver";
@@ -27,11 +47,6 @@ public class Constants {
     public static final String DB_Heroku_URL = "db_Heroku_url";
     public static final String DB_Heroku_USER = "db_Heroku_user";
     public static final String DB_Heroku_PASS = "db_Heroku_pass";
-
-    public static final String DB_H2_DRIVER = "db_H2_driver";
-    public static final String DB_H2_URL = "db_H2_url";
-    public static final String DB_H2_USER = "db_H2_user";
-    public static final String DB_H2_PASS = "db_H2_pass";
 
 
     public static final String DB_INSERT = "INSERT INTO %s (%s) VALUES (%s)";
@@ -416,4 +431,26 @@ public class Constants {
 
     public static final String LOAD_MASTER_REPORT ="Loading method create master report ...";
     public static final String LOAD_MASTER_REPORT_COMPLETE ="Method create master report was loaded";
+
+    public static final String MASTER_COMMAND ="master";
+    public static final String NEW_CUSTOMER_COMMAND ="newcustomer";
+    public static final String REGULAR_CUSTOMER_COMMAND ="regularcustomer";
+    public static final String ORDER_COMMAND ="order";
+    public static final String ORDER_ITEM_COMMAND ="orderitem";
+    public static final String SALON_COMMAND ="salon";
+    public static final String SERVICE_COMMAND ="service";
+
+    public static final String CREATE_COMMAND ="create";
+    public static final String DELETE_COMMAND ="delete";
+    public static final String GET_BY_ID_COMMAND ="getbyid";
+    public static final String GET_ORDER_HISTORY_COMMAND ="history";
+    public static final String CALCULATE_COMMAND ="calculate";
+
+    public static final String LINE ="___________________________________________________________________________________";
+    public static final String COMMA =", ";
+    public static final String READ_FAIL ="Can't read properties";
+    public static final String SOURCE_FAIL ="Command should begin from data source type: ";
+    public static final String FILE_FAIL ="Command should have a table name in the second place: ";
+    public static final String ACTION_FAIL ="Action should take the third place in command, actions: ";
+    public static final String BAD_ID ="Bad id format";
 }

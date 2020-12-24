@@ -1123,7 +1123,6 @@ public class DataProviderCsv implements DataProvider{
             orderList = orderList.stream()
                     .filter(user -> user.getCustomerId() == customerId)
                     .collect(Collectors.toList());
-            log.debug(orderList);
             Order order = orderList.stream()
                     .findAny().orElse(null);
             order.setItem(getOrderItemList(Order.class, order));

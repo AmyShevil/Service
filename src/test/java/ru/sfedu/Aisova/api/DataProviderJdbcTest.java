@@ -588,6 +588,7 @@ class DataProviderJdbcTest extends TestBase {
         Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, 10000.0,"PROCESSING", 3, "04.12.2020", null));
         Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList1, 10000.0,null, 2, null, "05.12.2020"));
         Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList1, null,"PROCESSING", 2, null, "05.12.2020"));
+        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList1, 55.0,"PROCESSING", 10, null, "05.12.2020"));
 
         dataProvider.createListItem(1,10);
         dataProvider.createListItem(10,2);

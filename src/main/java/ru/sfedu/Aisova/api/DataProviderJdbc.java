@@ -220,7 +220,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.info(LOAD_GET_SERVICE_COMPLETE);
                 return service;
             } else {
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 log.info(SERVICE_NOT_RECEIVED);
                 statement.close();
                 log.info(LOAD_GET_SERVICE_COMPLETE);
@@ -330,7 +330,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.info(LOAD_GET_NEW_CUSTOMER_COMPLETE);
                 return Optional.of(customer);
             } else {
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 log.info(NEW_CUSTOMER_NOT_RECEIVED);
                 statement.close();
                 log.info(LOAD_GET_NEW_CUSTOMER_COMPLETE);
@@ -440,7 +440,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.info(LOAD_GET_REGULAR_CUSTOMER_COMPLETE);
                 return Optional.of(customer);
             } else {
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 log.info(REGULAR_CUSTOMER_NOT_RECEIVED);
                 statement.close();
                 log.info(LOAD_GET_REGULAR_CUSTOMER_COMPLETE);
@@ -484,7 +484,7 @@ public class DataProviderJdbc implements DataProvider {
 
     public void createListService(long idMaster, long idService) {
         try{
-            log.info(LOAD_CREATE_LIST_MASTER);
+            log.info(LOAD_CREATE_LIST_SERVICE);
             if(getMasterById(idMaster) != null && getServiceById(idService) != null) {
                 log.info(LIST_ADD + MASTER_LIST_SERVICE);
                 execute(String.format(DB_INSERT, MASTER_LIST_SERVICE, LIST_SERVICE_FIELDS,
@@ -531,7 +531,7 @@ public class DataProviderJdbc implements DataProvider {
 
     public boolean editListService(long idMaster, long idService) {
         try {
-            log.info(LOAD_EDIT_LIST_MASTER);
+            log.info(LOAD_EDIT_LIST_SERVICE);
             if (getMasterById(idMaster) != null && getServiceById(idService) != null) {
                 execute(String.format(DB_UPDATE_LIST_SERVICE, idService, idMaster));
                 log.info(LIST_UPDATE + MASTER_LIST_SERVICE);
@@ -571,7 +571,7 @@ public class DataProviderJdbc implements DataProvider {
 
     public boolean deleteListService(long idMaster) {
         try{
-            log.info(LOAD_DELETE_LIST_MASTER);
+            log.info(LOAD_DELETE_LIST_SERVICE);
             if (getListServiceById(idMaster) == null || getMasterById(idMaster) == null){
                 log.info(SERVICE_LIST + idMaster + NOT_FOUND);
                 log.info(LIST_NOT_DELETE + MASTER_LIST_SERVICE);
@@ -610,7 +610,7 @@ public class DataProviderJdbc implements DataProvider {
                 return master;
             } else {
                 log.info(MASTER_NOT_RECEIVED);
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 statement.close();
                 log.info(LOAD_GET_MASTER_COMPLETE);
                 return null;
@@ -638,7 +638,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.info(LOAD_GET_LIST_SERVICE_COMPLETE);
                 return list;
             } else {
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 log.info(LIST_NOT_GET + MASTER_LIST_SERVICE);
                 statement.close();
                 log.info(LOAD_GET_LIST_SERVICE_COMPLETE);
@@ -796,7 +796,7 @@ public class DataProviderJdbc implements DataProvider {
                 return salon;
             } else {
                 log.info(SALON_NOT_RECEIVED);
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 statement.close();
                 log.info(LOAD_GET_SALON_COMPLETE);
                 return null;
@@ -824,7 +824,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.info(LOAD_GET_LIST_MASTER_COMPLETE);
                 return list;
             } else {
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 log.info(LIST_NOT_GET + SALON_LIST_MASTER);
                 statement.close();
                 log.info(LOAD_GET_LIST_MASTER_COMPLETE);
@@ -934,7 +934,7 @@ public class DataProviderJdbc implements DataProvider {
                 return orderItem;
             } else {
                 log.info(ORDER_ITEM_NOT_RECEIVED);
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 statement.close();
                 log.info(LOAD_GET_ITEM_COMPLETE);
                 return null;
@@ -949,7 +949,7 @@ public class DataProviderJdbc implements DataProvider {
     public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) {
         try{
             log.info(LOAD_CREATE_ORDER);
-            if (created == null || item == null || cost == null || status == null){
+            if (created == null || item == null || cost == null || status == null || !getNewCustomerById(customerId).isPresent()){
                 log.info(NULL_VALUE);
                 log.info(ORDER_NOT_CREATED);
                 log.info(LOAD_CREATE_ORDER_COMPLETE);
@@ -996,7 +996,7 @@ public class DataProviderJdbc implements DataProvider {
     public boolean editOrder(long id, String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) {
         try {
             log.info(LOAD_EDIT_ORDER);
-            if (getOrderById(id) == null){
+            if (getOrderById(id) == null || !getNewCustomerById(customerId).isPresent()){
                 log.info(ORDER_ID + id + NOT_FOUND);
                 log.info(ORDER_NOT_EDITED);
                 log.info(LOAD_EDIT_ORDER_COMPLETE);
@@ -1104,7 +1104,7 @@ public class DataProviderJdbc implements DataProvider {
                 return order;
             } else {
                 log.info(ORDER_NOT_RECEIVED);
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 statement.close();
                 log.info(LOAD_GET_ORDER_COMPLETE);
                 return null;
@@ -1132,7 +1132,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.info(LOAD_GET_LIST_ITEM_COMPLETE);
                 return list;
             } else {
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 log.info(LIST_NOT_GET + SALON_LIST_MASTER);
                 statement.close();
                 log.info(LOAD_GET_LIST_ITEM_COMPLETE);
@@ -1194,7 +1194,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.info(LOAD_VIEW_ORDER_COMPLETE);
                 return orderList;
             } else {
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 log.info(ORDER_NOT_RECEIVED);
                 statement.close();
                 log.info(LOAD_VIEW_ORDER_COMPLETE);
@@ -1266,7 +1266,7 @@ public class DataProviderJdbc implements DataProvider {
                 log.info(LOAD_CUSTOMER_REPORT_COMPLETE);
                 return report;
             } else {
-                log.error(ERROR_GET_ID);
+                log.info(ERROR_GET_ID);
                 statement.close();
                 log.info(LOAD_CUSTOMER_REPORT_COMPLETE);
                 return null;

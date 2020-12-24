@@ -1,0 +1,53 @@
+Общий вид команды:
+
+java -jar Aisova.jar [источник] [файл] [команда] [id или прочие данные]
+
+[источник]:
+    [xml]
+    [csv]
+
+[файл]:
+    [master]
+    [newcustomer]
+    [regularcustomer]
+    [order]
+    [orderitem]
+    [salon]
+    [service]
+
+[команда]:
+    [create]
+    [delete]
+    [getbyid]
+    [history]
+    [calculate]
+
+[id или прочие данные]:
+    для команды [getbyid]:
+        [id(число)]
+    для команды [delete]:
+        [id(число)]
+    для команды [getall]:
+        ничего
+    для команды [write]:
+        для тaблицы [employee]:
+            [id(число)] [name(текст)] [salary(число)] [hall_id(число)] [type_id(число)]
+        для тaблицы [employeetype]:
+            [id(число)] [description(текст)]
+        для тaблицы [hall]:
+            [id(число)] [description(текст)]
+        для тaблицы [film]:
+            [id(число)] [title(текст)] [startDate(день.месяц.год)] [endDate(день.месяц.год)]
+        для тaблицы [session]:
+            [id(число)] [film_id(число)] [hall_id(число)]
+
+Примеры:
+Посмотреть историю заказов клиента
+java -jar Aisova.jar xml order history 1
+java -jar Aisova.jar csv order history 0
+
+Рассчитать стоимость заказа
+java -jar Aisova.jar csv order calculate 1
+
+Создать услугу
+java -jar Aisova.jar csv service create nail 500.0 "super nail"
