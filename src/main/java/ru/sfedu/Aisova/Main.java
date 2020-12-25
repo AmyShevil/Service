@@ -19,11 +19,11 @@ import java.util.Properties;
 
 import static ru.sfedu.Aisova.Constants.*;
 
-public class ServiceClient {
+public class Main {
 
-    private static Logger log = LogManager.getLogger(ServiceClient.class);
+    private static Logger log = LogManager.getLogger(Main.class);
 
-    public ServiceClient(){
+    public Main(){
         log.debug(START_APP);
     }
 
@@ -260,7 +260,7 @@ public class ServiceClient {
     }
 
     public static void main(String[] args) throws Exception {
-        new ServiceClient();
+        new Main();
         logBasicSystemInfo();
         log.info(LINE);
 

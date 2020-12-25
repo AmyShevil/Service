@@ -4,13 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class ServiceClientTest {
+class MainTest {
 
     @Test
     public void main() throws IOException {
-        ServiceClient client = new ServiceClient();
+        Main client = new Main();
         client.logBasicSystemInfo();
     }
 }

@@ -78,7 +78,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.sfedu.Aisova.ServiceClient</mainClass>
+                            <mainClass>ru.sfedu.Aisova.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

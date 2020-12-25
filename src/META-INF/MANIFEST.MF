@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: ru.sfedu.Aisova.ServiceClient
+Main-Class: ru.sfedu.Aisova.Main
 
