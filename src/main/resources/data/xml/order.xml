@@ -15,9 +15,18 @@
       <status>CREATED</status>
       <customerId>0</customerId>
    </object>
-   <object class="ru.sfedu.Aisova.model.Order" id="2">
-      <created>01.12.2020</created>
+   <object class="ru.sfedu.Aisova.model.Order" id="1">
+      <created>02.12.2020</created>
       <item class="java.util.ArrayList">
+         <OrderItem id="0">
+            <service id="0">
+               <name>service1</name>
+               <price>1000.0</price>
+               <description>description1</description>
+            </service>
+            <cost>1000.0</cost>
+            <quantity>1</quantity>
+         </OrderItem>
          <OrderItem id="1">
             <service id="1">
                <name>service2</name>
@@ -37,21 +46,12 @@
             <quantity>5</quantity>
          </OrderItem>
       </item>
-      <status>CREATED</status>
+      <status>PROCESSING</status>
       <customerId>1</customerId>
    </object>
-   <object class="ru.sfedu.Aisova.model.Order" id="1">
-      <created>02.12.2020</created>
+   <object class="ru.sfedu.Aisova.model.Order" id="2">
+      <created>01.12.2020</created>
       <item class="java.util.ArrayList">
-         <OrderItem id="0">
-            <service id="0">
-               <name>service1</name>
-               <price>1000.0</price>
-               <description>description1</description>
-            </service>
-            <cost>1000.0</cost>
-            <quantity>1</quantity>
-         </OrderItem>
          <OrderItem id="1">
             <service id="1">
                <name>service2</name>

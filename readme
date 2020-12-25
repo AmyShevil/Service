@@ -27,17 +27,25 @@ java -jar Aisova.jar [источник] [файл] [команда] [id или �
         [id(число)]
     для команды [create]:
         в файл [service]:
-            [name(текст)] [price(число с плавающей точкой)] [description(текст)]
+            [name(текст)] [price(число)] [description(текст)]
         в файл [newcustomer]:
             [firstName(текст)] [lastName(текст)] [phone(текст)] [email(текст)] [discount(число)]
         в файл [regularcustomer]:
             [firstName(текст)] [lastName(текст)] [phone(текст)] [email(текст)] [numberOfOrders(число)]
+        в файл [master]:
+            [firstName(текст)] [lastName(текст)] [position(текст)] [phone(текст)] [salary(число)] [listService(список услуг через запятую)]
+        в файл [salon]:
+            [address(текст)] [listMaster(список мастеров через запятую)]
+        в файл [orderitem]:
+            [service(id заказа)] [quantity(число)]
+        в файл [order]:
+            [created(текст даты)] [item(список строк заказа через запятую)] [status(текст)]  [customerId(id пользователя)]
 
 Примеры:
 
 Создать услугу:
-    java -jar Aisova.jar csv service create manicure 500.0 "without cover"
-    java -jar Aisova.jar xml service create makeup 1500.0 "everyday, evening, etc"
+    java -jar Aisova.jar csv service create manicure 500 "without cover"
+    java -jar Aisova.jar xml service create makeup 1500 "everyday, evening, etc"
 
 Создать нового пользователя:
     java -jar Aisova.jar csv newcustomer create Irina Ivanova 89234567890 irina@ivanova.ru 10
@@ -48,17 +56,20 @@ java -jar Aisova.jar [источник] [файл] [команда] [id или �
     java -jar Aisova.jar xml regularcustomer create Anna Smirnova 89653451267 anna@smirnova.ru 7
 
 Создать мастера:
-    java -jar Aisova.jar csv master create Aa Aa "nail master" 89674142737 1000 "2,1"
+    java -jar Aisova.jar csv master create Alena Karpova "nail master" 89674198737 1000 "2,1"
+    java -jar Aisova.jar xml master create Nina Makarova "visagiste" 89658238737 1500 "0,1"
 
 Создать салон:
-    java -jar Aisova.jar csv salon create "Pushkina street, 14" "2,3"
-
+    java -jar Aisova.jar csv salon create "Pushkina street, 14" "2,0"
+    java -jar Aisova.jar xml salon create "Lenina street, 30" "0,1"
 
 Создать строку заказа:
-
+    java -jar Aisova.jar csv orderitem create 1 2
+    java -jar Aisova.jar xml orderitem create 2 1
 
 Создать заказ:
-
+    java -jar Aisova.jar csv order create "25.12.2020" "0,2" CREATED 1
+    java -jar Aisova.jar xml order create "24.12.2020" "1,2" COMPLETED 0
 
 Посмотреть историю заказов клиента:
     java -jar Aisova.jar xml order history 1
