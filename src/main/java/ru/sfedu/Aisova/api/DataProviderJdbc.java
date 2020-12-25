@@ -1330,4 +1330,23 @@ public class DataProviderJdbc implements DataProvider {
             return null;
         }
     }
+
+    @Override
+    public boolean markStatusOfOrder(long idOrder, String status){
+        try{
+            if (getOrderById(idOrder) == null || status == null){
+                log.info(ORDER_COMMAND + NOT_FOUND);
+                return false;
+            }
+            Order order = getOrderById(idOrder);
+            order.setStatus(status);
+            log.debug(order);
+            execute(String.format(DB_UPDATE_STATUS, order.getStatus(), idOrder));
+            return true;
+        } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
+            log.error(e);
+            return false;
+        }
+    }
+
 }

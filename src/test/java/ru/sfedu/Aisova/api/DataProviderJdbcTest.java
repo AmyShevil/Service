@@ -776,4 +776,18 @@ class DataProviderJdbcTest extends TestBase {
         Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
     }
 
+    @Test
+    @org.junit.jupiter.api.Order(35)
+    void markStatusOfOrderSuccess() {
+        Assertions.assertTrue(dataProvider.markStatusOfOrder(2, "COMPLETE"));
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(35)
+    void markStatusOfOrderFail() {
+        Assertions.assertFalse(dataProvider.markStatusOfOrder(10, "COMPLETE"));
+        Assertions.assertFalse(dataProvider.markStatusOfOrder(1, null));
+
+    }
+
 }

@@ -1259,5 +1259,24 @@ public class DataProviderCsv implements DataProvider{
         }
     }
 
+    @Override
+    public boolean markStatusOfOrder(long idOrder, String status){
+        try {
+            if (getOrderById(idOrder) == null || status == null){
+                log.info(ORDER_COMMAND + NOT_FOUND);
+                return false;
+            }
+            Order order = getOrderById(idOrder);
+            order.setStatus(status);
+            deleteOrder(idOrder);
+            log.debug(order);
+            writeToCsv(order);
+            return true;
+        } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
+            log.error(e);
+            return false;
+        }
+    }
+
 
 }

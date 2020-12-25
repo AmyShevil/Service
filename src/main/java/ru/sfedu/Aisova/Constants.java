@@ -76,6 +76,8 @@ public class Constants {
     public static final String DB_UPDATE_LIST_SERVICE = "UPDATE listService SET id_service='%s' WHERE id_master=%d";
     public static final String DB_UPDATE_LIST_MASTER = "UPDATE listMaster SET id_master='%s' WHERE id_salon=%d";
     public static final String DB_UPDATE_LIST_ORDER_ITEM = "UPDATE listItem SET id_item='%s' WHERE id_order=%d";
+    public static final String DB_UPDATE_STATUS = "UPDATE \"order\" SET status='%s' WHERE id=%d";
+
 
     public static final String CREATE_SERVICE ="create table Service(\n" +
             "id serial Primary key,\n" +

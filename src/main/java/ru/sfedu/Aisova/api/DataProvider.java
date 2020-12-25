@@ -379,4 +379,13 @@ public interface DataProvider {
      */
     StringBuffer createMasterReport(long masterId, boolean needMasterReport) throws Exception;
 
+    /**
+     * Установить статус заказа
+     *
+     * @param idOrder значение idOrder
+     * @param status значение status
+     * @return true или false
+     */
+    boolean markStatusOfOrder(long idOrder, String status);
+
 }

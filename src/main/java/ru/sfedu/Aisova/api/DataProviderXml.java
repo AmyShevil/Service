@@ -1259,4 +1259,23 @@ public class DataProviderXml implements DataProvider{
             return null;
         }
     }
+
+    @Override
+    public boolean markStatusOfOrder(long idOrder, String status){
+        try {
+            if (getOrderById(idOrder) == null || status == null){
+                log.info(ORDER_COMMAND + NOT_FOUND);
+                return false;
+            }
+            Order order = getOrderById(idOrder);
+            order.setStatus(status);
+            deleteOrder(idOrder);
+            log.debug(order);
+            writeToXml(order);
+            return true;
+        } catch (Exception e) {
+            log.error(e);
+            return false;
+        }
+    }
 }
