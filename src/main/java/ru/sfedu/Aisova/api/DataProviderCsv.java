@@ -750,7 +750,6 @@ public class DataProviderCsv implements DataProvider{
             }
             List<Master> masterList = readFromCsv(Master.class);
             masterList.removeIf(master -> master.getId() == id);
-            log.debug(masterList);
             writeToCsv(Master.class, masterList, true);
             log.info(MASTER_DELETED);
             log.info(LOAD_DELETE_MASTER_COMPLETE);
@@ -983,10 +982,10 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) {
+    public boolean createOrder(String created, List<OrderItem> item, String status, long customerId) {
         try{
             log.info(LOAD_CREATE_ORDER);
-            if (created == null || item == null || cost == null || status == null){
+            if (created == null || item == null || status == null){
                 log.info(NULL_VALUE);
                 log.info(ORDER_NOT_CREATED);
                 log.info(LOAD_CREATE_ORDER_COMPLETE);
@@ -996,11 +995,8 @@ public class DataProviderCsv implements DataProvider{
                 order.setCreated(created);
                 order.setId(getNextOrderId());
                 order.setItem(item);
-                order.setCost(cost);
                 order.setStatus(status);
                 order.setCustomerId(customerId);
-                order.setLastUpdated(lastUpdated);
-                order.setCompleted(completed);
                 log.info(ORDER_CREATE);
                 log.debug(order);
                 log.info(LOAD_CREATE_ORDER_COMPLETE);
@@ -1013,7 +1009,7 @@ public class DataProviderCsv implements DataProvider{
     }
 
     @Override
-    public boolean editOrder(long id, String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) {
+    public boolean editOrder(long id, String created, List<OrderItem> item, String status, long customerId) {
         List<Order> orderList = readFromCsv(Order.class);
         try {
             log.info(LOAD_EDIT_ORDER);
@@ -1027,11 +1023,8 @@ public class DataProviderCsv implements DataProvider{
             order.setCreated(created);
             order.setId(id);
             order.setItem(item);
-            order.setCost(calculateOrderValue(id));
             order.setStatus(status);
             order.setCustomerId(customerId);
-            order.setLastUpdated(lastUpdated);
-            order.setCompleted(completed);
             orderList.removeIf(ord -> ord.getId() == id);
             writeToCsv(Order.class, orderList, true);
             writeToCsv(order);
@@ -1265,4 +1258,6 @@ public class DataProviderCsv implements DataProvider{
             return null;
         }
     }
+
+
 }

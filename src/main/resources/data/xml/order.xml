@@ -12,42 +12,11 @@
             <quantity>2</quantity>
          </OrderItem>
       </item>
-      <cost>4000.0</cost>
       <status>CREATED</status>
       <customerId>0</customerId>
-      <lastUpdated>04.12.2020</lastUpdated>
-      <completed>07.12.2020</completed>
    </object>
    <object class="ru.sfedu.Aisova.model.Order" id="1">
       <created>02.12.2020</created>
-      <item class="java.util.ArrayList">
-         <OrderItem id="0">
-            <service id="0">
-               <name>service1</name>
-               <price>1000.0</price>
-               <description>description1</description>
-            </service>
-            <cost>1000.0</cost>
-            <quantity>1</quantity>
-         </OrderItem>
-         <OrderItem id="1">
-            <service id="1">
-               <name>service2</name>
-               <price>2000.0</price>
-               <description>description2</description>
-            </service>
-            <cost>2000.0</cost>
-            <quantity>2</quantity>
-         </OrderItem>
-      </item>
-      <cost>5000.0</cost>
-      <status>PROCESSING</status>
-      <customerId>1</customerId>
-      <lastUpdated>05.12.2020</lastUpdated>
-      <completed>08.12.2020</completed>
-   </object>
-   <object class="ru.sfedu.Aisova.model.Order" id="2">
-      <created>03.12.2020</created>
       <item class="java.util.ArrayList">
          <OrderItem id="0">
             <service id="0">
@@ -77,10 +46,32 @@
             <quantity>5</quantity>
          </OrderItem>
       </item>
-      <cost>7500.0</cost>
-      <status>COMPLETED</status>
+      <status>PROCESSING</status>
       <customerId>1</customerId>
-      <lastUpdated>06.12.2020</lastUpdated>
-      <completed>09.12.2020</completed>
+   </object>
+   <object class="ru.sfedu.Aisova.model.Order" id="2">
+      <created>01.12.2020</created>
+      <item class="java.util.ArrayList">
+         <OrderItem id="1">
+            <service id="1">
+               <name>service2</name>
+               <price>2000.0</price>
+               <description>description2</description>
+            </service>
+            <cost>2000.0</cost>
+            <quantity>2</quantity>
+         </OrderItem>
+         <OrderItem id="2">
+            <service id="2">
+               <name>rewriteName</name>
+               <price>500.0</price>
+               <description>rewriteDescription</description>
+            </service>
+            <cost>500.0</cost>
+            <quantity>5</quantity>
+         </OrderItem>
+      </item>
+      <status>CREATED</status>
+      <customerId>1</customerId>
    </object>
 </main>

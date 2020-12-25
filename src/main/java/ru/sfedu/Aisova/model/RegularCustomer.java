@@ -73,7 +73,12 @@ public class RegularCustomer extends Customer {
   @Override
   public String toString() {
     return "RegularCustomer{" +
-            "numberOfOrders=" + numberOfOrders +
+            "id=" + getId() +
+            ", firstName='" + getFirstName() + '\'' +
+            ", lastName='" + getLastName() + '\'' +
+            ", phone='" + getPhone() + '\'' +
+            ", email='" + getEmail() + '\'' +
+            ", numberOfOrders=" + numberOfOrders +
             '}';
   }
 }

@@ -1,13 +1,13 @@
 package ru.sfedu.Aisova;
 
-import com.opencsv.exceptions.CsvDataTypeMismatchException;
-import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sfedu.Aisova.api.DataProvider;
 import ru.sfedu.Aisova.api.DataProviderCsv;
 import ru.sfedu.Aisova.api.DataProviderXml;
+import ru.sfedu.Aisova.model.Master;
 import ru.sfedu.Aisova.model.Order;
+import ru.sfedu.Aisova.model.OrderItem;
 import ru.sfedu.Aisova.model.Service;
 
 import java.io.FileInputStream;
@@ -165,7 +165,53 @@ public class ServiceClient {
         if (cost != null) log.info(cost.toString());
     }
 
-    public static void write(DataProvider dataProvider, String table, List<String> arguments) throws Exception {
+    public static List<Service> getListService(DataProvider dataProvider, String arguments) throws Exception {
+        List<Long> argumentsList= new ArrayList<>();
+        String[] masArguments;
+        masArguments = arguments.split(DELIMETR);
+        for (String s : masArguments) {
+            argumentsList.add(Long.parseLong(s));
+        }
+        List<Service> serviceList = new ArrayList<>();
+        for(long i : argumentsList){
+            serviceList.add(dataProvider.getServiceById(i));
+        }
+        return serviceList;
+    }
+
+    public static List<Master> getListMaster(DataProvider dataProvider, String arguments) throws Exception {
+        List<Long> argumentsList= new ArrayList<>();
+        String[] masArguments;
+        masArguments = arguments.split(DELIMETR);
+        for (String s : masArguments) {
+            argumentsList.add(Long.parseLong(s));
+        }
+        List<Master> masterList = new ArrayList<>();
+        for(long i : argumentsList){
+            masterList.add(dataProvider.getMasterById(i));
+        }
+        return masterList;
+    }
+
+    public static Service getService(DataProvider dataProvider, Integer arguments) throws Exception {
+        return dataProvider.getServiceById(arguments);
+    }
+
+    public static List<OrderItem> getListItem(DataProvider dataProvider, String arguments) throws Exception {
+        List<Long> argumentsList= new ArrayList<>();
+        String[] masArguments;
+        masArguments = arguments.split(DELIMETR);
+        for (String s : masArguments) {
+            argumentsList.add(Long.parseLong(s));
+        }
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for(long i : argumentsList){
+            orderItemList.add(dataProvider.getOrderItemById(i));
+        }
+        return orderItemList;
+    }
+
+    public static void create(DataProvider dataProvider, String table, List<String> arguments) throws Exception {
         switch (table){
             case SERVICE_COMMAND:
                 dataProvider.createService(arguments.get(0),
@@ -177,26 +223,38 @@ public class ServiceClient {
                         arguments.get(1),
                         arguments.get(2),
                         arguments.get(3),
-                        Integer.parseInt(arguments.get(0)));
+                        Integer.parseInt(arguments.get(4)));
                 break;
             case REGULAR_CUSTOMER_COMMAND:
                 dataProvider.createRegularCustomer(arguments.get(0),
                         arguments.get(1),
                         arguments.get(2),
                         arguments.get(3),
-                        Integer.parseInt(arguments.get(0)));
+                        Integer.parseInt(arguments.get(4)));
                 break;
             case MASTER_COMMAND:
-                //dataProvider.createMaster();
+                dataProvider.createMaster(arguments.get(0),
+                        arguments.get(1),
+                        arguments.get(2),
+                        arguments.get(3),
+                        Double.parseDouble(arguments.get(4)),
+                        getListService(dataProvider,arguments.get(5)),
+                        true);
                 break;
             case SALON_COMMAND:
-                //dataProvider.createSalon();
+                dataProvider.createSalon(arguments.get(0),
+                        getListMaster(dataProvider,arguments.get(1)));
                 break;
             case ORDER_ITEM_COMMAND:
-                //dataProvider.createOrderItem();
+                dataProvider.createOrderItem(getService(dataProvider,Integer.parseInt(arguments.get(0))),
+                        Integer.parseInt(arguments.get(1)));
                 break;
             case ORDER_COMMAND:
-                //dataProvider.createOrder();
+                dataProvider.createOrder(arguments.get(0),
+                        getListItem(dataProvider,arguments.get(1)),
+                        arguments.get(2),
+                        Long.parseLong(arguments.get(3))
+                        );
                 break;
         }
     }
@@ -269,9 +327,7 @@ public class ServiceClient {
         }
 
         if (action.equals(CREATE_COMMAND))
-            write(dataProvider, file, arguments);
-
-        log.info(LINE);
+            create(dataProvider, file, arguments);
     }
 
     public static void logBasicSystemInfo() {

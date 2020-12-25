@@ -946,10 +946,10 @@ public class DataProviderJdbc implements DataProvider {
     }
 
     @Override
-    public boolean createOrder(String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) {
+    public boolean createOrder(String created, List<OrderItem> item, String status, long customerId) {
         try{
             log.info(LOAD_CREATE_ORDER);
-            if (created == null || item == null || cost == null || status == null || !getNewCustomerById(customerId).isPresent()){
+            if (created == null || item == null || status == null || !getNewCustomerById(customerId).isPresent()){
                 log.info(NULL_VALUE);
                 log.info(ORDER_NOT_CREATED);
                 log.info(LOAD_CREATE_ORDER_COMPLETE);
@@ -958,15 +958,12 @@ public class DataProviderJdbc implements DataProvider {
                 Order order = new Order();
                 order.setCreated(created);
                 order.setItem(item);
-                order.setCost(cost);
                 order.setStatus(status);
                 order.setCustomerId(customerId);
-                order.setLastUpdated(lastUpdated);
-                order.setCompleted(completed);
                 log.info(ORDER_CREATE);
                 log.debug(order);
                 execute(String.format(DB_INSERT_ORDER, ORDER_FIELDS,
-                        String.format(ORDER_INSERT_FORMAT,order.getCreated(), order.getCost(), order.getStatus(), order.getCustomerId(), order.getLastUpdated(), order.getCompleted())));
+                        String.format(ORDER_INSERT_FORMAT,order.getCreated(), order.getStatus(), order.getCustomerId())));
                 log.info(LOAD_CREATE_ORDER_COMPLETE);
                 return true;
             }
@@ -993,7 +990,7 @@ public class DataProviderJdbc implements DataProvider {
     }
 
     @Override
-    public boolean editOrder(long id, String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) {
+    public boolean editOrder(long id, String created, List<OrderItem> item, String status, long customerId) {
         try {
             log.info(LOAD_EDIT_ORDER);
             if (getOrderById(id) == null || !getNewCustomerById(customerId).isPresent()){
@@ -1006,14 +1003,11 @@ public class DataProviderJdbc implements DataProvider {
             order.setCreated(created);
             order.setId(id);
             order.setItem(item);
-            order.setCost(cost);
             order.setStatus(status);
             order.setCustomerId(customerId);
-            order.setLastUpdated(lastUpdated);
-            order.setCompleted(completed);
             log.info(ORDER_EDITED);
             log.debug(order);
-            execute(String.format(DB_UPDATE_ORDER, order.getCreated(), order.getCost(), order.getStatus(), order.getCustomerId(), order.getLastUpdated(), order.getCompleted(), id));
+            execute(String.format(DB_UPDATE_ORDER, order.getCreated(), order.getStatus(), order.getCustomerId(), id));
             log.info(LOAD_EDIT_ORDER_COMPLETE);
             return true;
         } catch (NullPointerException | NoSuchElementException | IndexOutOfBoundsException e) {
@@ -1092,11 +1086,8 @@ public class DataProviderJdbc implements DataProvider {
                 Order order = new Order();
                 order.setId(set.getLong(ID));
                 order.setCreated(set.getString(ORDER_CREATED));
-                order.setCost(set.getDouble(ORDER_COST));
                 order.setStatus(set.getString(ORDER_STATUS));
                 order.setCustomerId(set.getLong(ORDER_CUSTOMER));
-                order.setLastUpdated(set.getString(ORDER_UPDATE));
-                order.setCompleted(set.getString(ORDER_COMPLETED));
                 log.info(ORDER_RECEIVED);
                 log.debug(order);
                 statement.close();
@@ -1181,14 +1172,12 @@ public class DataProviderJdbc implements DataProvider {
                     Order order = new Order();
                     order.setId(set.getLong(ID));
                     order.setCreated(set.getString(ORDER_CREATED));
-                    order.setCost(set.getDouble(ORDER_COST));
                     order.setStatus(set.getString(ORDER_STATUS));
                     order.setCustomerId(set.getLong(ORDER_CUSTOMER));
-                    order.setLastUpdated(set.getString(ORDER_UPDATE));
-                    order.setCompleted(set.getString(ORDER_COMPLETED));
                     orderList.add(order);
                 }
                 log.info(ORDER_RECEIVED);
+                log.info(LIST_CUSTOMER + customerId + COLON);
                 log.debug(orderList);
                 statement.close();
                 log.info(LOAD_VIEW_ORDER_COMPLETE);
@@ -1219,14 +1208,12 @@ public class DataProviderJdbc implements DataProvider {
                     Order order = new Order();
                     order.setId(set.getLong(ID));
                     order.setCreated(set.getString(ORDER_CREATED));
-                    order.setCost(set.getDouble(ORDER_COST));
                     order.setStatus(set.getString(ORDER_STATUS));
                     order.setCustomerId(set.getLong(ORDER_CUSTOMER));
-                    order.setLastUpdated(set.getString(ORDER_UPDATE));
-                    order.setCompleted(set.getString(ORDER_COMPLETED));
                     orderList.add(order);
                 }
                 log.info(ORDER_RECEIVED);
+                log.info(CURRENT_ORDER + customerId + COLON);
                 log.debug(orderList);
                 statement.close();
                 log.info(LOAD_GET_ORDER_LIST_COMPLETE);

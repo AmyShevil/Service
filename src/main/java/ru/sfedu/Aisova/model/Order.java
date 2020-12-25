@@ -34,23 +34,12 @@ public class Order {
 
   @Element
   @CsvBindByPosition(position = 3)
-  private Double cost;
-
-  @Element
-  @CsvBindByPosition(position = 4)
   private String status;
 
   @Element
-  @CsvBindByPosition(position = 5)
+  @CsvBindByPosition(position = 4)
   private long customerId;
 
-  @Element
-  @CsvBindByPosition(position = 6)
-  private String lastUpdated;
-
-  @Element
-  @CsvBindByPosition(position = 7)
-  private String completed;
   
   //
   // Constructors
@@ -114,21 +103,6 @@ public class Order {
     return item;
   }
 
-  /**
-   * Set the value of cost
-   * @param cost the new value of cost
-   */
-  public void setCost (Double cost) {
-    this.cost = cost;
-  }
-
-  /**
-   * Get the value of cost
-   * @return the value of cost
-   */
-  public Double getCost () {
-    return cost;
-  }
 
   /**
    * Set the value of status
@@ -162,38 +136,6 @@ public class Order {
     return customerId;
   }
 
-  /**
-   * Set the value of lastUpdated
-   * @param lastUpdated the new value of lastUpdated
-   */
-  public void setLastUpdated (String lastUpdated) {
-    this.lastUpdated = lastUpdated;
-  }
-
-  /**
-   * Get the value of lastUpdated
-   * @return the value of lastUpdated
-   */
-  public String getLastUpdated () {
-    return lastUpdated;
-  }
-
-  /**
-   * Set the value of completed
-   * @param completed the new value of completed
-   */
-  public void setCompleted (String completed) {
-    this.completed = completed;
-  }
-
-  /**
-   * Get the value of completed
-   * @return the value of completed
-   */
-  public String getCompleted () {
-    return completed;
-  }
-
   //
   // Other methods
   //
@@ -204,34 +146,23 @@ public class Order {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Order order = (Order) o;
-    return id == order.id &&
-            created.equals(order.created) &&
-            item.equals(order.item) &&
-            cost.equals(order.cost) &&
-            status == order.status &&
-            customerId == order.customerId &&
-            Objects.equals(lastUpdated, order.lastUpdated) &&
-            completed.equals(order.completed);
+    return id == order.id && customerId == order.customerId && Objects.equals(created, order.created) && Objects.equals(item, order.item) && Objects.equals(status, order.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, created, item, cost, status, customerId, lastUpdated, completed);
+    return Objects.hash(id, created, item, status, customerId);
   }
 
   @Override
   public String toString() {
     return "Order{" +
             "id=" + id +
-            ", created=" + created +
+            ", created='" + created + '\'' +
             ", item=" + item +
-            ", cost=" + cost +
-            ", status=" + status +
-            ", customer=" + customerId +
-            ", lastUpdated=" + lastUpdated +
-            ", completed=" + completed +
+            ", status='" + status + '\'' +
+            ", customerId=" + customerId +
             '}';
   }
-
 }
 

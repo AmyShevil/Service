@@ -73,7 +73,12 @@ public class NewCustomer extends Customer {
   @Override
   public String toString() {
     return "NewCustomer{" +
-            "discount=" + discount +
+            "id=" + getId() +
+            ", firstName='" + getFirstName() + '\'' +
+            ", lastName='" + getLastName() + '\'' +
+            ", phone='" + getPhone() + '\'' +
+            ", email='" + getEmail() + '\'' +
+            ", discount=" + discount +
             '}';
   }
 }

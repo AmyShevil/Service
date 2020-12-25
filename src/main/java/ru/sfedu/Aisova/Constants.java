@@ -72,7 +72,7 @@ public class Constants {
     public static final String DB_UPDATE_MASTER = "UPDATE Master SET firstName='%s', lastName='%s', position='%s', phone='%s', salary='%s' WHERE id=%d";
     public static final String DB_UPDATE_SALON = "UPDATE Salon SET address='%s' WHERE id=%d";
     public static final String DB_UPDATE_ORDER_ITEM = "UPDATE OrderItem SET service='%s', cost='%s', quantity='%s' WHERE id=%d";
-    public static final String DB_UPDATE_ORDER = "UPDATE \"order\" SET created='%s', cost='%s', status='%s', id_customer='%s', lastUpdated='%s', completed='%s' WHERE id=%d";
+    public static final String DB_UPDATE_ORDER = "UPDATE \"order\" SET created='%s', status='%s', id_customer='%s' WHERE id=%d";
     public static final String DB_UPDATE_LIST_SERVICE = "UPDATE listService SET id_service='%s' WHERE id_master=%d";
     public static final String DB_UPDATE_LIST_MASTER = "UPDATE listMaster SET id_master='%s' WHERE id_salon=%d";
     public static final String DB_UPDATE_LIST_ORDER_ITEM = "UPDATE listItem SET id_item='%s' WHERE id_order=%d";
@@ -128,11 +128,8 @@ public class Constants {
     public static final String CREATE_ORDER = "create table \"order\"(\n" +
             "id serial Primary key,\n" +
             "created varchar(255),\n" +
-            "cost double precision,\n" +
             "status varchar(255),\n" +
-            "id_customer integer,\n" +
-            "lastUpdated varchar(255),\n" +
-            "completed varchar(255)\n" +
+            "id_customer integer\n" +
             ")";
     public static final String CREATE_LIST_ITEM ="create table listItem(\n" +
             "id_order integer,\n" +
@@ -166,13 +163,10 @@ public class Constants {
 
     public static final String ORDER_CREATED ="created";
     public static final String ORDER_ITEM ="listItem";
-    public static final String ORDER_COST ="cost";
     public static final String ORDER_STATUS ="status";
     public static final String ORDER_CUSTOMER ="id_customer";
-    public static final String ORDER_UPDATE ="lastUpdated";
-    public static final String ORDER_COMPLETED ="completed";
-    public static final String ORDER_FIELDS = ORDER_CREATED+","+ORDER_COST +","+ ORDER_STATUS+","+ORDER_CUSTOMER+","+ORDER_UPDATE+","+ORDER_COMPLETED;
-    public static final String ORDER_INSERT_FORMAT ="'%s','%s','%s','%s','%s','%s'";
+    public static final String ORDER_FIELDS = ORDER_CREATED+","+ ORDER_STATUS+","+ORDER_CUSTOMER;
+    public static final String ORDER_INSERT_FORMAT ="'%s','%s','%s'";
 
     public static final String MASTER_FIRST_NAME ="firstName";
     public static final String MASTER_LAST_NAME ="lastName";
@@ -453,4 +447,7 @@ public class Constants {
     public static final String FILE_FAIL ="Command should have a table name in the second place: ";
     public static final String ACTION_FAIL ="Action should take the third place in command, actions: ";
     public static final String BAD_ID ="Bad id format";
+
+    public static final String DELIMETR =",";
+
 }

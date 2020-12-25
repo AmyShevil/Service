@@ -50,15 +50,13 @@ public class TestBase {
         return master;
     }
 
-    public Order createOrder (long id, String created, List<OrderItem> item, String status, long customerId, String lastUpdated, String completed){
+    public Order createOrder (long id, String created, List<OrderItem> item, String status, long customerId){
         Order order = new Order();
         order.setId(id);
         order.setCreated(created);
         order.setItem(item);
         order.setStatus(status);
         order.setCustomerId(customerId);
-        order.setLastUpdated(lastUpdated);
-        order.setCompleted(completed);
         return order;
     }
 

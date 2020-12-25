@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface DataProvider {
 
     /**
-     * Создание услуги
+     * Добавить новую услугу, которую предоставляет данная компания
      *
      * @param name значение name
      * @param price значение price
@@ -21,7 +21,8 @@ public interface DataProvider {
     boolean createService (String name, Double price, String description) throws Exception;
 
     /**
-     * Редактирование услуги
+     * Внесение изменений в существующую услугу.
+     * Например, изменить стоимость или описание
      *
      * @param id значение id
      * @param name значение name
@@ -33,7 +34,7 @@ public interface DataProvider {
     boolean editService (long id, String name, Double price, String description) throws Exception;
 
     /**
-     * Удаление услуги
+     * Удаление услуг, которые уже не предоставляются в данной компании
      *
      * @param id значение id
      * @return true или false
@@ -141,7 +142,7 @@ public interface DataProvider {
     Optional<RegularCustomer> getRegularCustomerById(long id) throws Exception;
 
     /**
-     * Создание мастера
+     * Позволяет добавить нового мастера в салон
      *
      * @param firstName значение first name
      * @param lastName значение last name
@@ -155,7 +156,7 @@ public interface DataProvider {
     boolean createMaster (String firstName, String lastName, String position, String phone, Double salary, List<Service> listService, boolean needCreateMaster) throws Exception;
 
     /**
-     * Редактирование мастера
+     * Позволяет внести изменения в данные мастера
      *
      * @param id значение id
      * @param firstName значение first name
@@ -170,7 +171,7 @@ public interface DataProvider {
     boolean editMaster (long id, String firstName, String lastName, String position, String phone, Double salary, List<Service> listService, boolean needEditMaster) throws Exception;
 
     /**
-     * Удаление мастера
+     * Удаление мастера, который уже не предоставляет услуги
      *
      * @param id значение id
      * @return true или false
@@ -266,38 +267,33 @@ public interface DataProvider {
     OrderItem getOrderItemById(long id) throws Exception;
 
     /**
-     * Создание заказа
+     * Создание заказа на оказание услуги и заполнение необходимой для заказа информации.
+     * Подразумевает под собой онлайн-запись на услугу
      *
      * @param created значение created
      * @param item значение item
-     * @param cost значение cost
      * @param status значение status
      * @param customerId значение customer id
-     * @param lastUpdated значение last updated
-     * @param completed значение completed
      * @return true или false
      * @throws NullPointerException когда входные переменные равны null
      */
-    boolean createOrder (String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) throws Exception;
+    boolean createOrder (String created, List<OrderItem> item, String status, long customerId) throws Exception;
 
     /**
-     * Редактирование заказа
+     * Возможность вносить изменения в текущий заказ
      *
      * @param id значение id
      * @param created значение created
      * @param item значение item
-     * @param cost значение cost
      * @param status значение status
      * @param customerId значение customer id
-     * @param lastUpdated значение last updated
-     * @param completed значение completed
      * @return true или false
      * @throws NullPointerException когда входные переменные равны null
      */
-    boolean editOrder (long id, String created, List<OrderItem> item, Double cost, String status, long customerId, String lastUpdated, String completed) throws Exception;
+    boolean editOrder (long id, String created, List<OrderItem> item, String status, long customerId) throws Exception;
 
     /**
-     * Удаление заказа
+     * Отменить заказ, если он был создан по ошибке, либо клиент больше не нуждается в оказании услуги
      *
      * @param id значение id
      * @return true или false
@@ -315,7 +311,7 @@ public interface DataProvider {
     Order getOrderById(long id) throws Exception;
 
     /**
-     * Рассчитать стоимость заказа
+     * Рассчитать полную стоимость созданного заказа на оказание услуги с учетом использованных материалов
      * 
      * @param orderId значение orderId
      * @return стоимость заказа
@@ -324,7 +320,8 @@ public interface DataProvider {
     Double calculateOrderValue(long orderId) throws Exception;
 
     /**
-     * Посмотреть историю заказов клиента
+     * Позволяет просмотреть историю заказов клиента. Текущие заказы, отмененные заказы, выполненные заказы.
+     * Каждый заказ включает в себя номер заказа, дату, сумму, статус
      *
      * @param customerId значение customerId
      * @return список заказов
@@ -333,7 +330,8 @@ public interface DataProvider {
     List<Order> viewOrderHistory(long customerId) throws Exception;
 
     /**
-     * Получить список текущих заказов
+     * Получить список текущих заказов.
+     * Каждый заказ включает в себя номер заказа, дату, сумму, статус
      *
      * @param customerId значение customerId
      * @param status статус заказа
@@ -343,7 +341,8 @@ public interface DataProvider {
     List<Order> getListOfCurrentOrders(long customerId, String status) throws Exception;
 
     /**
-     * Создать отчет по клиентам
+     * Просмотр отчета по клиентам.
+     * Позволяет просмотреть количество заказов, которые совершил данный клиент
      *
      * @param customerId значение customerId
      * @return количество заказов клиента
@@ -352,7 +351,7 @@ public interface DataProvider {
     StringBuffer createCustomerReport(long customerId) throws Exception;
 
     /**
-     * Изменить список мастеров выбранного салона
+     * Включает в себя функции просмотра и управления мастерами, которые относятся к определенному салону
      *
      * @param salonId значение salonId
      * @return список мастеров
@@ -361,7 +360,7 @@ public interface DataProvider {
     List<Master> changeTheLisOfMaster(long salonId) throws Exception;
 
     /**
-     * Назначить услугу мастеру
+     * Позволяет назначить услуги, которые будет предоставлять мастер
      * 
      * @param service значение service
      * @param masterId значение masterId
@@ -371,7 +370,8 @@ public interface DataProvider {
     boolean assignService(List<Service> service, long masterId) throws Exception;
 
     /**
-     * Создать отчет по мастерам
+     * Создание отчета о работе мастера на данном сервисе.
+     * Какие услуги предоставляет
      * 
      * @param masterId значение masterId
      * @return какие услуги предоставляет мастер

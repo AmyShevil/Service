@@ -547,10 +547,10 @@ class DataProviderJdbcTest extends TestBase {
     void createOrderSuccess() {
         List<OrderItem> orderItemList1 = new ArrayList<>();
 
-        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, 10000.0,"CREATED", 1, null, null));
-        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList1, 20000.0,"COMPLETED", 3, "04.12.2020", null));
-        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList1, 30000.0,"PROCESSING", 2, "05.12.2020", "10.12.2020"));
-        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList1, 40000.0,"CANCELED", 2, null, "05.12.2020"));
+        Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, "CREATED", 1));
+        Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList1, "PROCESSING", 2));
+        Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList1, "COMPLETED", 3));
+        Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList1, "CANCELED", 1));
 
         dataProvider.createListItem(1,1);
         dataProvider.createListItem(1,2);
@@ -584,11 +584,11 @@ class DataProviderJdbcTest extends TestBase {
     void createOrderFail() {
         List<OrderItem> orderItemList1 = new ArrayList<>();
 
-        Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, 10000.0,"CREATED", 1, null, null));
-        Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, 10000.0,"PROCESSING", 3, "04.12.2020", null));
-        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList1, 10000.0,null, 2, null, "05.12.2020"));
-        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList1, null,"PROCESSING", 2, null, "05.12.2020"));
-        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList1, 55.0,"PROCESSING", 10, null, "05.12.2020"));
+        Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, "CREATED", 3));
+        Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, "PROCESSING", 1));
+        Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList1, null, 2));
+        Assertions.assertFalse(dataProvider.createOrder("02.12.2020", orderItemList1, "PROCESSING", 0));
+
 
         dataProvider.createListItem(1,10);
         dataProvider.createListItem(10,2);
@@ -601,7 +601,7 @@ class DataProviderJdbcTest extends TestBase {
     @org.junit.jupiter.api.Order(25)
     void editOrderSuccess() {
         List<OrderItem> orderItemList3 = new ArrayList<>();
-        Assertions.assertTrue(dataProvider.editOrder(3,"03.12.2020", orderItemList3, 3000.0,"PROCESSING", 1, "11.12.2020", "12.12.2020"));
+        Assertions.assertTrue(dataProvider.editOrder(3,"01.12.2020", orderItemList3, "PROCESSING", 1));
 
         Assertions.assertTrue(dataProvider.editListItem(3,1));
         List<Long> list = new ArrayList<>();
@@ -615,7 +615,7 @@ class DataProviderJdbcTest extends TestBase {
         List<OrderItem> orderItemList = new ArrayList<>();
         orderItemList.add(dataProvider.getOrderItemById(1));
         orderItemList.add(dataProvider.getOrderItemById(2));
-        Assertions.assertFalse(dataProvider.editOrder(10,"01.12.2020", orderItemList,  10000.0,"COMPLETED", 3, "05.12.2020", "10.12.2020"));
+        Assertions.assertFalse(dataProvider.editOrder(30,"01.12.2020", orderItemList, "CREATED", 0));
         dataProvider.editListItem(1,10);
         dataProvider.editListItem(10,2);
         List<Long> list = new ArrayList<>();
@@ -775,6 +775,5 @@ class DataProviderJdbcTest extends TestBase {
         log.debug(dataProvider.createMasterReport(10, false));
         Assertions.assertEquals(dataProvider.getMasterById(10), NullPointerException);
     }
-
 
 }
