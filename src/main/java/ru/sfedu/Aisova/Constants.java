@@ -27,7 +27,6 @@ public class Constants {
     public static final String PEOPLE_START_SYMBOL ="{";
     public static final String PEOPLE_END_SYMBOL ="}";
     public static final String CONFIG_PATH = "config.path";
-    public static final String PROPERTIES = "src/main/resources/enviroment.properties";
 
     public static final String PATH_CSV = "csv_path";
     public static final String FILE_EXTENSION_CSV = "csv";

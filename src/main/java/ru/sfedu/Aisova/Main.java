@@ -9,6 +9,7 @@ import ru.sfedu.Aisova.model.Master;
 import ru.sfedu.Aisova.model.Order;
 import ru.sfedu.Aisova.model.OrderItem;
 import ru.sfedu.Aisova.model.Service;
+import ru.sfedu.Aisova.utils.ConfigurationUtil;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -234,9 +235,7 @@ public class Main {
         log.info(LINE);
 
         try {
-            Properties properties = new Properties();
-            properties.load(new FileInputStream(Constants.PROPERTIES));
-            properties.forEach((o, o2) -> System.setProperty((String) o, (String) o2));
+            ConfigurationUtil.getConfigurationEntry(CONFIG_PATH);
         } catch (IOException e) {
             log.info(READ_FAIL);
             log.fatal(e);
