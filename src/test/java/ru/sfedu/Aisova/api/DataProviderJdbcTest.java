@@ -3,7 +3,6 @@ package ru.sfedu.Aisova.api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
-import ru.sfedu.Aisova.TestBase;
 import ru.sfedu.Aisova.model.*;
 import ru.sfedu.Aisova.model.Order;
 
@@ -11,10 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ru.sfedu.Aisova.Constants.*;
-
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class DataProviderJdbcTest extends TestBase {
+class DataProviderJdbcTest {
 
     private static final Logger log = LogManager.getLogger(DataProviderJdbcTest.class);
     private static final DataProviderJdbc dataProvider = new DataProviderJdbc();

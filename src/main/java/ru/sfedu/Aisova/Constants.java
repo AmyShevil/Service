@@ -34,6 +34,8 @@ public class Constants {
     public static final String PATH_XML = "xml_path";
     public static final String FILE_EXTENSION_XML = "xml";
 
+    public static final String FILE_EXTENSION_JDBC ="jdbc";
+
     public static final String DB_PostgreSQL_USED = "db_PostgreSQL_used";
     public static final String DB_Heroku_USED = "db_Heroku_used";
 

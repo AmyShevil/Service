@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.sfedu.Aisova.api.DataProvider;
 import ru.sfedu.Aisova.api.DataProviderCsv;
+import ru.sfedu.Aisova.api.DataProviderJdbc;
 import ru.sfedu.Aisova.api.DataProviderXml;
 import ru.sfedu.Aisova.model.Master;
 import ru.sfedu.Aisova.model.Order;
@@ -36,6 +37,10 @@ public class Main {
         return new DataProviderXml();
     }
 
+    public static DataProviderJdbc getDataProviderJdbc(){
+        return new DataProviderJdbc();
+    }
+
     public static DataProvider getSource(List<String> command){
         if (command.size() == 0) return null;
         switch (command.remove(0)){
@@ -43,6 +48,8 @@ public class Main {
                 return getDataProviderCsv();
             case FILE_EXTENSION_XML:
                 return getDataProviderXml();
+            case FILE_EXTENSION_JDBC:
+                return getDataProviderJdbc();
             default:
                 return null;
         }

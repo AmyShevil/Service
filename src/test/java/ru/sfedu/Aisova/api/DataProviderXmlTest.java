@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import ru.sfedu.Aisova.Constants;
-import ru.sfedu.Aisova.TestBase;
 import ru.sfedu.Aisova.model.*;
 import ru.sfedu.Aisova.model.Order;
 import ru.sfedu.Aisova.utils.ConfigurationUtil;
@@ -16,10 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DataProviderXmlTest extends TestBase {
+public class DataProviderXmlTest {
 
     private static final Logger log = LogManager.getLogger(DataProviderXmlTest.class);
     private static final DataProvider dataProvider = new DataProviderXml();
