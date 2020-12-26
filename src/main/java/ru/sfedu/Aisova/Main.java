@@ -89,36 +89,6 @@ public class Main {
 
     }
 
-    public static void getById(DataProvider dataProvider, String file, long id) throws Exception {
-        Object object;
-        switch (file){
-            case SERVICE_COMMAND:
-                object = dataProvider.getServiceById(id);
-                break;
-            case NEW_CUSTOMER_COMMAND:
-                object = dataProvider.getNewCustomerById(id);
-                break;
-            case REGULAR_CUSTOMER_COMMAND:
-                object = dataProvider.getRegularCustomerById(id);
-                break;
-            case MASTER_COMMAND:
-                object = dataProvider.getMasterById(id);
-                break;
-            case SALON_COMMAND:
-                object = dataProvider.getSalonById(id);
-                break;
-            case ORDER_ITEM_COMMAND:
-                object = dataProvider.getOrderItemById(id);
-                break;
-            case ORDER_COMMAND:
-                object = dataProvider.getOrderById(id);
-                break;
-            default:
-                object = null;
-        }
-        if (object != null) log.info(object.toString());
-    }
-
     public static void delete(DataProvider dataProvider, String file, long id) throws Exception {
         switch (file){
             case SERVICE_COMMAND:
@@ -304,16 +274,13 @@ public class Main {
             return;
         }
 
-        if (action.equals(DELETE_COMMAND) || action.equals(GET_BY_ID_COMMAND) || action.equals(GET_ORDER_HISTORY_COMMAND) || action.equals(CALCULATE_COMMAND)){
+        if (action.equals(DELETE_COMMAND) || action.equals(GET_ORDER_HISTORY_COMMAND) || action.equals(CALCULATE_COMMAND)){
             Long id = getId(arguments);
             if (id == null){
                 log.error(BAD_ID);
                 return;
             }
             switch (action) {
-                case GET_BY_ID_COMMAND:
-                    getById(dataProvider, file, id);
-                    break;
                 case DELETE_COMMAND:
                     delete(dataProvider, file, id);
                     break;

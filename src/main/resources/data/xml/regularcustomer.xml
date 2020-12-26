@@ -13,11 +13,11 @@
       <email>email2</email>
       <numberOfOrders>2</numberOfOrders>
    </object>
-   <object class="ru.sfedu.Aisova.model.RegularCustomer" id="2">
-      <firstName>rewriteFirstName</firstName>
-      <lastName>rewriteLastName</lastName>
-      <phone>rewritePhone</phone>
-      <email>rewriteEmail</email>
-      <numberOfOrders>5</numberOfOrders>
+   <object class="ru.sfedu.Aisova.model.RegularCustomer" id="3">
+      <firstName>Anna</firstName>
+      <lastName>Smirnova</lastName>
+      <phone>89653451267</phone>
+      <email>anna@smirnova.ru</email>
+      <numberOfOrders>7</numberOfOrders>
    </object>
 </main>
