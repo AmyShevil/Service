@@ -438,7 +438,6 @@ public class Constants {
 
     public static final String CREATE_COMMAND ="create";
     public static final String DELETE_COMMAND ="delete";
-    public static final String GET_BY_ID_COMMAND ="getbyid";
     public static final String GET_ORDER_HISTORY_COMMAND ="history";
     public static final String CALCULATE_COMMAND ="calculate";
 

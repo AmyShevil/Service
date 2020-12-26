@@ -17,13 +17,13 @@
       <cost>2000.0</cost>
       <quantity>2</quantity>
    </object>
-   <object class="ru.sfedu.Aisova.model.OrderItem" id="3">
+   <object class="ru.sfedu.Aisova.model.OrderItem" id="2">
       <service id="2">
          <name>rewriteName</name>
          <price>500.0</price>
          <description>rewriteDescription</description>
       </service>
       <cost>500.0</cost>
-      <quantity>1</quantity>
+      <quantity>5</quantity>
    </object>
 </main>

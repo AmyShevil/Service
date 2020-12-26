@@ -70,7 +70,6 @@ public class Main {
         switch (action){
             case CREATE_COMMAND:
             case DELETE_COMMAND:
-            case GET_BY_ID_COMMAND:
             case GET_ORDER_HISTORY_COMMAND:
             case CALCULATE_COMMAND:
                 return action;
@@ -268,7 +267,6 @@ public class Main {
             log.error(ACTION_FAIL
                     + CREATE_COMMAND + COMMA
                     + DELETE_COMMAND + COMMA
-                    + GET_BY_ID_COMMAND + COMMA
                     + GET_ORDER_HISTORY_COMMAND + COMMA
                     + CALCULATE_COMMAND);
             return;

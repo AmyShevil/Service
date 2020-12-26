@@ -9,14 +9,9 @@
       <price>2000.0</price>
       <description>description2</description>
    </object>
-   <object class="ru.sfedu.Aisova.model.Service" id="3">
-      <name>makeup</name>
-      <price>1500.0</price>
-      <description>everyday, evening, etc</description>
-   </object>
-   <object class="ru.sfedu.Aisova.model.Service" id="4">
-      <name>makeup</name>
-      <price>1500.0</price>
-      <description>everyday, evening, etc</description>
+   <object class="ru.sfedu.Aisova.model.Service" id="2">
+      <name>rewriteName</name>
+      <price>500.0</price>
+      <description>rewriteDescription</description>
    </object>
 </main>

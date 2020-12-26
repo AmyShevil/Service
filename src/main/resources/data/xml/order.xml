@@ -49,8 +49,8 @@
       <status>PROCESSING</status>
       <customerId>1</customerId>
    </object>
-   <object class="ru.sfedu.Aisova.model.Order" id="3">
-      <created>24.12.2020</created>
+   <object class="ru.sfedu.Aisova.model.Order" id="2">
+      <created>01.12.2020</created>
       <item class="java.util.ArrayList">
          <OrderItem id="1">
             <service id="1">
@@ -71,7 +71,7 @@
             <quantity>5</quantity>
          </OrderItem>
       </item>
-      <status>COMPLETED</status>
-      <customerId>0</customerId>
+      <status>COMPLETE</status>
+      <customerId>1</customerId>
    </object>
 </main>

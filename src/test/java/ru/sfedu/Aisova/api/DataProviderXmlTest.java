@@ -480,9 +480,16 @@ public class DataProviderXmlTest extends TestBase {
         orderItemList4.add(dataProvider.getOrderItemById(2));
 
         Assertions.assertTrue(dataProvider.createOrder("01.12.2020", orderItemList1, "CREATED", 0));
+        Assertions.assertNotNull(dataProvider.calculateOrderValue(0));
+
         Assertions.assertTrue(dataProvider.createOrder("02.12.2020", orderItemList2, "PROCESSING", 1));
+        Assertions.assertNotNull(dataProvider.calculateOrderValue(1));
+
         Assertions.assertTrue(dataProvider.createOrder("03.12.2020", orderItemList3, "COMPLETED", 2));
+        Assertions.assertNotNull(dataProvider.calculateOrderValue(2));
+
         Assertions.assertTrue(dataProvider.createOrder("04.12.2020", orderItemList4, "CANCELED", 3));
+        Assertions.assertNotNull(dataProvider.calculateOrderValue(3));
     }
 
     @Test
@@ -497,6 +504,7 @@ public class DataProviderXmlTest extends TestBase {
         Assertions.assertFalse(dataProvider.createOrder(null, orderItemList1, "CREATED", 0));
         Assertions.assertFalse(dataProvider.createOrder("02.12.2020", null, "PROCESSING", 1));
         Assertions.assertFalse(dataProvider.createOrder("04.12.2020", orderItemList4, null, 2));
+        Assertions.assertEquals(dataProvider.calculateOrderValue(20), 0);
     }
 
     @Test
@@ -507,6 +515,7 @@ public class DataProviderXmlTest extends TestBase {
         orderItemList1.add(dataProvider.getOrderItemById(2));
 
         Assertions.assertTrue(dataProvider.editOrder(2,"01.12.2020", orderItemList1, "CREATED", 1));
+        Assertions.assertNotNull(dataProvider.calculateOrderValue(2));
 
     }
 
@@ -517,6 +526,7 @@ public class DataProviderXmlTest extends TestBase {
         orderItemList.add(dataProvider.getOrderItemById(1));
         orderItemList.add(dataProvider.getOrderItemById(2));
         Assertions.assertFalse(dataProvider.editOrder(20,"01.12.2020", orderItemList, "CREATED", 0));
+        Assertions.assertEquals(dataProvider.calculateOrderValue(20), 0);
     }
 
     @Test
@@ -538,6 +548,7 @@ public class DataProviderXmlTest extends TestBase {
     void getOrderByIdSuccess() throws Exception {
         log.debug(dataProvider.getOrderById(1));
         Assertions.assertNotNull(dataProvider.getOrderById(1));
+        Assertions.assertNotNull(dataProvider.calculateOrderValue(1));
     }
 
     @Test
@@ -545,6 +556,7 @@ public class DataProviderXmlTest extends TestBase {
     void getOrderByIdFail() throws Exception {
         log.debug(dataProvider.getOrderById(10));
         Assertions.assertEquals(dataProvider.getOrderById(10), NullPointerException);
+        Assertions.assertEquals(dataProvider.calculateOrderValue(10), 0);
     }
 
     @Test
