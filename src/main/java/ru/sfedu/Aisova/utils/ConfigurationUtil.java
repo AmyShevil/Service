@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import static ru.sfedu.Aisova.Constants.CONFIG_PATH;
+
 /**
  * Configuration utility. Allows to get configuration properties from the
  * default configuration file
@@ -15,7 +17,7 @@ import java.util.Properties;
 public class ConfigurationUtil {
 
     private static final String DEFAULT_CONFIG_PATH = "./src/main/resources/enviroment.properties";
-    private static final String NEW_CONFIG_PATH = System.getProperty("newPath");
+    private static final String NEW_CONFIG_PATH = System.getProperty(CONFIG_PATH);
     private static final Properties configuration = new Properties();
     /**
      * Hides default constructor
